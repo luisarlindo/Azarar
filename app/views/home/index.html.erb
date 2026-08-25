@@ -1,0 +1,711 @@
+<!-- Main Application Screen -->
+  <main class="app-screen">
+    
+    <!-- Screen Container (Isolated In-App Views Container) -->
+    <div class="screen-container view-mode-home" id="screenContainer">
+      
+      <!-- ============================================ -->
+      <!-- VIEW 1: HOME / LANDING SCREEN (Logged Out)  -->
+      <!-- ============================================ -->
+      <section class="app-view view-home active" id="viewHome" style="display: flex;">
+        
+        <!-- Ambient Particles Canvas -->
+        <canvas id="particlesCanvas" class="particles-canvas"></canvas>
+
+        <!-- Top Branding Section -->
+        <header class="app-header">
+          <div class="logo-wrapper">
+            <img src="/assets/images/logo.png" alt="AZARAR Logo" class="brand-logo" />
+          </div>
+
+          <div class="heart-divider">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="#ff2a7a">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+          </div>
+
+          <p class="brand-tagline">
+            Conecte-se com quem<br />
+            desperta seu <span class="tagline-highlight">interesse</span>
+          </p>
+        </header>
+
+        <!-- Center Spacer (Keeps couple visible) -->
+        <div class="screen-spacer" aria-hidden="true"></div>
+
+        <!-- Bottom Actions -->
+        <footer class="app-actions">
+          
+          <button class="pill-nearby-btn" id="btnNearby" type="button" onclick="window.azararApp.openRadarPreview()">
+            <span class="pin-badge">
+              <span class="pin-pulse"></span>
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </span>
+            <span class="pill-text">
+              Conheça pessoas <strong class="pill-highlight">perto de você</strong>
+            </span>
+          </button>
+
+          <button class="btn-primary" id="btnCreateAccount" type="button" onclick="window.azararApp.showView('register')">
+            <span class="btn-text">Criar conta</span>
+            <span class="btn-arrow">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </span>
+          </button>
+
+          <button class="btn-secondary" id="btnLogin" type="button" onclick="window.azararApp.showView('login')">
+            <span class="btn-text">Entrar</span>
+          </button>
+
+          <div class="security-badge">
+            <svg class="shield-icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#ff2a7a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <polyline points="9 12 11 14 15 10"></polyline>
+            </svg>
+            <span class="security-text">Seguro, discreto e feito para conexões reais</span>
+          </div>
+        </footer>
+
+      </section>
+
+      <!-- ============================================ -->
+      <!-- VIEW 2: CRIAR CONTA (Logged Out)             -->
+      <!-- ============================================ -->
+      <section class="app-view view-register" id="viewRegister" style="display: none;" aria-labelledby="regScreenTitle">
+        <nav class="view-navbar">
+          <button class="nav-back-btn" type="button" onclick="window.azararApp.showView('home')" aria-label="Voltar">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="nav-brand-wrap">
+            <img src="/assets/images/logo.png" alt="AZARAR" class="nav-mini-logo" />
+          </div>
+          <div class="nav-placeholder"></div>
+        </nav>
+
+        <div class="view-scroll-content">
+          <div class="form-intro">
+            <h1 class="view-title" id="regScreenTitle">Criar nova conta</h1>
+            <p class="view-subtitle">Junte-se à maior comunidade de conexões e encontros.</p>
+          </div>
+
+          <form class="app-form" id="registerForm" onsubmit="event.preventDefault(); window.azararApp.handleRegisterSubmit();">
+            
+            <div class="form-group">
+              <label for="regFullName">Nome completo</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </span>
+                <input type="text" id="regFullName" placeholder="Seu nome e sobrenome" required autocomplete="name" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regBirthDate">Data de nascimento</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </span>
+                <input type="date" id="regBirthDate" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regUsername">Nome de perfil (@usuario)</label>
+              <div class="input-wrap input-username-wrap">
+                <span class="input-prefix">@</span>
+                <input type="text" id="regUsername" placeholder="seuusuario" required pattern="[a-zA-Z0-9._]+" autocomplete="username" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regEmailPhone">E-mail ou Telefone</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                </span>
+                <input type="text" id="regEmailPhone" placeholder="seuemail@exemplo.com ou (11) 99999-9999" required />
+              </div>
+            </div>
+
+            <!-- Relationship Goal Selection -->
+            <div class="form-group">
+              <label>O que você busca no Azarar?</label>
+              <div class="intent-chips-grid" id="regIntentChips">
+                <button type="button" class="intent-chip active" data-intent="Relacionamento Sério">💍 Relacionamento Sério</button>
+                <button type="button" class="intent-chip" data-intent="Casual">🍹 Encontros Casuais</button>
+                <button type="button" class="intent-chip" data-intent="Sexo">💋 Sexo sem tabus</button>
+                <button type="button" class="intent-chip" data-intent="Companhia">✨ Companhia & Amizade</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regPassword">Senha</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+                <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required minlength="6" autocomplete="new-password" />
+                <button type="button" class="btn-toggle-pwd" onclick="window.azararApp.togglePasswordVisibility('regPassword', this)" aria-label="Mostrar/ocultar senha">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regPasswordConfirm">Confirmação de senha</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline>
+                </span>
+                <input type="password" id="regPasswordConfirm" placeholder="Repita sua senha" required minlength="6" autocomplete="new-password" />
+                <button type="button" class="btn-toggle-pwd" onclick="window.azararApp.togglePasswordVisibility('regPasswordConfirm', this)" aria-label="Mostrar/ocultar senha">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary form-submit-btn">
+              <span class="btn-text">Criar conta e Começar</span>
+              <span class="btn-arrow">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </span>
+            </button>
+
+          </form>
+
+          <p class="form-switch-prompt">
+            Já tem uma conta? <button type="button" class="link-switch" onclick="window.azararApp.showView('login')">Entrar</button>
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- VIEW 3: LOGIN (Logged Out)                   -->
+      <!-- ============================================ -->
+      <section class="app-view view-login" id="viewLogin" style="display: none;" aria-labelledby="loginScreenTitle">
+        <nav class="view-navbar">
+          <button class="nav-back-btn" type="button" onclick="window.azararApp.showView('home')" aria-label="Voltar">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <div class="nav-brand-wrap">
+            <img src="/assets/images/logo.png" alt="AZARAR" class="nav-mini-logo" />
+          </div>
+          <div class="nav-placeholder"></div>
+        </nav>
+
+        <div class="view-scroll-content">
+          <div class="form-intro">
+            <h1 class="view-title" id="loginScreenTitle">Bem-vindo de volta</h1>
+            <p class="view-subtitle">Acesse sua conta para ver suas conexÃµes e mensagens.</p>
+          </div>
+
+          <form class="app-form" id="loginForm" onsubmit="event.preventDefault(); window.azararApp.handleLoginSubmit();">
+            
+            <div class="form-group">
+              <label for="loginUser">E-mail, Telefone ou @usuario</label>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                </span>
+                <input type="text" id="loginUser" placeholder="seuemail@exemplo.com ou @usuario" required autocomplete="username" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <div class="label-row">
+                <label for="loginPass">Sua Senha</label>
+                <a href="#" class="forgot-link" onclick="window.azararApp.toast('Link de recuperaÃ§Ã£o enviado!')">Esqueci a senha</a>
+              </div>
+              <div class="input-wrap">
+                <span class="input-icon">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </span>
+                <input type="password" id="loginPass" placeholder="Digite sua senha" required autocomplete="current-password" />
+                <button type="button" class="btn-toggle-pwd" onclick="window.azararApp.togglePasswordVisibility('loginPass', this)" aria-label="Mostrar/ocultar senha">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary form-submit-btn">
+              <span class="btn-text">Entrar no Azarar</span>
+              <span class="btn-arrow">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </span>
+            </button>
+
+          </form>
+
+          <p class="form-switch-prompt">
+            NÃ£o tem uma conta? <button type="button" class="link-switch" onclick="window.azararApp.showView('register')">Cadastre-se</button>
+          </p>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- VIEW 4: APP SHELL (Logged In Experience)     -->
+      <!-- ============================================ -->
+      <section class="app-view view-app-shell" id="viewAppShell" style="display: none;">
+        
+        <!-- App Top Header -->
+        <header class="app-topbar">
+          <div class="topbar-left">
+            <img src="/assets/images/logo.png" alt="AZARAR" class="topbar-logo" />
+          </div>
+          
+          <div class="topbar-right">
+            <!-- Online status indicator badge -->
+            <div class="online-status-badge" id="topbarOnlineBadge" onclick="window.azararApp.toggleOnlineStatus()">
+              <span class="status-indicator-dot"></span>
+              <span class="status-indicator-text" id="topbarOnlineText">Online</span>
+            </div>
+            
+            <button class="topbar-icon-btn" onclick="window.azararApp.switchTab('messages')" aria-label="Mensagens">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              <span class="badge-unread-count" id="badgeUnreadMsg">2</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- Dynamic Tab Pages Container -->
+        <div class="tab-content-container" id="tabContentContainer">
+          
+          <!-- TAB 1: RADAR ("ESTOU ONLINE AGORA" & CHAT DE PROXIMIDADE) -->
+          <div class="tab-page tab-radar active" id="tabRadar">
+            
+            <!-- Radar Control Card -->
+            <div class="radar-control-card">
+              <div class="control-header">
+                <div class="control-title-wrap">
+                  <span class="radar-icon-pulse">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                  </span>
+                  <div>
+                    <h3 class="control-title">Estou Online Agora</h3>
+                    <p class="control-desc">VisÃ­vel no radar e no mural de proximidade</p>
+                  </div>
+                </div>
+                
+                <!-- Toggle Switch -->
+                <label class="toggle-switch">
+                  <input type="checkbox" id="chkOnlineNow" checked onchange="window.azararApp.toggleOnlineStatus(this.checked)" />
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- Radius Selector Chips -->
+              <div class="radius-selector-wrap">
+                <div class="radius-label-row">
+                  <span class="radius-title">Raio de Proximidade:</span>
+                  <strong class="radius-val-highlight" id="lblCurrentRadius">500 metros</strong>
+                </div>
+                <div class="radius-chips-list" id="radiusChipsList">
+                  <button class="radius-chip" data-radius="200" onclick="window.azararApp.setProximityRadius(200)">200m</button>
+                  <button class="radius-chip" data-radius="400" onclick="window.azararApp.setProximityRadius(400)">400m</button>
+                  <button class="radius-chip active" data-radius="500" onclick="window.azararApp.setProximityRadius(500)">500m</button>
+                  <button class="radius-chip" data-radius="1000" onclick="window.azararApp.setProximityRadius(1000)">1 km</button>
+                  <button class="radius-chip" data-radius="2000" onclick="window.azararApp.setProximityRadius(2000)">2 km</button>
+                  <button class="radius-chip" data-radius="5000" onclick="window.azararApp.setProximityRadius(5000)">5 km</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Radar Sub-navigation: Pessoas x Mural Aberto -->
+            <div class="subnav-radar">
+              <button class="subnav-btn active" id="btnSubnavUsers" onclick="window.azararApp.switchRadarSubTab('users')">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                Pessoas no Raio (<span id="countOnlineUsers">4</span>)
+              </button>
+              <button class="subnav-btn" id="btnSubnavMural" onclick="window.azararApp.switchRadarSubTab('mural')">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                Mural Aberto do Raio
+              </button>
+            </div>
+
+            <!-- SUB-TAB 1: LISTA DE PESSOAS NO RAIO -->
+            <div class="radar-subcontent" id="subtabUsers">
+              <div class="nearby-users-grid" id="nearbyUsersList">
+                <!-- Rendered dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- SUB-TAB 2: MURAL / CHAT ABERTO DO RAIO (Sem Match NecessÃ¡rio) -->
+            <div class="radar-subcontent" id="subtabMural" style="display: none;">
+              <div class="mural-chat-box">
+                <div class="mural-banner">
+                  <span class="mural-badge">ðŸ”¥ Chat Aberto</span>
+                  <p class="mural-info">Todos que estÃ£o dentro de <strong id="muralRadiusText">500m</strong> podem ler e responder livremente aqui!</p>
+                </div>
+                
+                <div class="mural-messages-scroll" id="muralMessagesList">
+                  <!-- Rendered dynamically via JS -->
+                </div>
+
+                <form class="mural-input-bar" onsubmit="event.preventDefault(); window.azararApp.sendMuralMessage();">
+                  <input type="text" id="txtMuralInput" placeholder="Envie uma mensagem no mural local..." required />
+                  <button type="submit" class="btn-send-mural" aria-label="Enviar mensagem">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TAB 2: FEED SOCIAL (ESTILO INSTAGRAM) -->
+          <div class="tab-page tab-feed" id="tabFeed">
+            
+            <!-- Stories Carousel -->
+            <div class="stories-section">
+              <div class="stories-scroll" id="storiesScroll">
+                <!-- Current user Add Story -->
+                <div class="story-item story-my-add" onclick="window.azararApp.openNewPostModal()">
+                  <div class="story-avatar-wrap">
+                    <img src="" id="myStoryAvatar" alt="Meu Story" class="story-avatar" />
+                    <span class="story-add-badge">+</span>
+                  </div>
+                  <span class="story-username">Seu Story</span>
+                </div>
+                <!-- Other stories populated dynamically -->
+                <div id="dynamicStoriesList" class="dynamic-stories-row"></div>
+              </div>
+            </div>
+
+            <!-- Feed Posts Timeline -->
+            <div class="feed-posts-container" id="feedPostsList">
+              <!-- Rendered dynamically via JS -->
+            </div>
+
+            <!-- Floating Action Button: New Post -->
+            <button class="fab-new-post" onclick="window.azararApp.openNewPostModal()" aria-label="Criar nova publicaÃ§Ã£o">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+
+          </div>
+
+          <!-- TAB 3: MENSAGENS E CONVERSAS DIRETAS -->
+          <div class="tab-page tab-messages" id="tabMessages">
+            
+            <div class="messages-header">
+              <h2 class="messages-title">Conversas</h2>
+              <div class="search-wrap">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="txtSearchChat" placeholder="Buscar conexÃµes ou mensagens..." oninput="window.azararApp.filterChats(this.value)" />
+              </div>
+            </div>
+
+            <!-- Pinned: Quick Access to Mural -->
+            <div class="pinned-mural-card" onclick="window.azararApp.switchTab('radar'); window.azararApp.switchRadarSubTab('mural');">
+              <div class="pinned-icon-wrap">ðŸ”¥</div>
+              <div class="pinned-info">
+                <div class="pinned-top-row">
+                  <strong class="pinned-name">Mural do Raio Local</strong>
+                  <span class="pinned-badge">Ao Vivo</span>
+                </div>
+                <p class="pinned-last-msg" id="lastMuralPreview">Carregando mensagens do raio...</p>
+              </div>
+            </div>
+
+            <div class="direct-chats-section">
+              <h3 class="section-subheading">Mensagens Diretas</h3>
+              <div class="conversations-list" id="directConversationsList">
+                <!-- Rendered dynamically via JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- TAB 4: MEU PERFIL (HÃBRIDO TINDER + INSTAGRAM) -->
+          <div class="tab-page tab-profile" id="tabProfile">
+            
+            <!-- Profile Hero Header -->
+            <div class="profile-hero">
+              <div class="profile-avatar-container">
+                <img src="" id="profHeroAvatar" alt="Foto de perfil" class="profile-hero-avatar" />
+                <button class="btn-change-avatar" onclick="window.azararApp.openEditProfileModal()" title="Trocar foto">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                </button>
+              </div>
+
+              <div class="profile-hero-info">
+                <div class="name-row">
+                  <h2 class="profile-fullname" id="profFullName">Seu Nome</h2>
+                  <span class="verified-check" title="Perfil Verificado">âœ“</span>
+                </div>
+                <span class="profile-handle" id="profHandle">@usuario</span>
+                
+                <!-- Relationship Intent Tag -->
+                <div class="profile-intent-pill" id="profIntentBadge">
+                  <span>ðŸ’ Relacionamento SÃ©rio</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats Bar (Instagram Style) -->
+            <div class="profile-stats-bar">
+              <div class="stat-column">
+                <strong class="stat-val" id="profStatPosts">0</strong>
+                <span class="stat-txt">Posts</span>
+              </div>
+              <div class="stat-column">
+                <strong class="stat-val" id="profStatFollowers">148</strong>
+                <span class="stat-txt">Seguidores</span>
+              </div>
+              <div class="stat-column">
+                <strong class="stat-val" id="profStatFollowing">92</strong>
+                <span class="stat-txt">Seguindo</span>
+              </div>
+            </div>
+
+            <!-- Bio -->
+            <div class="profile-bio-card">
+              <p class="profile-bio-text" id="profBio">Escreva sua biografia aqui para que as pessoas conheÃ§am vocÃª melhor.</p>
+              <div class="profile-location-row">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span id="profLocation">SÃ£o Paulo, SP â€¢ No seu raio agora</span>
+              </div>
+            </div>
+
+            <!-- Profile Action Buttons -->
+            <div class="profile-actions-row">
+              <button class="btn-profile-action btn-edit-prof" onclick="window.azararApp.openEditProfileModal()">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Editar Perfil
+              </button>
+              <button class="btn-profile-action btn-logout-prof" onclick="window.azararApp.handleLogout()">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Sair
+              </button>
+            </div>
+
+            <!-- Profile Subtabs (Instagram Photo Grid vs Tinder Details) -->
+            <div class="profile-nav-tabs">
+              <button class="prof-tab-btn active" id="btnProfTabGrid" onclick="window.azararApp.switchProfileTab('grid')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                Minhas Fotos
+              </button>
+              <button class="prof-tab-btn" id="btnProfTabTinder" onclick="window.azararApp.switchProfileTab('details')">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                Interesses & Tinder Card
+              </button>
+            </div>
+
+            <!-- Profile Tab 1: Instagram Photo Grid (3 Columns) -->
+            <div class="profile-subcontent" id="profContentGrid">
+              <div class="instagram-photo-grid" id="profPhotoGrid">
+                <!-- Rendered dynamically via JS -->
+              </div>
+            </div>
+
+            <!-- Profile Tab 2: Tinder Style Card & Passions -->
+            <div class="profile-subcontent" id="profContentDetails" style="display: none;">
+              <div class="tinder-details-card">
+                <h4 class="tinder-card-heading">PassÃµes & Interesses</h4>
+                <div class="passions-tags-list" id="profPassionsList">
+                  <span class="passion-tag">ðŸ¹ Baladas</span>
+                  <span class="passion-tag">ðŸŽ§ MÃºsica EletrÃ´nica</span>
+                  <span class="passion-tag">âœˆï¸ Viagens</span>
+                  <span class="passion-tag">ðŸ£ Gastronomia</span>
+                  <span class="passion-tag">ðŸ‹ï¸ Fitness</span>
+                  <span class="passion-tag">ðŸŽ¬ Cinema</span>
+                </div>
+
+                <h4 class="tinder-card-heading" style="margin-top: 18px;">InformaÃ§Ãµes Adicionais</h4>
+                <div class="tinder-info-rows">
+                  <div class="info-item-row"><span class="info-label">Signo:</span> <strong>EscorpiÃ£o â™</strong></div>
+                  <div class="info-item-row"><span class="info-label">Altura:</span> <strong>1,75 m</strong></div>
+                  <div class="info-item-row"><span class="info-label">Bebida:</span> <strong>Socialmente ðŸ¸</strong></div>
+                  <div class="info-item-row"><span class="info-label">IntenÃ§Ã£o:</span> <strong id="tinderIntentLabel">ðŸ’ Relacionamento SÃ©rio</strong></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Fixed Bottom Navigation Bar -->
+        <nav class="bottom-nav-bar">
+          <button class="nav-tab-item active" id="navTabRadar" onclick="window.azararApp.switchTab('radar')">
+            <div class="nav-tab-icon-wrap">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <span class="nav-tab-label">Radar</span>
+          </button>
+
+          <button class="nav-tab-item" id="navTabFeed" onclick="window.azararApp.switchTab('feed')">
+            <div class="nav-tab-icon-wrap">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5" ry="5"></rect><circle cx="12" cy="12" r="3.5"></circle><circle cx="17.5" cy="6.5" r="0.8" fill="currentColor"></circle></svg>
+            </div>
+            <span class="nav-tab-label">Feed Social</span>
+          </button>
+
+          <button class="nav-tab-item" id="navTabMessages" onclick="window.azararApp.switchTab('messages')">
+            <div class="nav-tab-icon-wrap">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+            </div>
+            <span class="nav-tab-label">Mensagens</span>
+          </button>
+
+          <button class="nav-tab-item" id="navTabProfile" onclick="window.azararApp.switchTab('profile')">
+            <div class="nav-tab-icon-wrap nav-tab-profile-wrap">
+              <img src="" id="navTabUserAvatar" alt="Perfil" class="nav-mini-avatar" />
+            </div>
+            <span class="nav-tab-label">Perfil</span>
+          </button>
+        </nav>
+
+      </section>
+
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: NOVA PUBLICAÃ‡ÃƒO (POST NO FEED)        -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalNewPost" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeNewPostModal()"></div>
+      <div class="modal-card-sheet">
+        <div class="modal-header">
+          <h3 class="modal-title">Nova PublicaÃ§Ã£o</h3>
+          <button class="modal-close-btn" onclick="window.azararApp.closeNewPostModal()">âœ•</button>
+        </div>
+
+        <form class="modal-form" onsubmit="event.preventDefault(); window.azararApp.handleCreatePostSubmit();">
+          
+          <label>Selecione ou Cole a URL de uma Foto:</label>
+          <div class="preset-photos-row" id="presetPhotosRow">
+            <!-- Preset sample photos clickable -->
+          </div>
+
+          <div class="form-group" style="margin-top: 10px;">
+            <label for="txtPostImageUrl">Ou URL personalizada da imagem:</label>
+            <div class="input-wrap">
+              <input type="url" id="txtPostImageUrl" placeholder="https://exemplo.com/minha-foto.jpg" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="txtPostCaption">Legenda da foto:</label>
+            <div class="input-wrap">
+              <textarea id="txtPostCaption" rows="3" placeholder="O que vocÃª estÃ¡ fazendo ou pensando agora?..." required></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="txtPostLocation">LocalizaÃ§Ã£o:</label>
+            <div class="input-wrap">
+              <input type="text" id="txtPostLocation" placeholder="Ex: Rooftop Bar, Jardins" value="SÃ£o Paulo, SP" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 12px; height: 50px;">
+            <span>Publicar no Feed</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: EDITAR PERFIL                         -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalEditProfile" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeEditProfileModal()"></div>
+      <div class="modal-card-sheet">
+        <div class="modal-header">
+          <h3 class="modal-title">Editar Meu Perfil</h3>
+          <button class="modal-close-btn" onclick="window.azararApp.closeEditProfileModal()">âœ•</button>
+        </div>
+
+        <form class="modal-form" onsubmit="event.preventDefault(); window.azararApp.handleEditProfileSubmit();">
+          
+          <div class="form-group">
+            <label for="editFullName">Nome completo</label>
+            <div class="input-wrap">
+              <input type="text" id="editFullName" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editBio">Biografia</label>
+            <div class="input-wrap">
+              <textarea id="editBio" rows="3" placeholder="Conte um pouco sobre sua vibe e o que vocÃª curte..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>IntenÃ§Ã£o Principal:</label>
+            <div class="intent-chips-grid" id="editIntentChips">
+              <button type="button" class="intent-chip" data-intent="Relacionamento SÃ©rio">ðŸ’ Relacionamento SÃ©rio</button>
+              <button type="button" class="intent-chip" data-intent="Casual">ðŸ¹ Encontros Casuais</button>
+              <button type="button" class="intent-chip" data-intent="Sexo">ðŸ’‹ Sexo sem tabus</button>
+              <button type="button" class="intent-chip" data-intent="Companhia">âœ¨ Companhia & Amizade</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editAvatarUrl">URL da Foto de Perfil:</label>
+            <div class="input-wrap">
+              <input type="url" id="editAvatarUrl" placeholder="https://..." />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="margin-top: 14px; height: 50px;">
+            <span>Salvar AlteraÃ§Ãµes</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: DIRECT CHAT (CONVERSA PRIVADA)        -->
+    <!-- ============================================ -->
+    <div class="app-modal modal-chat-fullscreen" id="modalDirectChat" role="dialog" aria-modal="true">
+      <div class="chat-fullscreen-card">
+        
+        <div class="chat-header">
+          <button class="nav-back-btn" type="button" onclick="window.azararApp.closeDirectChat()">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          
+          <div class="chat-user-meta">
+            <div class="chat-avatar-wrap">
+              <img src="" id="chatActiveAvatar" alt="Avatar" class="chat-avatar" />
+              <span class="chat-status-dot online"></span>
+            </div>
+            <div>
+              <h4 class="chat-user-name" id="chatActiveName">Nome</h4>
+              <span class="chat-user-sub" id="chatActiveSub">Online agora â€¢ 250m de vocÃª</span>
+            </div>
+          </div>
+
+          <button class="btn-chat-follow" id="btnChatFollow" onclick="window.azararApp.toggleFollowActiveChatUser()">
+            Seguir
+          </button>
+        </div>
+
+        <div class="chat-messages-container" id="directChatMessagesList">
+          <!-- Messages dynamically populated -->
+        </div>
+
+        <form class="chat-input-bar" onsubmit="event.preventDefault(); window.azararApp.sendDirectChatMessage();">
+          <input type="text" id="txtDirectChatInput" placeholder="Digite uma mensagem..." required />
+          <button type="submit" class="btn-send-mural" aria-label="Enviar">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-notification" id="toastNotification" aria-live="polite"></div>
+
+  </main>
+
+  <!-- JavaScript -->
+  <script src="/js/app.js"></script>

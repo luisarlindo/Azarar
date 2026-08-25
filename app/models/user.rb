@@ -1,0 +1,40 @@
+﻿class User < ApplicationRecord
+  has_secure_password
+
+  has_many :posts, dependent: :destroy
+  has_many :likes, dependent: :destroy
+  has_many :liked_posts, through: :likes, source: :post
+  has_many :mural_messages, dependent: :destroy
+  has_many :sent_messages, class_name: "DirectMessage", foreign_key: :sender_id, dependent: :destroy
+  has_many :received_messages, class_name: "DirectMessage", foreign_key: :recipient_id, dependent: :destroy
+
+  validates :name, presence: true
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
+  validates :email_or_phone, presence: true, uniqueness: { case_sensitive: false }
+  validates :password, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
+
+  scope :online, -> { where(online_now: true) }
+
+  before_validation :clean_username
+
+  def display_avatar
+    avatar_url.presence || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+  end
+
+  def formatted_username
+    username.start_with?("@") ? username : "@#{username}"
+  end
+
+  def age
+    return nil unless birthdate
+    now = Time.now.utc.to_date
+    now.year - birthdate.year - ((now.month > birthdate.month || (now.month == birthdate.month && now.day >= birthdate.day)) ? 0 : 1)
+  end
+
+  private
+
+  def clean_username
+    self.username = username.to_s.gsub(/^@/, "").strip.downcase if username.present?
+    self.email_or_phone = email_or_phone.to_s.strip.downcase if email_or_phone.present?
+  end
+end

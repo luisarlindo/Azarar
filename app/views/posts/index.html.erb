@@ -1,0 +1,104 @@
+﻿<div class="tab-page tab-feed active" style="display: flex;">
+  <div class="stories-section">
+    <div class="stories-scroll">
+      <div class="story-item story-my-add" onclick="document.getElementById('modalNewPost').style.display='flex'">
+        <div class="story-avatar-wrap">
+          <img src="<%= current_user.display_avatar %>" alt="Meu Story" class="story-avatar" />
+          <span class="story-add-badge">+</span>
+        </div>
+        <span class="story-username">Seu Post</span>
+      </div>
+
+      <div class="dynamic-stories-row">
+        <% @stories_users.each do |user| %>
+          <div class="story-item" onclick="window.location='<%= user_path(user) %>'">
+            <div class="story-avatar-wrap">
+              <img src="<%= user.display_avatar %>" alt="<%= user.name %>" class="story-avatar" />
+            </div>
+            <span class="story-username"><%= user.username %></span>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="feed-posts-container">
+    <% @posts.each do |post| %>
+      <article class="feed-post-card" id="post_<%= post.id %>">
+        <div class="post-header">
+          <a href="<%= user_path(post.user) %>" class="post-author-link">
+            <img src="<%= post.user.display_avatar %>" alt="<%= post.user.name %>" class="post-avatar" />
+            <div class="post-author-meta">
+              <div class="post-author-row">
+                <strong class="post-author-name"><%= post.user.name %></strong>
+                <span class="verified-dot">âœ“</span>
+              </div>
+              <span class="post-handle"><%= post.user.formatted_username %> â€¢ <%= time_ago_in_words(post.created_at) %> atrÃ¡s</span>
+            </div>
+          </a>
+        </div>
+
+        <% if post.image_url.present? %>
+          <div class="post-image-wrap">
+            <img src="<%= post.image_url %>" alt="Post" class="post-media" />
+          </div>
+        <% end %>
+
+        <div class="post-actions-bar">
+          <div class="post-actions-left">
+            <%= button_to like_post_path(post), method: :post, class: "btn-action-icon", form_class: "inline-block" do %>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="<%= post.liked_by?(current_user) ? '#ff2a7a' : 'none' %>" stroke="<%= post.liked_by?(current_user) ? '#ff2a7a' : 'currentColor' %>" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            <% end %>
+            <span class="likes-count"><%= post.likes_count %> curtidas</span>
+          </div>
+          
+          <a href="<%= direct_message_path(post.user) %>" class="btn-action-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          </a>
+        </div>
+
+        <div class="post-caption-box">
+          <p class="post-caption-text">
+            <strong><%= post.user.formatted_username %></strong> <%= post.caption %>
+          </p>
+        </div>
+      </article>
+    <% end %>
+  </div>
+
+  <button class="fab-new-post" onclick="document.getElementById('modalNewPost').style.display='flex'" aria-label="Criar nova publicaÃ§Ã£o">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+  </button>
+</div>
+
+<div class="app-modal" id="modalNewPost" style="display: none; position: fixed; inset: 0; z-index: 150; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.7);">
+  <div class="modal-backdrop" onclick="document.getElementById('modalNewPost').style.display='none'" style="position: absolute; inset: 0;"></div>
+  <div class="modal-card-sheet" style="position: relative; z-index: 10; width: 100%; max-width: 480px; background: #160920; border-radius: 24px 24px 0 0; padding: 20px; border-top: 1px solid rgba(255,42,122,0.3);">
+    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+      <h3 class="modal-title" style="font-size: 18px; font-weight: 700;">Nova PublicaÃ§Ã£o</h3>
+      <button class="modal-close-btn" onclick="document.getElementById('modalNewPost').style.display='none'" style="background: none; border: none; color: #fff; font-size: 20px; cursor: pointer;">âœ•</button>
+    </div>
+
+    <%= form_with model: @post, url: posts_path, method: :post, class: "modal-form", data: { turbo: false } do |f| %>
+      <div class="form-group">
+        <label>URL da Imagem:</label>
+        <div class="input-wrap">
+          <%= f.url_field :image_url, placeholder: "https://images.unsplash.com/...", value: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600" %>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-top: 10px;">
+        <label>Legenda:</label>
+        <div class="input-wrap">
+          <%= f.text_area :caption, rows: 3, placeholder: "O que vocÃª estÃ¡ pensando ou fazendo agora?...", required: true %>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" style="margin-top: 14px; height: 50px;">
+        <span>Publicar no Feed</span>
+      </button>
+    <% end %>
+  </div>
+</div>

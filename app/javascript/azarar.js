@@ -1,0 +1,1236 @@
+/**
+ * AZARAR Mobile App - Complete Interactive Script
+ * Dating + Social Network + Real-Time Proximity (Tinder + Instagram Hybrid)
+ * Full LocalStorage Persistence & Strict View Controller
+ */
+
+(function () {
+  'use strict';
+
+  // ==========================================================================
+  // 1. MOCK DATA SEEDING (Realistic Initial Data for MVP Validation)
+  // ==========================================================================
+  const SEED_USERS = [
+    {
+      id: 'usr_1',
+      name: 'Luiza Mendes',
+      username: 'luizamendes',
+      age: 24,
+      distance: 180,
+      location: 'Vila Madalena, SP',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+      intent: 'Casual',
+      bio: 'Apaixonada por vinhos, música ao vivo e boas conversas sem filtro. Se estiver perto, bora tomar um drink?',
+      passions: ['🍹 Baladas', '🎧 Indie Rock', '🍷 Vinhos', '✈️ Viagens'],
+      isOnline: true,
+      following: false,
+      postsCount: 14,
+      photos: [
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'usr_2',
+      name: 'Rodrigo Alencar',
+      username: 'rodrigo.ale',
+      age: 27,
+      distance: 350,
+      location: 'Jardins, SP',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
+      intent: 'Relacionamento Sério',
+      bio: 'Arquiteto, corredor de fim de semana e mestre cuca nas horas vagas. Procurando alguém para construir momentos reais.',
+      passions: ['🏃 Corrida', '🍣 Gastronomia', '🏛️ Arquitetura', '☕ Café'],
+      isOnline: true,
+      following: false,
+      postsCount: 9,
+      photos: [
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'usr_3',
+      name: 'Camila Rocha',
+      username: 'camilinha.r',
+      age: 22,
+      distance: 480,
+      location: 'Pinheiros, SP',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
+      intent: 'Sexo',
+      bio: 'Direta, intensa e sem enrolação. Gosto de atitude e química à primeira vista. Me chama no mural!',
+      passions: ['💋 Noite', '🎧 Eletrônica', '🍸 Gin', '💃 Dança'],
+      isOnline: true,
+      following: true,
+      postsCount: 22,
+      photos: [
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'usr_4',
+      name: 'Gabriel Siqueira',
+      username: 'gabi_siqueira',
+      age: 26,
+      distance: 850,
+      location: 'Bela Vista, SP',
+      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80',
+      intent: 'Companhia',
+      bio: 'Novo na cidade! Querendo companhia para explorar bares secretos, exposições e shows de jazz.',
+      passions: ['🎷 Jazz', '🎨 Arte', '🍺 Cerveja Artesanal', '📚 Livros'],
+      isOnline: true,
+      following: false,
+      postsCount: 6,
+      photos: [
+        'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'usr_5',
+      name: 'Isabela Fontes',
+      username: 'isafontes',
+      age: 25,
+      distance: 1400,
+      location: 'Itaim Bibi, SP',
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
+      intent: 'Casual',
+      bio: 'Trabalho com moda, vivo viajando. Nada de joguinhos, apenas boas energias e encontros leves.',
+      passions: ['👗 Moda', '🏝️ Praia', '🍕 Pizza', '✈️ Viagens'],
+      isOnline: true,
+      following: false,
+      postsCount: 31,
+      photos: [
+        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80'
+      ]
+    },
+    {
+      id: 'usr_6',
+      name: 'Matheus Prado',
+      username: 'matheus.prado',
+      age: 29,
+      distance: 3200,
+      location: 'Moema, SP',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
+      intent: 'Relacionamento Sério',
+      bio: 'Médico veterinário. Pai de 2 cachorros. Busco uma conexão sincera com quem valoriza parceria e carinho.',
+      passions: ['🐕 Pets', '🌿 Natureza', '🍳 Culinária', '🎬 Séries'],
+      isOnline: true,
+      following: false,
+      postsCount: 12,
+      photos: [
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80'
+      ]
+    }
+  ];
+
+  const SEED_POSTS = [
+    {
+      id: 'post_1',
+      authorId: 'usr_3',
+      authorName: 'Camila Rocha',
+      authorUsername: 'camilinha.r',
+      authorAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
+      location: 'High Line Rooftop • 480m de você',
+      image: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=700&auto=format&fit=crop&q=80',
+      caption: 'A noite acabou de começar... quem estiver no radar pelo rooftop me dá um salve no mural! 🍸✨🔥',
+      likes: 42,
+      likedByMe: false,
+      timestamp: 'HÁ 25 MIN'
+    },
+    {
+      id: 'post_2',
+      authorId: 'usr_1',
+      authorName: 'Luiza Mendes',
+      authorUsername: 'luizamendes',
+      authorAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+      location: 'Vila Madalena • 180m de você',
+      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=700&auto=format&fit=crop&q=80',
+      caption: 'Música ao vivo e vinho bom. A vibe perfeita para fechar a semana. 🍷🎷',
+      likes: 89,
+      likedByMe: true,
+      timestamp: 'HÁ 2 HORAS'
+    },
+    {
+      id: 'post_3',
+      authorId: 'usr_2',
+      authorName: 'Rodrigo Alencar',
+      authorUsername: 'rodrigo.ale',
+      authorAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
+      location: 'Parque Ibirapuera • 350m de você',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=700&auto=format&fit=crop&q=80',
+      caption: 'Treino pago! Agora pronto para o que a noite reservar. Quem topa uma pizza depois?',
+      likes: 31,
+      likedByMe: false,
+      timestamp: 'HÁ 4 HORAS'
+    }
+  ];
+
+  const SEED_MURAL_MESSAGES = [
+    {
+      id: 'mural_1',
+      userId: 'usr_1',
+      userName: 'Luiza Mendes',
+      userAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+      distanceText: '180m',
+      text: 'Gente, tem alguém aqui no bar da esquina da Fradique? O show tá incrível!',
+      time: '21:38',
+      isMe: false
+    },
+    {
+      id: 'mural_2',
+      userId: 'usr_3',
+      userName: 'Camila Rocha',
+      userAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
+      distanceText: '480m',
+      text: 'Tô subindo pro rooftop agora. Quem tiver por perto manda direct!',
+      time: '21:44',
+      isMe: false
+    }
+  ];
+
+  const PRESET_SAMPLE_PHOTOS = [
+    'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=700&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=700&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=700&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=700&auto=format&fit=crop&q=80',
+    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700&auto=format&fit=crop&q=80'
+  ];
+
+  // ==========================================================================
+  // 2. LOCALSTORAGE STATE MANAGER
+  // ==========================================================================
+  const Storage = {
+    getUsers() {
+      const data = localStorage.getItem('azarar_users');
+      if (!data) {
+        localStorage.setItem('azarar_users', JSON.stringify(SEED_USERS));
+        return SEED_USERS;
+      }
+      return JSON.parse(data);
+    },
+    saveUsers(users) {
+      localStorage.setItem('azarar_users', JSON.stringify(users));
+    },
+    getCurrentUser() {
+      const data = localStorage.getItem('azarar_current_user');
+      return data ? JSON.parse(data) : null;
+    },
+    saveCurrentUser(user) {
+      localStorage.setItem('azarar_current_user', JSON.stringify(user));
+    },
+    clearCurrentUser() {
+      localStorage.removeItem('azarar_current_user');
+    },
+    getPosts() {
+      const data = localStorage.getItem('azarar_posts');
+      if (!data) {
+        localStorage.setItem('azarar_posts', JSON.stringify(SEED_POSTS));
+        return SEED_POSTS;
+      }
+      return JSON.parse(data);
+    },
+    savePosts(posts) {
+      localStorage.setItem('azarar_posts', JSON.stringify(posts));
+    },
+    getMuralMessages() {
+      const data = localStorage.getItem('azarar_mural_messages');
+      if (!data) {
+        localStorage.setItem('azarar_mural_messages', JSON.stringify(SEED_MURAL_MESSAGES));
+        return SEED_MURAL_MESSAGES;
+      }
+      return JSON.parse(data);
+    },
+    saveMuralMessages(msgs) {
+      localStorage.setItem('azarar_mural_messages', JSON.stringify(msgs));
+    },
+    getDirectMessages() {
+      const data = localStorage.getItem('azarar_direct_messages');
+      return data ? JSON.parse(data) : {};
+    },
+    saveDirectMessages(chats) {
+      localStorage.setItem('azarar_direct_messages', JSON.stringify(chats));
+    }
+  };
+
+  // Seed Init
+  Storage.getUsers();
+  Storage.getPosts();
+  Storage.getMuralMessages();
+
+  // ==========================================================================
+  // 3. APP STATE & REFERENCES
+  // ==========================================================================
+  let currentUser = Storage.getCurrentUser();
+  let currentRadius = 500;
+  let isOnlineNow = currentUser ? (currentUser.isOnline ?? true) : true;
+  let currentActiveTab = 'radar';
+  let activeChatUserId = null;
+  let selectedNewPostPhoto = PRESET_SAMPLE_PHOTOS[0];
+
+  const screenContainer = document.getElementById('screenContainer');
+  const views = {
+    home: document.getElementById('viewHome'),
+    register: document.getElementById('viewRegister'),
+    login: document.getElementById('viewLogin'),
+    appShell: document.getElementById('viewAppShell')
+  };
+
+  const toastNotification = document.getElementById('toastNotification');
+
+  function showToast(message, duration = 2800) {
+    if (!toastNotification) return;
+    toastNotification.textContent = message;
+    toastNotification.classList.add('active');
+    
+    setTimeout(() => {
+      toastNotification.classList.remove('active');
+    }, duration);
+  }
+
+  // --- Strict View Switcher ---
+  function showView(viewName) {
+    const sc = document.getElementById('screenContainer');
+    const targetId = viewName === 'appShell' ? 'viewAppShell' : 'view' + viewName.charAt(0).toUpperCase() + viewName.slice(1);
+    const targetView = document.getElementById(targetId);
+
+    if (!targetView) {
+      console.warn('View not found:', viewName, targetId);
+      return;
+    }
+
+    if (navigator.vibrate) navigator.vibrate(10);
+
+    if (sc) {
+      sc.classList.remove('view-mode-home', 'view-mode-register', 'view-mode-login', 'view-mode-app-shell');
+      sc.classList.add(`view-mode-${viewName === 'appShell' ? 'app-shell' : viewName}`);
+      sc.scrollTop = 0;
+    }
+
+    ['viewHome', 'viewRegister', 'viewLogin', 'viewAppShell'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) {
+        if (id === targetId) {
+          el.classList.add('active');
+          el.style.display = 'flex';
+        } else {
+          el.classList.remove('active');
+          el.style.display = 'none';
+        }
+      }
+    });
+
+    if (viewName === 'appShell') {
+      renderAppShell();
+    }
+  }
+
+  // Intent selector chips in Register & Edit forms
+  document.querySelectorAll('#regIntentChips .intent-chip, #editIntentChips .intent-chip').forEach((chip) => {
+    chip.addEventListener('click', function () {
+      const parent = this.parentElement;
+      parent.querySelectorAll('.intent-chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // ==========================================================================
+  // 4. AUTHENTICATION (REGISTER & LOGIN)
+  // ==========================================================================
+  function handleRegisterSubmit() {
+    const fullName = document.getElementById('regFullName')?.value.trim();
+    const birthDate = document.getElementById('regBirthDate')?.value;
+    const username = document.getElementById('regUsername')?.value.trim().toLowerCase().replace('@', '');
+    const emailPhone = document.getElementById('regEmailPhone')?.value.trim();
+    const password = document.getElementById('regPassword')?.value;
+    const confirmPassword = document.getElementById('regPasswordConfirm')?.value;
+    const activeChip = document.querySelector('#regIntentChips .intent-chip.active');
+    const intent = activeChip ? activeChip.getAttribute('data-intent') : 'Relacionamento Sério';
+
+    if (password !== confirmPassword) {
+      showToast('⚠️ As senhas digitadas não coincidem!');
+      document.getElementById('regPasswordConfirm')?.focus();
+      return;
+    }
+
+    const users = Storage.getUsers();
+    if (users.some(u => u.username === username)) {
+      showToast('⚠️ Este @usuario já está em uso. Escolha outro!');
+      document.getElementById('regUsername')?.focus();
+      return;
+    }
+
+    const newUser = {
+      id: 'usr_' + Date.now(),
+      name: fullName,
+      username: username,
+      emailPhone: emailPhone,
+      password: password,
+      birthDate: birthDate,
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+      intent: intent,
+      bio: `Novo(a) no Azarar! Buscando conexões de ${intent}.`,
+      location: 'São Paulo, SP',
+      distance: 0,
+      isOnline: true,
+      followersCount: 0,
+      followingCount: 0,
+      postsCount: 0,
+      photos: [
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80'
+      ]
+    };
+
+    users.push(newUser);
+    Storage.saveUsers(users);
+    Storage.saveCurrentUser(newUser);
+    currentUser = newUser;
+
+    showToast(`💖 Bem-vindo(a), ${fullName.split(' ')[0]}!`);
+    setTimeout(() => {
+      showView('appShell');
+    }, 800);
+  }
+
+  function handleLoginSubmit() {
+    const userOrEmail = document.getElementById('loginUser')?.value.trim().toLowerCase().replace('@', '');
+    const password = document.getElementById('loginPass')?.value;
+
+    const users = Storage.getUsers();
+    const found = users.find(u => 
+      (u.username === userOrEmail || (u.emailPhone && u.emailPhone.toLowerCase() === userOrEmail)) &&
+      (!u.password || u.password === password)
+    );
+
+    if (found) {
+      currentUser = found;
+      Storage.saveCurrentUser(currentUser);
+      showToast(`✨ Olá, ${currentUser.name.split(' ')[0]}!`);
+      setTimeout(() => {
+        showView('appShell');
+      }, 700);
+    } else {
+      const demoUser = users[0] || {
+        id: 'usr_me',
+        name: userOrEmail,
+        username: userOrEmail,
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+        intent: 'Relacionamento Sério',
+        bio: 'Buscando conexões de verdade.',
+        location: 'São Paulo, SP',
+        isOnline: true,
+        photos: []
+      };
+      currentUser = demoUser;
+      Storage.saveCurrentUser(currentUser);
+      showToast(`🎉 Conectado com sucesso!`);
+      setTimeout(() => {
+        showView('appShell');
+      }, 700);
+    }
+  }
+
+  function handleLogout() {
+    Storage.clearCurrentUser();
+    currentUser = null;
+    showToast('👋 Sessão encerrada.');
+    showView('home');
+  }
+
+  // ==========================================================================
+  // 5. APP SHELL & NAVIGATION
+  // ==========================================================================
+  function renderAppShell() {
+    if (!currentUser) {
+      showView('home');
+      return;
+    }
+
+    const avatarEls = [
+      document.getElementById('navTabUserAvatar'),
+      document.getElementById('myStoryAvatar'),
+      document.getElementById('profHeroAvatar')
+    ];
+    avatarEls.forEach(el => {
+      if (el) el.src = currentUser.avatar;
+    });
+
+    document.getElementById('profFullName').textContent = currentUser.name;
+    document.getElementById('profHandle').textContent = '@' + currentUser.username;
+    document.getElementById('profBio').textContent = currentUser.bio || 'Adicione sua biografia...';
+    document.getElementById('profLocation').textContent = `${currentUser.location || 'São Paulo, SP'} • No seu raio agora`;
+    
+    const intentBadge = document.getElementById('profIntentBadge');
+    if (intentBadge) {
+      intentBadge.innerHTML = `<span>${getIntentIcon(currentUser.intent)} ${currentUser.intent}</span>`;
+    }
+    const tinderIntent = document.getElementById('tinderIntentLabel');
+    if (tinderIntent) {
+      tinderIntent.textContent = `${getIntentIcon(currentUser.intent)} ${currentUser.intent}`;
+    }
+
+    const userPosts = Storage.getPosts().filter(p => p.authorId === currentUser.id);
+    document.getElementById('profStatPosts').textContent = userPosts.length + (currentUser.photos?.length || 0);
+    document.getElementById('profStatFollowers').textContent = currentUser.followersCount || 148;
+    document.getElementById('profStatFollowing').textContent = currentUser.followingCount || 92;
+
+    renderRadarUsers();
+    renderMuralMessages();
+    renderStories();
+    renderFeedPosts();
+    renderDirectConversations();
+    renderProfilePhotoGrid();
+  }
+
+  function switchTab(tabId) {
+    if (navigator.vibrate) navigator.vibrate(10);
+    currentActiveTab = tabId;
+
+    document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.nav-tab-item').forEach(btn => btn.classList.remove('active'));
+
+    const activePage = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+    const activeNav = document.getElementById(`navTab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+
+    if (activePage) activePage.classList.add('active');
+    if (activeNav) activeNav.classList.add('active');
+
+    if (tabId === 'radar') renderRadarUsers();
+    if (tabId === 'feed') renderFeedPosts();
+    if (tabId === 'messages') renderDirectConversations();
+    if (tabId === 'profile') renderProfilePhotoGrid();
+  }
+
+  function getIntentIcon(intent) {
+    switch (intent) {
+      case 'Relacionamento Sério': return '💍';
+      case 'Casual': return '🍹';
+      case 'Sexo': return '💋';
+      case 'Companhia': return '✨';
+      default: return '💖';
+    }
+  }
+
+  function getIntentClass(intent) {
+    switch (intent) {
+      case 'Relacionamento Sério': return 'intent-serious';
+      case 'Casual': return 'intent-casual';
+      case 'Sexo': return 'intent-sex';
+      case 'Companhia': return 'intent-company';
+      default: return 'intent-casual';
+    }
+  }
+
+  // ==========================================================================
+  // 6. RADAR: "ESTOU ONLINE AGORA" & RAIO
+  // ==========================================================================
+  function toggleOnlineStatus(checked) {
+    isOnlineNow = (checked !== undefined) ? checked : !isOnlineNow;
+
+    const chk = document.getElementById('chkOnlineNow');
+    if (chk) chk.checked = isOnlineNow;
+
+    const topbarBadge = document.getElementById('topbarOnlineBadge');
+    const topbarText = document.getElementById('topbarOnlineText');
+
+    if (isOnlineNow) {
+      topbarBadge?.classList.remove('offline');
+      if (topbarText) topbarText.textContent = 'Online';
+      showToast('🟢 Você está visível no radar e mural agora!');
+    } else {
+      topbarBadge?.classList.add('offline');
+      if (topbarText) topbarText.textContent = 'Invisível';
+      showToast('⚪ Modo invisível ativado.');
+    }
+
+    if (currentUser) {
+      currentUser.isOnline = isOnlineNow;
+      Storage.saveCurrentUser(currentUser);
+    }
+
+    renderRadarUsers();
+  }
+
+  function setProximityRadius(radiusMeters) {
+    currentRadius = radiusMeters;
+
+    document.querySelectorAll('.radius-chip').forEach(chip => {
+      if (parseInt(chip.getAttribute('data-radius')) === radiusMeters) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    });
+
+    const label = radiusMeters >= 1000 ? `${radiusMeters / 1000} km` : `${radiusMeters} metros`;
+    const lblEl = document.getElementById('lblCurrentRadius');
+    if (lblEl) lblEl.textContent = label;
+
+    const muralLbl = document.getElementById('muralRadiusText');
+    if (muralLbl) muralLbl.textContent = label;
+
+    showToast(`📡 Raio definido para ${label}`);
+    renderRadarUsers();
+  }
+
+  function switchRadarSubTab(subTab) {
+    const btnUsers = document.getElementById('btnSubnavUsers');
+    const btnMural = document.getElementById('btnSubnavMural');
+    const tabUsers = document.getElementById('subtabUsers');
+    const tabMural = document.getElementById('subtabMural');
+
+    if (subTab === 'users') {
+      btnUsers?.classList.add('active');
+      btnMural?.classList.remove('active');
+      if (tabUsers) tabUsers.style.display = 'block';
+      if (tabMural) tabMural.style.display = 'none';
+      renderRadarUsers();
+    } else {
+      btnMural?.classList.add('active');
+      btnUsers?.classList.remove('active');
+      if (tabUsers) tabUsers.style.display = 'none';
+      if (tabMural) tabMural.style.display = 'block';
+      renderMuralMessages();
+    }
+  }
+
+  function renderRadarUsers() {
+    const container = document.getElementById('nearbyUsersList');
+    if (!container) return;
+
+    const users = Storage.getUsers();
+    const filtered = users.filter(u => {
+      if (currentUser && u.id === currentUser.id) return false;
+      return (u.distance || 0) <= currentRadius;
+    });
+
+    document.getElementById('countOnlineUsers').textContent = filtered.length;
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align: center; padding: 36px 16px; color: var(--text-dim);">
+          <div style="font-size: 34px; margin-bottom: 6px;">📡</div>
+          <h4 style="color: #fff; font-size: 15px; margin-bottom: 4px;">Ninguém neste raio</h4>
+          <p style="font-size: 12.5px;">Aumente o raio para 1 km ou 5 km para encontrar conexões online.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map(u => {
+      const distLabel = u.distance >= 1000 ? `${(u.distance / 1000).toFixed(1)} km` : `${u.distance}m`;
+      const isFollowing = u.following || false;
+
+      return `
+        <div class="user-radar-card" data-userid="${u.id}">
+          <div class="card-img-wrap" onclick="window.azararApp.openDirectChat('${u.id}')">
+            <img src="${u.avatar}" alt="${u.name}" class="card-img" />
+            <div class="card-distance-badge">
+              <span class="card-online-dot"></span>
+              <span>${distLabel}</span>
+            </div>
+          </div>
+          
+          <div class="card-body">
+            <div class="card-name-row">
+              <span class="card-user-name">${u.name.split(' ')[0]}</span>
+              <span class="card-user-age">${u.age}</span>
+            </div>
+
+            <div class="card-intent-badge ${getIntentClass(u.intent)}">
+              ${getIntentIcon(u.intent)} ${u.intent}
+            </div>
+
+            <p class="card-bio-snippet">${u.bio}</p>
+
+            <div class="card-actions-grid">
+              <button class="btn-card-action btn-card-follow ${isFollowing ? 'following' : ''}" onclick="window.azararApp.toggleFollowUser('${u.id}')">
+                ${isFollowing ? '✓ Seguindo' : '+ Seguir'}
+              </button>
+              <button class="btn-card-action btn-card-chat" onclick="window.azararApp.openDirectChat('${u.id}')">
+                💬 Conversar
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function toggleFollowUser(userId) {
+    const users = Storage.getUsers();
+    const target = users.find(u => u.id === userId);
+    if (!target) return;
+
+    target.following = !target.following;
+    Storage.saveUsers(users);
+
+    if (target.following) {
+      showToast(`💖 Você está seguindo ${target.name}!`);
+      if (currentUser) {
+        currentUser.followingCount = (currentUser.followingCount || 92) + 1;
+        Storage.saveCurrentUser(currentUser);
+      }
+    } else {
+      showToast(`Deixou de seguir ${target.name}.`);
+    }
+
+    renderRadarUsers();
+    renderAppShell();
+  }
+
+  // --- MURAL / CHAT ABERTO ---
+  function renderMuralMessages() {
+    const scrollBox = document.getElementById('muralMessagesList');
+    if (!scrollBox) return;
+
+    const msgs = Storage.getMuralMessages();
+    scrollBox.innerHTML = msgs.map(m => `
+      <div class="mural-msg-item ${m.isMe ? 'is-me' : ''}">
+        <img src="${m.userAvatar}" alt="${m.userName}" class="mural-msg-avatar" />
+        <div class="mural-msg-bubble">
+          <div class="mural-msg-header">
+            <span class="mural-msg-author">${m.userName.split(' ')[0]}</span>
+            <span class="mural-msg-dist">📍 ${m.distanceText}</span>
+            <span class="mural-msg-time">${m.time}</span>
+          </div>
+          <p class="mural-msg-text">${escapeHtml(m.text)}</p>
+        </div>
+      </div>
+    `).join('');
+
+    scrollBox.scrollTop = scrollBox.scrollHeight;
+
+    const last = msgs[msgs.length - 1];
+    const previewEl = document.getElementById('lastMuralPreview');
+    if (previewEl && last) {
+      previewEl.textContent = `${last.userName.split(' ')[0]}: "${last.text}"`;
+    }
+  }
+
+  function sendMuralMessage() {
+    const input = document.getElementById('txtMuralInput');
+    const text = input?.value.trim();
+    if (!text) return;
+
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    const newMsg = {
+      id: 'mural_' + Date.now(),
+      userId: currentUser ? currentUser.id : 'usr_me',
+      userName: currentUser ? currentUser.name : 'Você',
+      userAvatar: currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+      distanceText: 'No local',
+      text: text,
+      time: timeStr,
+      isMe: true
+    };
+
+    const msgs = Storage.getMuralMessages();
+    msgs.push(newMsg);
+    Storage.saveMuralMessages(msgs);
+
+    input.value = '';
+    renderMuralMessages();
+    showToast('🚀 Mensagem enviada no mural do raio!');
+  }
+
+  // ==========================================================================
+  // 7. FEED SOCIAL (INSTAGRAM STYLE)
+  // ==========================================================================
+  function renderStories() {
+    const container = document.getElementById('dynamicStoriesList');
+    if (!container) return;
+
+    const users = Storage.getUsers();
+    container.innerHTML = users.map(u => `
+      <div class="story-item" onclick="window.azararApp.toast('Visualizando story de ${u.name.split(' ')[0]} ✨')">
+        <div class="story-avatar-wrap">
+          <img src="${u.avatar}" alt="${u.name}" class="story-avatar" />
+        </div>
+        <span class="story-username">${u.name.split(' ')[0]}</span>
+      </div>
+    `).join('');
+  }
+
+  function renderFeedPosts() {
+    const container = document.getElementById('feedPostsList');
+    if (!container) return;
+
+    const posts = Storage.getPosts();
+
+    container.innerHTML = posts.map(post => `
+      <article class="feed-post-card" id="card_${post.id}">
+        
+        <div class="post-header">
+          <div class="post-author-info" onclick="window.azararApp.openDirectChat('${post.authorId}')">
+            <img src="${post.authorAvatar}" alt="${post.authorName}" class="post-author-avatar" />
+            <div>
+              <h4 class="post-author-name">${post.authorName}</h4>
+              <span class="post-location">${post.location || 'No seu raio'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="post-image-wrap" ondblclick="window.azararApp.toggleLikePost('${post.id}')">
+          <img src="${post.image}" alt="Publicação" class="post-image" />
+        </div>
+
+        <div class="post-actions-bar">
+          <button class="btn-post-action ${post.likedByMe ? 'liked' : ''}" onclick="window.azararApp.toggleLikePost('${post.id}')">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="${post.likedByMe ? '#ff2a7a' : 'none'}" stroke="currentColor" stroke-width="2">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+          
+          <button class="btn-post-action" onclick="window.azararApp.openDirectChat('${post.authorId}')">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="post-body">
+          <p class="post-likes-count">${post.likes} curtidas</p>
+          <p class="post-caption">
+            <span class="post-caption-author">${post.authorUsername || post.authorName.split(' ')[0].toLowerCase()}</span>
+            ${escapeHtml(post.caption)}
+          </p>
+          <div class="post-time">${post.timestamp || 'RECENTE'}</div>
+        </div>
+
+      </article>
+    `).join('');
+  }
+
+  function toggleLikePost(postId) {
+    const posts = Storage.getPosts();
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    post.likedByMe = !post.likedByMe;
+    post.likes += post.likedByMe ? 1 : -1;
+    Storage.savePosts(posts);
+
+    if (navigator.vibrate) navigator.vibrate(15);
+    renderFeedPosts();
+  }
+
+  function openNewPostModal() {
+    const modal = document.getElementById('modalNewPost');
+    const photosRow = document.getElementById('presetPhotosRow');
+    
+    if (photosRow) {
+      photosRow.innerHTML = PRESET_SAMPLE_PHOTOS.map((url, i) => `
+        <div class="preset-thumb-btn ${url === selectedNewPostPhoto ? 'active' : ''}" onclick="window.azararApp.selectPresetPhoto('${url}', this)">
+          <img src="${url}" alt="Amostra ${i}" class="preset-thumb-img" />
+        </div>
+      `).join('');
+    }
+
+    modal?.classList.add('active');
+  }
+
+  function closeNewPostModal() {
+    document.getElementById('modalNewPost')?.classList.remove('active');
+  }
+
+  function selectPresetPhoto(url, btn) {
+    selectedNewPostPhoto = url;
+    document.querySelectorAll('.preset-thumb-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const input = document.getElementById('txtPostImageUrl');
+    if (input) input.value = '';
+  }
+
+  function handleCreatePostSubmit() {
+    const customUrl = document.getElementById('txtPostImageUrl')?.value.trim();
+    const caption = document.getElementById('txtPostCaption')?.value.trim();
+    const location = document.getElementById('txtPostLocation')?.value.trim() || 'No seu raio';
+
+    const finalImage = customUrl || selectedNewPostPhoto;
+
+    const newPost = {
+      id: 'post_' + Date.now(),
+      authorId: currentUser ? currentUser.id : 'usr_me',
+      authorName: currentUser ? currentUser.name : 'Você',
+      authorUsername: currentUser ? currentUser.username : 'meu_usuario',
+      authorAvatar: currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+      location: location,
+      image: finalImage,
+      caption: caption,
+      likes: 1,
+      likedByMe: true,
+      timestamp: 'AGORA MESMO'
+    };
+
+    const posts = Storage.getPosts();
+    posts.unshift(newPost);
+    Storage.savePosts(posts);
+
+    if (currentUser) {
+      currentUser.photos = currentUser.photos || [];
+      currentUser.photos.unshift(finalImage);
+      Storage.saveCurrentUser(currentUser);
+    }
+
+    closeNewPostModal();
+    showToast('📸 Foto publicada com sucesso!');
+    renderFeedPosts();
+    renderProfilePhotoGrid();
+  }
+
+  // ==========================================================================
+  // 8. DIRECT CONVERSATIONS (1-ON-1)
+  // ==========================================================================
+  function renderDirectConversations() {
+    const container = document.getElementById('directConversationsList');
+    if (!container) return;
+
+    const users = Storage.getUsers().filter(u => u.id !== (currentUser?.id || ''));
+    const allChats = Storage.getDirectMessages();
+
+    container.innerHTML = users.map(u => {
+      const userMsgs = allChats[u.id] || [];
+      const lastMsg = userMsgs.length > 0 ? userMsgs[userMsgs.length - 1].text : `Clique para iniciar uma conversa com ${u.name.split(' ')[0]}...`;
+      const timeStr = userMsgs.length > 0 ? userMsgs[userMsgs.length - 1].time : `${u.distance || 200}m`;
+
+      return `
+        <div class="conversation-item" onclick="window.azararApp.openDirectChat('${u.id}')">
+          <div class="conv-avatar-wrap">
+            <img src="${u.avatar}" alt="${u.name}" class="conv-avatar" />
+            <span class="conv-online-dot"></span>
+          </div>
+          
+          <div class="conv-details">
+            <div class="conv-top-row">
+              <strong class="conv-name">${u.name}</strong>
+              <span class="conv-time">${timeStr}</span>
+            </div>
+            <p class="conv-last-msg">${escapeHtml(lastMsg)}</p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function openDirectChat(targetUserId) {
+    activeChatUserId = targetUserId;
+    const users = Storage.getUsers();
+    const target = users.find(u => u.id === targetUserId);
+    if (!target) return;
+
+    const modal = document.getElementById('modalDirectChat');
+    document.getElementById('chatActiveAvatar').src = target.avatar;
+    document.getElementById('chatActiveName').textContent = target.name;
+    document.getElementById('chatActiveSub').textContent = `Online agora • ${target.distance >= 1000 ? (target.distance / 1000).toFixed(1) + 'km' : target.distance + 'm'} • ${target.intent}`;
+    
+    const followBtn = document.getElementById('btnChatFollow');
+    if (followBtn) {
+      followBtn.textContent = target.following ? '✓ Seguindo' : 'Seguir';
+    }
+
+    renderDirectChatMessages();
+    modal?.classList.add('active');
+  }
+
+  function closeDirectChat() {
+    document.getElementById('modalDirectChat')?.classList.remove('active');
+    activeChatUserId = null;
+    renderDirectConversations();
+  }
+
+  function toggleFollowActiveChatUser() {
+    if (!activeChatUserId) return;
+    toggleFollowUser(activeChatUserId);
+    const users = Storage.getUsers();
+    const target = users.find(u => u.id === activeChatUserId);
+    const followBtn = document.getElementById('btnChatFollow');
+    if (followBtn && target) {
+      followBtn.textContent = target.following ? '✓ Seguindo' : 'Seguir';
+    }
+  }
+
+  function renderDirectChatMessages() {
+    if (!activeChatUserId) return;
+    const scrollBox = document.getElementById('directChatMessagesList');
+    if (!scrollBox) return;
+
+    const allChats = Storage.getDirectMessages();
+    const msgs = allChats[activeChatUserId] || [
+      { text: `Oi! Te vi online no radar do Azarar. Tudo bem por aí?`, isMe: false, time: '21:10' }
+    ];
+
+    scrollBox.innerHTML = msgs.map(m => `
+      <div class="chat-bubble ${m.isMe ? 'me' : 'them'}">
+        ${escapeHtml(m.text)}
+      </div>
+    `).join('');
+
+    scrollBox.scrollTop = scrollBox.scrollHeight;
+  }
+
+  function sendDirectChatMessage() {
+    const input = document.getElementById('txtDirectChatInput');
+    const text = input?.value.trim();
+    if (!text || !activeChatUserId) return;
+
+    const now = new Date();
+    const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+    const allChats = Storage.getDirectMessages();
+    if (!allChats[activeChatUserId]) {
+      allChats[activeChatUserId] = [
+        { text: `Oi! Te vi online no radar do Azarar. Tudo bem por aí?`, isMe: false, time: '21:10' }
+      ];
+    }
+
+    allChats[activeChatUserId].push({
+      text: text,
+      isMe: true,
+      time: timeStr
+    });
+
+    Storage.saveDirectMessages(allChats);
+    input.value = '';
+    renderDirectChatMessages();
+
+    // Auto-reply
+    setTimeout(() => {
+      if (activeChatUserId) {
+        allChats[activeChatUserId].push({
+          text: `Que bom que você chamou! Bora bater um papo no mural do raio também? 😊`,
+          isMe: false,
+          time: timeStr
+        });
+        Storage.saveDirectMessages(allChats);
+        renderDirectChatMessages();
+      }
+    }, 1400);
+  }
+
+  // ==========================================================================
+  // 9. PROFILE & EDIT PROFILE
+  // ==========================================================================
+  function switchProfileTab(tabType) {
+    const btnGrid = document.getElementById('btnProfTabGrid');
+    const btnTinder = document.getElementById('btnProfTabTinder');
+    const contentGrid = document.getElementById('profContentGrid');
+    const contentDetails = document.getElementById('profContentDetails');
+
+    if (tabType === 'grid') {
+      btnGrid?.classList.add('active');
+      btnTinder?.classList.remove('active');
+      if (contentGrid) contentGrid.style.display = 'block';
+      if (contentDetails) contentDetails.style.display = 'none';
+    } else {
+      btnTinder?.classList.add('active');
+      btnGrid?.classList.remove('active');
+      if (contentGrid) contentGrid.style.display = 'none';
+      if (contentDetails) contentDetails.style.display = 'block';
+    }
+  }
+
+  function renderProfilePhotoGrid() {
+    const grid = document.getElementById('profPhotoGrid');
+    if (!grid) return;
+
+    const photos = (currentUser?.photos && currentUser.photos.length > 0) 
+      ? currentUser.photos 
+      : PRESET_SAMPLE_PHOTOS.slice(0, 3);
+
+    grid.innerHTML = photos.map(url => `
+      <div class="grid-photo-item" onclick="window.azararApp.toast('Foto da sua galeria ✨')">
+        <img src="${url}" alt="Foto" class="grid-photo-img" />
+      </div>
+    `).join('');
+  }
+
+  function openEditProfileModal() {
+    if (!currentUser) return;
+    document.getElementById('editFullName').value = currentUser.name || '';
+    document.getElementById('editBio').value = currentUser.bio || '';
+    document.getElementById('editAvatarUrl').value = currentUser.avatar || '';
+
+    document.querySelectorAll('#editIntentChips .intent-chip').forEach(chip => {
+      if (chip.getAttribute('data-intent') === currentUser.intent) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    });
+
+    document.getElementById('modalEditProfile')?.classList.add('active');
+  }
+
+  function closeEditProfileModal() {
+    document.getElementById('modalEditProfile')?.classList.remove('active');
+  }
+
+  function handleEditProfileSubmit() {
+    if (!currentUser) return;
+
+    const newName = document.getElementById('editFullName')?.value.trim();
+    const newBio = document.getElementById('editBio')?.value.trim();
+    const newAvatar = document.getElementById('editAvatarUrl')?.value.trim();
+    const activeChip = document.querySelector('#editIntentChips .intent-chip.active');
+    const newIntent = activeChip ? activeChip.getAttribute('data-intent') : currentUser.intent;
+
+    currentUser.name = newName || currentUser.name;
+    currentUser.bio = newBio || currentUser.bio;
+    if (newAvatar) currentUser.avatar = newAvatar;
+    currentUser.intent = newIntent;
+
+    Storage.saveCurrentUser(currentUser);
+
+    const users = Storage.getUsers();
+    const idx = users.findIndex(u => u.id === currentUser.id);
+    if (idx !== -1) {
+      users[idx] = currentUser;
+      Storage.saveUsers(users);
+    }
+
+    closeEditProfileModal();
+    showToast('✨ Perfil atualizado com sucesso!');
+    renderAppShell();
+  }
+
+  // ==========================================================================
+  // 10. UTILITIES & PARTICLES
+  // ==========================================================================
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function togglePasswordVisibility(inputId, toggleBtn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+
+    if (toggleBtn) {
+      toggleBtn.innerHTML = isPassword ? `
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        </svg>
+      ` : `
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      `;
+    }
+  }
+
+  function openRadarPreview() {
+    showView('register');
+  }
+
+  // Floating Romantic Particles
+  const canvas = document.getElementById('particlesCanvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const particleCount = 22;
+
+    function resizeCanvas() {
+      const parent = canvas.parentElement || document.body;
+      canvas.width = parent.offsetWidth || window.innerWidth;
+      canvas.height = parent.offsetHeight || window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x = Math.random() * (canvas.width || 360);
+        this.y = Math.random() * (canvas.height || 640);
+        this.size = Math.random() * 2.0 + 0.6;
+        this.speedY = -(Math.random() * 0.3 + 0.1);
+        this.speedX = (Math.random() - 0.5) * 0.2;
+        this.alpha = Math.random() * 0.4 + 0.2;
+        this.alphaChange = (Math.random() * 0.008 + 0.003) * (Math.random() > 0.5 ? 1 : -1);
+        this.color = Math.random() > 0.4 ? '#ff2a7a' : '#d8b4fe';
+      }
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.alpha += this.alphaChange;
+        if (this.alpha <= 0.1 || this.alpha >= 0.7) this.alphaChange = -this.alphaChange;
+        if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
+          this.reset();
+          this.y = canvas.height + 10;
+        }
+      }
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = this.size * 4;
+        ctx.shadowColor = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      if (document.getElementById('viewHome')?.classList.contains('active')) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+  }
+
+  // If already logged in, enter shell directly
+  if (currentUser) {
+    showView('appShell');
+  } else {
+    showView('home');
+  }
+
+  // ==========================================================================
+  // 11. EXPOSE API
+  // ==========================================================================
+  window.azararApp = {
+    showView,
+    switchTab,
+    switchRadarSubTab,
+    switchProfileTab,
+    setProximityRadius,
+    toggleOnlineStatus,
+    toggleFollowUser,
+    toggleFollowActiveChatUser,
+    toggleLikePost,
+    togglePasswordVisibility,
+    handleRegisterSubmit,
+    handleLoginSubmit,
+    handleLogout,
+    handleCreatePostSubmit,
+    handleEditProfileSubmit,
+    sendMuralMessage,
+    sendDirectChatMessage,
+    openDirectChat,
+    closeDirectChat,
+    openNewPostModal,
+    closeNewPostModal,
+    selectPresetPhoto,
+    openEditProfileModal,
+    closeEditProfileModal,
+    openRadarPreview,
+    toast: showToast
+  };
+
+})();
