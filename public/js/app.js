@@ -20,10 +20,12 @@
       location: 'Vila Madalena, SP',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
       intent: 'Casual',
+      vibe: '🍹 No balcão do bar',
       bio: 'Apaixonada por vinhos, música ao vivo e boas conversas sem filtro. Se estiver perto, bora tomar um drink?',
       passions: ['🍹 Baladas', '🎧 Indie Rock', '🍷 Vinhos', '✈️ Viagens'],
       isOnline: true,
       following: false,
+      cheersSent: false,
       postsCount: 14,
       photos: [
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
@@ -40,10 +42,12 @@
       location: 'Jardins, SP',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
       intent: 'Relacionamento Sério',
+      vibe: '🛋️ No lounge VIP',
       bio: 'Arquiteto, corredor de fim de semana e mestre cuca nas horas vagas. Procurando alguém para construir momentos reais.',
       passions: ['🏃 Corrida', '🍣 Gastronomia', '🏛️ Arquitetura', '☕ Café'],
       isOnline: true,
       following: false,
+      cheersSent: false,
       postsCount: 9,
       photos: [
         'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
@@ -59,10 +63,12 @@
       location: 'Pinheiros, SP',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
       intent: 'Sexo',
-      bio: 'Direta, intensa e sem enrolação. Gosto de atitude e química à primeira vista. Me chama no mural!',
+      vibe: '🎧 Na pista de dança',
+      bio: 'Direta, intensa e sem enrolação. Gosto de atitude e química à primeira vista. Me manda um brinde no radar!',
       passions: ['💋 Noite', '🎧 Eletrônica', '🍸 Gin', '💃 Dança'],
       isOnline: true,
       following: true,
+      cheersSent: false,
       postsCount: 22,
       photos: [
         'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
@@ -78,10 +84,12 @@
       location: 'Bela Vista, SP',
       avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80',
       intent: 'Companhia',
+      vibe: '🍻 Com a galera',
       bio: 'Novo na cidade! Querendo companhia para explorar bares secretos, exposições e shows de jazz.',
       passions: ['🎷 Jazz', '🎨 Arte', '🍺 Cerveja Artesanal', '📚 Livros'],
       isOnline: true,
       following: false,
+      cheersSent: false,
       postsCount: 6,
       photos: [
         'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80'
@@ -96,10 +104,12 @@
       location: 'Itaim Bibi, SP',
       avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
       intent: 'Casual',
+      vibe: '🍹 No balcão do bar',
       bio: 'Trabalho com moda, vivo viajando. Nada de joguinhos, apenas boas energias e encontros leves.',
       passions: ['👗 Moda', '🏝️ Praia', '🍕 Pizza', '✈️ Viagens'],
       isOnline: true,
       following: false,
+      cheersSent: false,
       postsCount: 31,
       photos: [
         'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80'
@@ -114,10 +124,12 @@
       location: 'Moema, SP',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
       intent: 'Relacionamento Sério',
+      vibe: '🎧 Na pista de dança',
       bio: 'Médico veterinário. Pai de 2 cachorros. Busco uma conexão sincera com quem valoriza parceria e carinho.',
       passions: ['🐕 Pets', '🌿 Natureza', '🍳 Culinária', '🎬 Séries'],
       isOnline: true,
       following: false,
+      cheersSent: false,
       postsCount: 12,
       photos: [
         'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80'
@@ -621,11 +633,13 @@
     container.innerHTML = filtered.map(u => {
       const distLabel = u.distance >= 1000 ? `${(u.distance / 1000).toFixed(1)} km` : `${u.distance}m`;
       const isFollowing = u.following || false;
+      const isCheersSent = u.cheersSent || false;
 
       return `
         <div class="user-radar-card" data-userid="${u.id}">
           <div class="card-img-wrap" onclick="window.azararApp.openDirectChat('${u.id}')">
             <img src="${u.avatar}" alt="${u.name}" class="card-img" />
+            <div class="card-vibe-pill">${u.vibe || '🍹 No local'}</div>
             <div class="card-distance-badge">
               <span class="card-online-dot"></span>
               <span>${distLabel}</span>
@@ -645,17 +659,69 @@
             <p class="card-bio-snippet">${u.bio}</p>
 
             <div class="card-actions-grid">
-              <button class="btn-card-action btn-card-follow ${isFollowing ? 'following' : ''}" onclick="window.azararApp.toggleFollowUser('${u.id}')">
-                ${isFollowing ? '✓ Seguindo' : '+ Seguir'}
+              <button class="btn-card-action btn-card-cheers ${isCheersSent ? 'cheers-sent' : ''}" onclick="window.azararApp.sendCheers('${u.id}')">
+                ${isCheersSent ? '🥂 Brindado' : '🥂 Brindar'}
               </button>
               <button class="btn-card-action btn-card-chat" onclick="window.azararApp.openDirectChat('${u.id}')">
-                💬 Conversar
+                💬 Perfil
               </button>
             </div>
           </div>
         </div>
       `;
     }).join('');
+  }
+
+  function sendCheers(userId) {
+    const users = Storage.getUsers();
+    const target = users.find(u => u.id === userId);
+    if (!target) return;
+
+    if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
+
+    target.cheersSent = true;
+    Storage.saveUsers(users);
+    renderRadarUsers();
+
+    showToast(`🥂 Você enviou um Brinde para ${target.name.split(' ')[0]}!`);
+
+    // Simulated mutual response trigger (celebration match)
+    setTimeout(() => {
+      showCheersCelebration(target);
+    }, 1000);
+  }
+
+  let activeCheersUser = null;
+
+  function showCheersCelebration(targetUser) {
+    activeCheersUser = targetUser;
+    const modal = document.getElementById('modalCheersCelebration');
+    if (!modal) return;
+
+    const myAvatarEl = document.getElementById('cheersMyAvatar');
+    const theirAvatarEl = document.getElementById('cheersTheirAvatar');
+    const subtitleEl = document.getElementById('cheersSubtitle');
+
+    if (myAvatarEl && currentUser) myAvatarEl.src = currentUser.avatar;
+    if (theirAvatarEl) theirAvatarEl.src = targetUser.avatar;
+    if (subtitleEl) {
+      subtitleEl.textContent = `Você e ${targetUser.name.split(' ')[0]} brindaram no mesmo local!`;
+    }
+
+    if (navigator.vibrate) navigator.vibrate([60, 100, 60, 100, 60]);
+    modal.classList.add('active');
+  }
+
+  function closeCheersModal() {
+    document.getElementById('modalCheersCelebration')?.classList.remove('active');
+    activeCheersUser = null;
+  }
+
+  function openDirectChatFromCheers() {
+    if (!activeCheersUser) return;
+    const targetId = activeCheersUser.id;
+    closeCheersModal();
+    openDirectChat(targetId);
   }
 
   function toggleFollowUser(userId) {
@@ -688,7 +754,7 @@
     const msgs = Storage.getMuralMessages();
     scrollBox.innerHTML = msgs.map(m => `
       <div class="mural-msg-item ${m.isMe ? 'is-me' : ''}">
-        <img src="${m.userAvatar}" alt="${m.userName}" class="mural-msg-avatar" />
+        <img src="${m.userAvatar}" alt="${m.userName}" class="mural-msg-avatar" onclick="${m.userId && !m.isMe ? `window.azararApp.openDirectChat('${m.userId}')` : ''}" />
         <div class="mural-msg-bubble">
           <div class="mural-msg-header">
             <span class="mural-msg-author">${m.userName.split(' ')[0]}</span>
@@ -696,6 +762,13 @@
             <span class="mural-msg-time">${m.time}</span>
           </div>
           <p class="mural-msg-text">${escapeHtml(m.text)}</p>
+          ${!m.isMe && m.userId ? `
+            <div style="margin-top: 6px; display: flex; justify-content: flex-end;">
+              <button type="button" class="btn-card-cheers" style="padding: 3px 10px; border-radius: 9999px; font-size: 10.5px;" onclick="window.azararApp.sendCheers('${m.userId}')">
+                🥂 Brindar
+              </button>
+            </div>
+          ` : ''}
         </div>
       </div>
     `).join('');
@@ -916,6 +989,31 @@
     }).join('');
   }
 
+  let chatCountdownTimer = null;
+  let chatSecondsRemaining = 3 * 3600; // 3 hours
+
+  function startChatCountdown() {
+    clearInterval(chatCountdownTimer);
+    chatSecondsRemaining = 3 * 3600 - Math.floor(Math.random() * 90); // ~2h 58m
+
+    function updateDisplay() {
+      const h = Math.floor(chatSecondsRemaining / 3600);
+      const m = Math.floor((chatSecondsRemaining % 3600) / 60);
+      const s = chatSecondsRemaining % 60;
+      const str = `${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+      const el = document.getElementById('chatTimerCount');
+      if (el) el.textContent = str;
+      if (chatSecondsRemaining > 0) {
+        chatSecondsRemaining--;
+      } else {
+        clearInterval(chatCountdownTimer);
+      }
+    }
+
+    updateDisplay();
+    chatCountdownTimer = setInterval(updateDisplay, 1000);
+  }
+
   function openDirectChat(targetUserId) {
     activeChatUserId = targetUserId;
     const users = Storage.getUsers();
@@ -925,13 +1023,14 @@
     const modal = document.getElementById('modalDirectChat');
     document.getElementById('chatActiveAvatar').src = target.avatar;
     document.getElementById('chatActiveName').textContent = target.name;
-    document.getElementById('chatActiveSub').textContent = `Online agora • ${target.distance >= 1000 ? (target.distance / 1000).toFixed(1) + 'km' : target.distance + 'm'} • ${target.intent}`;
+    document.getElementById('chatActiveSub').textContent = `Online agora • ${target.vibe || 'No local'} • ${target.intent}`;
     
     const followBtn = document.getElementById('btnChatFollow');
     if (followBtn) {
       followBtn.textContent = target.following ? '✓ Seguindo' : 'Seguir';
     }
 
+    startChatCountdown();
     renderDirectChatMessages();
     modal?.classList.add('active');
   }
@@ -939,6 +1038,7 @@
   function closeDirectChat() {
     document.getElementById('modalDirectChat')?.classList.remove('active');
     activeChatUserId = null;
+    clearInterval(chatCountdownTimer);
     renderDirectConversations();
   }
 
@@ -960,7 +1060,7 @@
 
     const allChats = Storage.getDirectMessages();
     const msgs = allChats[activeChatUserId] || [
-      { text: `Oi! Te vi online no radar do Azarar. Tudo bem por aí?`, isMe: false, time: '21:10' }
+      { text: `🥂 Brinde aceito! Vocês estão no mesmo local. Este chat expira em 3 horas.`, isMe: false, time: 'Agora' }
     ];
 
     scrollBox.innerHTML = msgs.map(m => `
@@ -970,6 +1070,13 @@
     `).join('');
 
     scrollBox.scrollTop = scrollBox.scrollHeight;
+  }
+
+  function sendQuickIcebreaker(text) {
+    if (!activeChatUserId) return;
+    const input = document.getElementById('txtDirectChatInput');
+    if (input) input.value = text;
+    sendDirectChatMessage();
   }
 
   function sendDirectChatMessage() {
@@ -983,7 +1090,7 @@
     const allChats = Storage.getDirectMessages();
     if (!allChats[activeChatUserId]) {
       allChats[activeChatUserId] = [
-        { text: `Oi! Te vi online no radar do Azarar. Tudo bem por aí?`, isMe: false, time: '21:10' }
+        { text: `🥂 Brinde aceito! Vocês estão no mesmo local. Este chat expira em 3 horas.`, isMe: false, time: 'Agora' }
       ];
     }
 
@@ -997,18 +1104,44 @@
     input.value = '';
     renderDirectChatMessages();
 
-    // Auto-reply
+    // Auto-reply response tailored to in-person meeting
     setTimeout(() => {
       if (activeChatUserId) {
+        const replies = [
+          `Bora! Tô aqui no balcão de jaqueta preta 🍹 Pode vir!`,
+          `Com certeza! Qual mesa você tá? Te vejo aí em 2 min 🥂`,
+          `Adorei a atitude! Vem pro lounge VIP que tem espaço com a galera ✨`,
+          `Fechou! Tô perto da pista de dança, vem pra cá 💃`
+        ];
+        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+
         allChats[activeChatUserId].push({
-          text: `Que bom que você chamou! Bora bater um papo no mural do raio também? 😊`,
+          text: randomReply,
           isMe: false,
           time: timeStr
         });
         Storage.saveDirectMessages(allChats);
         renderDirectChatMessages();
+        if (navigator.vibrate) navigator.vibrate(30);
       }
-    }, 1400);
+    }, 1300);
+  }
+
+  function selectUserVibe(vibeText) {
+    if (!currentUser) return;
+    currentUser.vibe = vibeText;
+    Storage.saveCurrentUser(currentUser);
+
+    document.querySelectorAll('.vibe-chip').forEach(chip => {
+      if (chip.getAttribute('data-vibe') === vibeText) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    });
+
+    showToast(`🍸 Vibe atualizada: "${vibeText}"`);
+    renderRadarUsers();
   }
 
   // ==========================================================================
@@ -1222,6 +1355,11 @@
     handleEditProfileSubmit,
     sendMuralMessage,
     sendDirectChatMessage,
+    sendQuickIcebreaker,
+    sendCheers,
+    closeCheersModal,
+    openDirectChatFromCheers,
+    selectUserVibe,
     openDirectChat,
     closeDirectChat,
     openNewPostModal,

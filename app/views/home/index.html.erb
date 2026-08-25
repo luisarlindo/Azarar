@@ -483,6 +483,25 @@
               </button>
             </div>
 
+            <!-- VIBE SELECTION: Onde estou na festa / evento -->
+            <div style="background: rgba(22, 9, 32, 0.85); border: 1px solid rgba(255, 42, 122, 0.3); border-radius: 14px; padding: 14px; margin-bottom: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                <h4 style="font-size: 13.5px; font-weight: 700; color: #fff;">🍸 Minha Vibe Agora (Onde estou)</h4>
+                <span style="font-size: 10.5px; color: var(--primary-pink); font-weight: 600;">Ao Vivo</span>
+              </div>
+              <p style="font-size: 11.5px; color: var(--text-dim); margin-bottom: 8px;">Esta tag aparece no radar de quem estiver no mesmo local:</p>
+              <div class="vibe-selector-grid" id="vibeSelectorGrid">
+                <button type="button" class="vibe-chip active" data-vibe="🍹 No balcão do bar" onclick="window.azararApp.selectUserVibe('🍹 No balcão do bar')">🍹 No balcão do bar</button>
+                <button type="button" class="vibe-chip" data-vibe="🎧 Na pista de dança" onclick="window.azararApp.selectUserVibe('🎧 Na pista de dança')">🎧 Na pista de dança</button>
+                <button type="button" class="vibe-chip" data-vibe="🛋️ No lounge VIP" onclick="window.azararApp.selectUserVibe('🛋️ No lounge VIP')">🛋️ No lounge VIP</button>
+                <button type="button" class="vibe-chip" data-vibe="🍻 Com a galera" onclick="window.azararApp.selectUserVibe('🍻 Com a galera')">🍻 Com a galera</button>
+                <button type="button" class="vibe-chip" data-vibe="💋 Aberto(a) a um beijo" onclick="window.azararApp.selectUserVibe('💋 Aberto(a) a um beijo')">💋 Aberto(a) a um beijo</button>
+              </div>
+              <div class="auto-off-notice">
+                ⚡ O modo Online desliga automaticamente após 4h de inatividade para economizar bateria e garantir privacidade.
+              </div>
+            </div>
+
             <!-- Profile Subtabs (Instagram Photo Grid vs Tinder Details) -->
             <div class="profile-nav-tabs">
               <button class="prof-tab-btn active" id="btnProfTabGrid" onclick="window.azararApp.switchProfileTab('grid')">
@@ -662,7 +681,7 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- MODAL: DIRECT CHAT (CONVERSA PRIVADA)        -->
+    <!-- MODAL: DIRECT CHAT (CONVERSA PRIVADA EFÊMERA) -->
     <!-- ============================================ -->
     <div class="app-modal modal-chat-fullscreen" id="modalDirectChat" role="dialog" aria-modal="true">
       <div class="chat-fullscreen-card">
@@ -679,7 +698,7 @@
             </div>
             <div>
               <h4 class="chat-user-name" id="chatActiveName">Nome</h4>
-              <span class="chat-user-sub" id="chatActiveSub">Online agora â€¢ 250m de vocÃª</span>
+              <span class="chat-user-sub" id="chatActiveSub">Online agora • No mesmo local</span>
             </div>
           </div>
 
@@ -688,17 +707,64 @@
           </button>
         </div>
 
+        <!-- Ephemeral Countdown Bar -->
+        <div class="chat-countdown-bar" id="chatCountdownBar">
+          <span class="pulse-dot"></span>
+          <span>⏳ Chat Efêmero: Expira em <strong id="chatTimerCount">02h 59m 45s</strong></span>
+        </div>
+
         <div class="chat-messages-container" id="directChatMessagesList">
           <!-- Messages dynamically populated -->
         </div>
 
+        <!-- Quick Icebreaker Chips (1-Click Send) -->
+        <div class="quick-icebreakers-row">
+          <button type="button" class="icebreaker-chip" onclick="window.azararApp.sendQuickIcebreaker('🍹 Bora tomar um drink no bar?')">🍹 Bora tomar um drink?</button>
+          <button type="button" class="icebreaker-chip" onclick="window.azararApp.sendQuickIcebreaker('👀 Tô de jaqueta preta perto do palco')">👀 Tô perto do palco</button>
+          <button type="button" class="icebreaker-chip" onclick="window.azararApp.sendQuickIcebreaker('🥂 Qual mesa você tá?')">🥂 Qual mesa você tá?</button>
+          <button type="button" class="icebreaker-chip" onclick="window.azararApp.sendQuickIcebreaker('💃 Bora pra pista de dança?')">💃 Bora pra pista?</button>
+        </div>
+
         <form class="chat-input-bar" onsubmit="event.preventDefault(); window.azararApp.sendDirectChatMessage();">
-          <input type="text" id="txtDirectChatInput" placeholder="Digite uma mensagem..." required />
+          <input type="text" id="txtDirectChatInput" placeholder="Digite uma mensagem rápida..." required />
           <button type="submit" class="btn-send-mural" aria-label="Enviar">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
           </button>
         </form>
 
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: BRINDE MÚTUO CELEBRATION (MATCH NO LOCAL) -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalCheersCelebration" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeCheersModal()"></div>
+      <div class="modal-card-sheet cheers-celebration-card">
+        <div class="cheers-avatars-row">
+          <div class="cheers-avatar-circle">
+            <img src="" id="cheersMyAvatar" alt="Você" />
+          </div>
+          <div class="cheers-icon-bounce">🥂</div>
+          <div class="cheers-avatar-circle">
+            <img src="" id="cheersTheirAvatar" alt="Parceiro(a)" />
+          </div>
+        </div>
+
+        <h3 class="cheers-title">🎉 É UM BRINDE MÚTUO!</h3>
+        <p class="cheers-subtitle" id="cheersSubtitle">Vocês dois brindaram e estão no mesmo local agora!</p>
+
+        <div class="cheers-timer-warning">
+          <span>⏳ Chat Efêmero desbloqueado: Expira em <strong>3 horas</strong> para combinarem de se falar no balcão.</span>
+        </div>
+
+        <button type="button" class="btn-primary btn-card-cheers" style="height: 48px; width: 100%;" onclick="window.azararApp.openDirectChatFromCheers()">
+          <span>💬 Abrir Chat Efêmero</span>
+        </button>
+
+        <button type="button" class="btn-outline-login" style="margin-top: 10px; height: 42px; width: 100%; border: 1px solid rgba(255,255,255,0.2);" onclick="window.azararApp.closeCheersModal()">
+          <span>Continuar no Radar</span>
+        </button>
       </div>
     </div>
 

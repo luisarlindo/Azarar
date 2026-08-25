@@ -2265,3 +2265,173 @@ html, body {
 @keyframes pulseRing { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.7); opacity: 0; } }
 @keyframes pulseDot { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.3); opacity: 1; } }
 @keyframes heartBounce { 0% { transform: scale(1); } 50% { transform: scale(1.35); } 100% { transform: scale(1); } }
+
+/* ==========================================================================
+   BRINDE 🥂 & AZARAR ⚡ DYNAMIC STYLES
+   ========================================================================== */
+.btn-card-cheers {
+  background: linear-gradient(135deg, #ff2a7a 0%, #d946ef 100%) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 14px rgba(255, 42, 122, 0.45) !important;
+  border: none !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.btn-card-cheers:active {
+  transform: scale(0.94);
+  box-shadow: 0 2px 8px rgba(255, 42, 122, 0.6) !important;
+}
+.btn-card-cheers.cheers-sent {
+  background: rgba(255, 42, 122, 0.2) !important;
+  color: #ff478e !important;
+  border: 1px solid rgba(255, 42, 122, 0.4) !important;
+  box-shadow: none !important;
+}
+
+.card-vibe-pill {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(13, 5, 23, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #ffffff;
+  z-index: 4;
+}
+
+/* Celebration Modal */
+.cheers-celebration-card {
+  text-align: center;
+  background: radial-gradient(circle at 50% 30%, #300c46 0%, #130420 100%) !important;
+  border: 2px solid #ff2a7a !important;
+  box-shadow: 0 0 40px rgba(255, 42, 122, 0.5) !important;
+}
+.cheers-avatars-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 15px 0 12px 0;
+}
+.cheers-avatar-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 3px solid #ff2a7a;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(255, 42, 122, 0.6);
+}
+.cheers-avatar-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cheers-icon-bounce {
+  font-size: 38px;
+  animation: cheersBounce 1s infinite alternate cubic-bezier(0.28, 0.84, 0.42, 1);
+}
+@keyframes cheersBounce {
+  0% { transform: scale(0.9) rotate(-10deg); }
+  100% { transform: scale(1.2) rotate(10deg); }
+}
+.cheers-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+.cheers-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 14px;
+}
+.cheers-timer-warning {
+  background: rgba(255, 42, 122, 0.15);
+  border: 1px solid rgba(255, 42, 122, 0.35);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: #ffd1e3;
+}
+
+/* Chat Countdown & Icebreakers */
+.chat-countdown-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 42, 122, 0.15);
+  border-bottom: 1px solid rgba(255, 42, 122, 0.3);
+  padding: 6px 12px;
+  font-size: 11px;
+  color: #ff94bf;
+}
+.chat-countdown-bar strong {
+  color: #ffffff;
+  font-family: 'Montserrat', monospace;
+  letter-spacing: 0.5px;
+}
+
+.quick-icebreakers-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 6px 10px;
+  background: rgba(13, 5, 23, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.icebreaker-chip {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 5px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.icebreaker-chip:hover, .icebreaker-chip:active {
+  background: rgba(255, 42, 122, 0.25);
+  border-color: #ff2a7a;
+  color: #ffffff;
+}
+
+/* Vibe Selector */
+.vibe-selector-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0;
+}
+.vibe-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.vibe-chip.active {
+  background: linear-gradient(135deg, rgba(255, 42, 122, 0.3) 0%, rgba(217, 70, 239, 0.3) 100%);
+  border-color: #ff2a7a;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(255, 42, 122, 0.4);
+}
+.auto-off-notice {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
