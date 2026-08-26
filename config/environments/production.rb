@@ -76,15 +76,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # Only use :id for inspections in production.
-  config.active_record.attributes_for_inspect = [ :id ]
+  # Enable serving static files in production
+  config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present? || true
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  # config.hosts = [
-  #   "example.com",     # Allow requests from example.com
-  #   /.*\.example\.com/ # Allow requests from subdomains like `www.example.com`
-  # ]
-  #
-  # Skip DNS rebinding protection for the default health check endpoint.
-  # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+  # Allow all hosts (azarar.com.br, www.azarar.com.br, VPS IP) in production
+  config.hosts.clear
 end
