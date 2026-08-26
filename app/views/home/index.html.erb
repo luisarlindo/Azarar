@@ -19,12 +19,12 @@
   <main class="app-screen">
     
     <!-- Screen Container (Isolated In-App Views Container) -->
-    <div class="screen-container view-mode-home" id="screenContainer">
+    <div class="screen-container <%= current_user ? 'view-mode-app-shell' : 'view-mode-home' %>" id="screenContainer">
       
       <!-- ============================================ -->
       <!-- VIEW 1: HOME / LANDING SCREEN (Logged Out)  -->
       <!-- ============================================ -->
-      <section class="app-view view-home active" id="viewHome" style="display: flex;">
+      <section class="app-view view-home <%= current_user ? '' : 'active' %>" id="viewHome" style="<%= current_user ? 'display: none !important;' : 'display: flex !important;' %>">
         
         <!-- Ambient Particles Canvas -->
         <canvas id="particlesCanvas" class="particles-canvas"></canvas>
@@ -288,7 +288,7 @@
       <!-- ============================================ -->
       <!-- VIEW 4: APP SHELL (Logged In Experience)     -->
       <!-- ============================================ -->
-      <section class="app-view view-app-shell" id="viewAppShell" style="display: none;">
+      <section class="app-view view-app-shell <%= current_user ? 'active' : '' %>" id="viewAppShell" style="<%= current_user ? 'display: flex !important;' : 'display: none !important;' %>">
         
         <!-- App Top Header -->
         <header class="app-topbar">
