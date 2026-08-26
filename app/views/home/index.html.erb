@@ -464,11 +464,23 @@
 
             <!-- Bio -->
             <div class="profile-bio-card">
-              <p class="profile-bio-text" id="profBio">Escreva sua biografia aqui para que as pessoas conheÃ§am vocÃª melhor.</p>
+              <p class="profile-bio-text" id="profBio">Escreva sua biografia aqui para que as pessoas conheçam você melhor.</p>
               <div class="profile-location-row">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                <span id="profLocation">SÃ£o Paulo, SP â€¢ No seu raio agora</span>
+                <span id="profLocation">São Paulo, SP • No seu raio agora</span>
               </div>
+            </div>
+
+            <!-- Face Verification Card (Anti-Fake) -->
+            <div class="face-verification-card" id="faceVerificationCard">
+              <div class="verif-card-icon" id="verifIcon">🛡️</div>
+              <div class="verif-card-info">
+                <h4 id="verifTitle">Perfil Não Verificado</h4>
+                <p id="verifDesc">Autentique seu rosto com a câmera para ganhar o Selo Azul e ter 3x mais conexões.</p>
+              </div>
+              <button type="button" class="btn-verify-face" id="btnOpenFaceVerif" onclick="window.azararApp.openFaceVerificationModal()">
+                Verificar
+              </button>
             </div>
 
             <!-- Profile Action Buttons -->
@@ -765,6 +777,47 @@
         <button type="button" class="btn-outline-login" style="margin-top: 10px; height: 42px; width: 100%; border: 1px solid rgba(255,255,255,0.2);" onclick="window.azararApp.closeCheersModal()">
           <span>Continuar no Radar</span>
         </button>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: RECONHECIMENTO FACIAL ANTI-FAKE       -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalFaceVerification" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeFaceVerificationModal()"></div>
+      <div class="modal-card-sheet face-verif-modal-sheet">
+        <div class="modal-header">
+          <h3 class="modal-title">Reconhecimento Facial Anti-Fake</h3>
+          <button class="modal-close-btn" onclick="window.azararApp.closeFaceVerificationModal()">✕</button>
+        </div>
+
+        <div class="face-scanner-container">
+          <div class="camera-stream-wrap" id="cameraStreamWrap">
+            <video id="faceCameraVideo" autoplay playsinline muted></video>
+            <div class="face-target-oval">
+              <div class="scan-laser-line"></div>
+            </div>
+          </div>
+
+          <div class="face-scan-status-box">
+            <div class="face-scan-status-badge" id="faceScanBadge">
+              <span class="pulse-dot"></span>
+              <span id="faceScanStatusText">Posicione seu rosto no centro</span>
+            </div>
+            <div class="face-progress-bar-wrap">
+              <div class="face-progress-bar" id="faceProgressBar" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="face-verif-actions" style="margin-top: 14px;">
+          <button type="button" class="btn-primary" id="btnStartFaceScan" style="height: 48px; width: 100%;" onclick="window.azararApp.startFacialRecognitionScan()">
+            <span>📸 Iniciar Reconhecimento Facial</span>
+          </button>
+          <button type="button" class="btn-outline-login" style="margin-top: 8px; height: 40px; width: 100%; border: 1px solid rgba(255,255,255,0.2);" onclick="window.azararApp.closeFaceVerificationModal()">
+            Cancelar
+          </button>
+        </div>
       </div>
     </div>
 

@@ -2435,3 +2435,151 @@ html, body {
   line-height: 1.4;
 }
 
+/* ==========================================================================
+   FACIAL RECOGNITION & VERIFICATION STYLES
+   ========================================================================== */
+.face-verification-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(22, 9, 32, 0.95) 0%, rgba(35, 12, 50, 0.95) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
+}
+.face-verification-card.is-verified {
+  border-color: rgba(56, 189, 248, 0.8);
+  background: linear-gradient(135deg, rgba(8, 30, 48, 0.9) 0%, rgba(12, 18, 35, 0.9) 100%);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+}
+
+.verif-card-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.verif-card-info {
+  flex: 1;
+}
+.verif-card-info h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+.verif-card-info p {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.35;
+}
+.btn-verify-face {
+  background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+  color: #ffffff;
+  border: none;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 7px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(56, 189, 248, 0.4);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.btn-verify-face:hover, .btn-verify-face:active {
+  transform: scale(0.95);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.7);
+}
+.btn-verify-face.verified-done {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border: 1px solid #38bdf8;
+  box-shadow: none;
+  cursor: default;
+}
+
+/* Face Scanner Modal */
+.face-scanner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px 0;
+}
+.camera-stream-wrap {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 42, 122, 0.6);
+  background: #000;
+  box-shadow: 0 0 30px rgba(255, 42, 122, 0.4);
+}
+.camera-stream-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.camera-stream-wrap.scan-success {
+  border-color: #38bdf8;
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.7);
+}
+
+.face-target-oval {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+  overflow: hidden;
+}
+.scan-laser-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ff2a7a, #38bdf8, transparent);
+  box-shadow: 0 0 12px #ff2a7a, 0 0 8px #38bdf8;
+  animation: laserScan 2s infinite ease-in-out alternate;
+}
+@keyframes laserScan {
+  0% { top: 5%; opacity: 0.8; }
+  100% { top: 92%; opacity: 1; }
+}
+
+.face-scan-status-box {
+  width: 100%;
+  text-align: center;
+  margin-top: 14px;
+}
+.face-scan-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 11.5px;
+  color: #ffffff;
+}
+.face-progress-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.face-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff2a7a 0%, #38bdf8 100%);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+

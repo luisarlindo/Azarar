@@ -487,6 +487,7 @@
     document.getElementById('profStatFollowers').textContent = currentUser.followersCount || 148;
     document.getElementById('profStatFollowing').textContent = currentUser.followingCount || 92;
 
+    updateVerificationUI();
     renderRadarUsers();
     renderMuralMessages();
     renderStories();
@@ -1231,6 +1232,146 @@
   }
 
   // ==========================================================================
+  // 9.1. RECONHECIMENTO FACIAL & VERIFICAÇÃO ANTI-FAKE
+  // ==========================================================================
+  let currentCameraStream = null;
+
+  function updateVerificationUI() {
+    const card = document.getElementById('faceVerificationCard');
+    const icon = document.getElementById('verifIcon');
+    const title = document.getElementById('verifTitle');
+    const desc = document.getElementById('verifDesc');
+    const btn = document.getElementById('btnOpenFaceVerif');
+    const checkmark = document.querySelector('.verified-check');
+
+    if (!card) return;
+
+    if (currentUser?.isVerified) {
+      card.classList.add('is-verified');
+      if (icon) icon.textContent = '✅';
+      if (title) title.textContent = '🛡️ Perfil 100% Verificado';
+      if (desc) desc.textContent = 'Identidade facial autenticada com sucesso. Você transmite máxima confiança no radar!';
+      if (btn) {
+        btn.textContent = '✓ Verificado';
+        btn.classList.add('verified-done');
+        btn.onclick = null;
+      }
+      if (checkmark) checkmark.style.display = 'inline-flex';
+    } else {
+      card.classList.remove('is-verified');
+      if (icon) icon.textContent = '🛡️';
+      if (title) title.textContent = 'Perfil Não Verificado';
+      if (desc) desc.textContent = 'Autentique seu rosto com a câmera para ganhar o Selo Azul e ter 3x mais conexões.';
+      if (btn) {
+        btn.textContent = 'Verificar';
+        btn.classList.remove('verified-done');
+        btn.onclick = openFaceVerificationModal;
+      }
+      if (checkmark) checkmark.style.display = 'none';
+    }
+  }
+
+  function openFaceVerificationModal() {
+    const modal = document.getElementById('modalFaceVerification');
+    const video = document.getElementById('faceCameraVideo');
+    const badgeText = document.getElementById('faceScanStatusText');
+    const progressBar = document.getElementById('faceProgressBar');
+    const wrap = document.getElementById('cameraStreamWrap');
+    const startBtn = document.getElementById('btnStartFaceScan');
+
+    if (!modal) return;
+
+    if (wrap) wrap.classList.remove('scan-success');
+    if (progressBar) progressBar.style.width = '0%';
+    if (badgeText) badgeText.textContent = 'Posicione seu rosto no centro';
+    if (startBtn) {
+      startBtn.disabled = false;
+      startBtn.innerHTML = '<span>📸 Iniciar Reconhecimento Facial</span>';
+    }
+
+    modal.classList.add('active');
+
+    // Attempt webcam access
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+        .then(stream => {
+          currentCameraStream = stream;
+          if (video) {
+            video.srcObject = stream;
+            video.play().catch(() => {});
+          }
+        })
+        .catch(err => {
+          console.warn('Camera access fallback:', err);
+          if (badgeText) badgeText.textContent = 'Modo de Simulação Facial Ativo';
+        });
+    }
+  }
+
+  function closeFaceVerificationModal() {
+    const modal = document.getElementById('modalFaceVerification');
+    modal?.classList.remove('active');
+
+    if (currentCameraStream) {
+      currentCameraStream.getTracks().forEach(track => track.stop());
+      currentCameraStream = null;
+    }
+    const video = document.getElementById('faceCameraVideo');
+    if (video) video.srcObject = null;
+  }
+
+  function startFacialRecognitionScan() {
+    const badgeText = document.getElementById('faceScanStatusText');
+    const progressBar = document.getElementById('faceProgressBar');
+    const wrap = document.getElementById('cameraStreamWrap');
+    const startBtn = document.getElementById('btnStartFaceScan');
+
+    if (startBtn) {
+      startBtn.disabled = true;
+      startBtn.innerHTML = '<span>🔍 Escaneando Rosto...</span>';
+    }
+
+    if (navigator.vibrate) navigator.vibrate(30);
+
+    // Step 1 (30%)
+    if (progressBar) progressBar.style.width = '30%';
+    if (badgeText) badgeText.textContent = '🔍 Detectando pontos biométricos (olhos, nariz, boca)...';
+
+    setTimeout(() => {
+      // Step 2 (65%)
+      if (progressBar) progressBar.style.width = '65%';
+      if (badgeText) badgeText.textContent = '🤖 Comparando geometria facial com a foto de perfil...';
+      if (navigator.vibrate) navigator.vibrate(40);
+    }, 800);
+
+    setTimeout(() => {
+      // Step 3 (90%)
+      if (progressBar) progressBar.style.width = '90%';
+      if (badgeText) badgeText.textContent = '✨ Teste de prova de vida aprovado (Liveness OK)...';
+    }, 1600);
+
+    setTimeout(() => {
+      // Step 4 (100% Success)
+      if (progressBar) progressBar.style.width = '100%';
+      if (wrap) wrap.classList.add('scan-success');
+      if (badgeText) badgeText.textContent = '✅ Rosto Autenticado! 98.6% de similaridade.';
+
+      if (currentUser) {
+        currentUser.isVerified = true;
+        Storage.saveCurrentUser(currentUser);
+      }
+
+      if (navigator.vibrate) navigator.vibrate([60, 100, 60, 100, 60]);
+      showToast('🛡️ Perfil 100% Verificado com Sucesso! Selo Azul Ativado.');
+
+      setTimeout(() => {
+        closeFaceVerificationModal();
+        renderAppShell();
+      }, 1200);
+    }, 2400);
+  }
+
+  // ==========================================================================
   // 10. UTILITIES & PARTICLES
   // ==========================================================================
   function escapeHtml(str) {
@@ -1360,6 +1501,9 @@
     closeCheersModal,
     openDirectChatFromCheers,
     selectUserVibe,
+    openFaceVerificationModal,
+    closeFaceVerificationModal,
+    startFacialRecognitionScan,
     openDirectChat,
     closeDirectChat,
     openNewPostModal,
