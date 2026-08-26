@@ -201,7 +201,7 @@
         <div class="view-scroll-content">
           <div class="form-intro">
             <h1 class="view-title" id="loginScreenTitle">Bem-vindo de volta</h1>
-            <p class="view-subtitle">Acesse sua conta para ver suas conexÃµes e mensagens.</p>
+            <p class="view-subtitle">Acesse sua conta para ver suas conexões e mensagens.</p>
           </div>
 
           <form class="app-form" id="loginForm" onsubmit="event.preventDefault(); window.azararApp.handleLoginSubmit();">
@@ -219,7 +219,7 @@
             <div class="form-group">
               <div class="label-row">
                 <label for="loginPass">Sua Senha</label>
-                <a href="#" class="forgot-link" onclick="window.azararApp.toast('Link de recuperaÃ§Ã£o enviado!')">Esqueci a senha</a>
+                <a href="#" class="forgot-link" onclick="window.azararApp.toast('Link de recuperação enviado!')">Esqueci a senha</a>
               </div>
               <div class="input-wrap">
                 <span class="input-icon">
@@ -227,7 +227,7 @@
                 </span>
                 <input type="password" id="loginPass" placeholder="Digite sua senha" required autocomplete="current-password" />
                 <button type="button" class="btn-toggle-pwd" onclick="window.azararApp.togglePasswordVisibility('loginPass', this)" aria-label="Mostrar/ocultar senha">
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 </button>
               </div>
             </div>
@@ -242,7 +242,7 @@
           </form>
 
           <p class="form-switch-prompt">
-            NÃ£o tem uma conta? <button type="button" class="link-switch" onclick="window.azararApp.showView('register')">Cadastre-se</button>
+            Não tem uma conta? <button type="button" class="link-switch" onclick="window.azararApp.showView('register')">Cadastre-se</button>
           </p>
         </div>
       </section>
@@ -287,7 +287,7 @@
                   </span>
                   <div>
                     <h3 class="control-title">Estou Online Agora</h3>
-                    <p class="control-desc">VisÃ­vel no radar e no mural de proximidade</p>
+                    <p class="control-desc">Visível no radar e no mural de proximidade</p>
                   </div>
                 </div>
                 
@@ -331,15 +331,12 @@
             <div class="radar-subcontent" id="subtabUsers">
               <div class="nearby-users-grid" id="nearbyUsersList">
                 <!-- Rendered dynamically via JS -->
-              </div>
-            </div>
-
-            <!-- SUB-TAB 2: MURAL / CHAT ABERTO DO RAIO (Sem Match NecessÃ¡rio) -->
+                   <!-- SUB-TAB 2: MURAL / CHAT ABERTO DO RAIO (Sem Match Necessário) -->
             <div class="radar-subcontent" id="subtabMural" style="display: none;">
               <div class="mural-chat-box">
                 <div class="mural-banner">
-                  <span class="mural-badge">ðŸ”¥ Chat Aberto</span>
-                  <p class="mural-info">Todos que estÃ£o dentro de <strong id="muralRadiusText">500m</strong> podem ler e responder livremente aqui!</p>
+                  <span class="mural-badge">🔥 Chat Aberto</span>
+                  <p class="mural-info">Todos que estão dentro de <strong id="muralRadiusText">500m</strong> podem ler e responder livremente aqui!</p>
                 </div>
                 
                 <div class="mural-messages-scroll" id="muralMessagesList">
@@ -382,7 +379,7 @@
             </div>
 
             <!-- Floating Action Button: New Post -->
-            <button class="fab-new-post" onclick="window.azararApp.openNewPostModal()" aria-label="Criar nova publicaÃ§Ã£o">
+            <button class="fab-new-post" onclick="window.azararApp.openNewPostModal()" aria-label="Criar nova publicação">
               <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
 
@@ -395,13 +392,13 @@
               <h2 class="messages-title">Conversas</h2>
               <div class="search-wrap">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="txtSearchChat" placeholder="Buscar conexÃµes ou mensagens..." oninput="window.azararApp.filterChats(this.value)" />
+                <input type="text" id="txtSearchChat" placeholder="Buscar conexões ou mensagens..." oninput="window.azararApp.filterChats(this.value)" />
               </div>
             </div>
 
             <!-- Pinned: Quick Access to Mural -->
             <div class="pinned-mural-card" onclick="window.azararApp.switchTab('radar'); window.azararApp.switchRadarSubTab('mural');">
-              <div class="pinned-icon-wrap">ðŸ”¥</div>
+              <div class="pinned-icon-wrap">🔥</div>
               <div class="pinned-info">
                 <div class="pinned-top-row">
                   <strong class="pinned-name">Mural do Raio Local</strong>
@@ -420,7 +417,7 @@
 
           </div>
 
-          <!-- TAB 4: MEU PERFIL (HÃBRIDO TINDER + INSTAGRAM) -->
+          <!-- TAB 4: MEU PERFIL (HÍBRIDO TINDER + INSTAGRAM) -->
           <div class="tab-page tab-profile" id="tabProfile">
             
             <!-- Profile Hero Header -->
@@ -435,13 +432,13 @@
               <div class="profile-hero-info">
                 <div class="name-row">
                   <h2 class="profile-fullname" id="profFullName">Seu Nome</h2>
-                  <span class="verified-check" title="Perfil Verificado">âœ“</span>
+                  <span class="verified-check" title="Perfil Verificado">✓</span>
                 </div>
                 <span class="profile-handle" id="profHandle">@usuario</span>
                 
                 <!-- Relationship Intent Tag -->
                 <div class="profile-intent-pill" id="profIntentBadge">
-                  <span>ðŸ’ Relacionamento SÃ©rio</span>
+                  <span>💍 Relacionamento Sério</span>
                 </div>
               </div>
             </div>
@@ -536,22 +533,22 @@
             <!-- Profile Tab 2: Tinder Style Card & Passions -->
             <div class="profile-subcontent" id="profContentDetails" style="display: none;">
               <div class="tinder-details-card">
-                <h4 class="tinder-card-heading">PassÃµes & Interesses</h4>
+                <h4 class="tinder-card-heading">Passões & Interesses</h4>
                 <div class="passions-tags-list" id="profPassionsList">
-                  <span class="passion-tag">ðŸ¹ Baladas</span>
-                  <span class="passion-tag">ðŸŽ§ MÃºsica EletrÃ´nica</span>
-                  <span class="passion-tag">âœˆï¸ Viagens</span>
-                  <span class="passion-tag">ðŸ£ Gastronomia</span>
-                  <span class="passion-tag">ðŸ‹ï¸ Fitness</span>
-                  <span class="passion-tag">ðŸŽ¬ Cinema</span>
+                  <span class="passion-tag">🍹 Baladas</span>
+                  <span class="passion-tag">🎧 Música Eletrônica</span>
+                  <span class="passion-tag">✈️ Viagens</span>
+                  <span class="passion-tag">🍣 Gastronomia</span>
+                  <span class="passion-tag">🏋️ Fitness</span>
+                  <span class="passion-tag">🎬 Cinema</span>
                 </div>
 
-                <h4 class="tinder-card-heading" style="margin-top: 18px;">InformaÃ§Ãµes Adicionais</h4>
+                <h4 class="tinder-card-heading" style="margin-top: 18px;">Informações Adicionais</h4>
                 <div class="tinder-info-rows">
-                  <div class="info-item-row"><span class="info-label">Signo:</span> <strong>EscorpiÃ£o â™</strong></div>
+                  <div class="info-item-row"><span class="info-label">Signo:</span> <strong>Escorpião ♏</strong></div>
                   <div class="info-item-row"><span class="info-label">Altura:</span> <strong>1,75 m</strong></div>
-                  <div class="info-item-row"><span class="info-label">Bebida:</span> <strong>Socialmente ðŸ¸</strong></div>
-                  <div class="info-item-row"><span class="info-label">IntenÃ§Ã£o:</span> <strong id="tinderIntentLabel">ðŸ’ Relacionamento SÃ©rio</strong></div>
+                  <div class="info-item-row"><span class="info-label">Bebida:</span> <strong>Socialmente 🍸</strong></div>
+                  <div class="info-item-row"><span class="info-label">Intenção:</span> <strong id="tinderIntentLabel">💍 Relacionamento Sério</strong></div>
                 </div>
               </div>
             </div>
@@ -596,14 +593,14 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- MODAL: NOVA PUBLICAÃ‡ÃƒO (POST NO FEED)        -->
+    <!-- MODAL: NOVA PUBLICAÇÃO (POST NO FEED)        -->
     <!-- ============================================ -->
     <div class="app-modal" id="modalNewPost" role="dialog" aria-modal="true">
       <div class="modal-backdrop" onclick="window.azararApp.closeNewPostModal()"></div>
       <div class="modal-card-sheet">
         <div class="modal-header">
-          <h3 class="modal-title">Nova PublicaÃ§Ã£o</h3>
-          <button class="modal-close-btn" onclick="window.azararApp.closeNewPostModal()">âœ•</button>
+          <h3 class="modal-title">Nova Publicação</h3>
+          <button class="modal-close-btn" onclick="window.azararApp.closeNewPostModal()">✕</button>
         </div>
 
         <form class="modal-form" onsubmit="event.preventDefault(); window.azararApp.handleCreatePostSubmit();">
@@ -623,14 +620,14 @@
           <div class="form-group">
             <label for="txtPostCaption">Legenda da foto:</label>
             <div class="input-wrap">
-              <textarea id="txtPostCaption" rows="3" placeholder="O que vocÃª estÃ¡ fazendo ou pensando agora?..." required></textarea>
+              <textarea id="txtPostCaption" rows="3" placeholder="O que você está fazendo ou pensando agora?..." required></textarea>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="txtPostLocation">LocalizaÃ§Ã£o:</label>
+            <label for="txtPostLocation">Localização:</label>
             <div class="input-wrap">
-              <input type="text" id="txtPostLocation" placeholder="Ex: Rooftop Bar, Jardins" value="SÃ£o Paulo, SP" />
+              <input type="text" id="txtPostLocation" placeholder="Ex: Rooftop Bar, Jardins" value="São Paulo, SP" />
             </div>
           </div>
 
@@ -649,7 +646,7 @@
       <div class="modal-card-sheet">
         <div class="modal-header">
           <h3 class="modal-title">Editar Meu Perfil</h3>
-          <button class="modal-close-btn" onclick="window.azararApp.closeEditProfileModal()">âœ•</button>
+          <button class="modal-close-btn" onclick="window.azararApp.closeEditProfileModal()">✕</button>
         </div>
 
         <form class="modal-form" onsubmit="event.preventDefault(); window.azararApp.handleEditProfileSubmit();">
@@ -664,17 +661,17 @@
           <div class="form-group">
             <label for="editBio">Biografia</label>
             <div class="input-wrap">
-              <textarea id="editBio" rows="3" placeholder="Conte um pouco sobre sua vibe e o que vocÃª curte..."></textarea>
+              <textarea id="editBio" rows="3" placeholder="Conte um pouco sobre sua vibe e o que você curte..."></textarea>
             </div>
           </div>
 
           <div class="form-group">
-            <label>IntenÃ§Ã£o Principal:</label>
+            <label>Intenção Principal:</label>
             <div class="intent-chips-grid" id="editIntentChips">
-              <button type="button" class="intent-chip" data-intent="Relacionamento SÃ©rio">ðŸ’ Relacionamento SÃ©rio</button>
-              <button type="button" class="intent-chip" data-intent="Casual">ðŸ¹ Encontros Casuais</button>
-              <button type="button" class="intent-chip" data-intent="Sexo">ðŸ’‹ Sexo sem tabus</button>
-              <button type="button" class="intent-chip" data-intent="Companhia">âœ¨ Companhia & Amizade</button>
+              <button type="button" class="intent-chip" data-intent="Relacionamento Sério">💍 Relacionamento Sério</button>
+              <button type="button" class="intent-chip" data-intent="Casual">🍹 Encontros Casuais</button>
+              <button type="button" class="intent-chip" data-intent="Sexo">💋 Sexo sem tabus</button>
+              <button type="button" class="intent-chip" data-intent="Companhia">✨ Companhia & Amizade</button>
             </div>
           </div>
 
@@ -686,7 +683,7 @@
           </div>
 
           <button type="submit" class="btn-primary" style="margin-top: 14px; height: 50px;">
-            <span>Salvar AlteraÃ§Ãµes</span>
+            <span>Salvar Alterações</span>
           </button>
         </form>
       </div>
