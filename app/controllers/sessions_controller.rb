@@ -44,33 +44,7 @@ class SessionsController < ApplicationController
   end
 
   def face_login
-    identifier = params[:identifier].to_s.strip.downcase.gsub(/^@/, "")
     captured_image = params[:captured_image] || params[:image]
-
-    user = if identifier.present?
-      User.where("lower(username) = ? OR lower(email_or_phone) = ?", identifier, identifier).first
-    else
-      current_user || User.verified_users.first
-    end
-
-    if user.nil?
-      render json: {
-        success: false,
-        error_type: "user_not_found",
-        message: "Usuário não encontrado. Por favor, cadastre-se ou entre com seu e-mail/senha."
-      }, status: :not_found
-      return
-    end
-
-    # Check if user has biometric enrollment
-    unless user.verified?
-      render json: {
-        success: false,
-        error_type: "not_enrolled",
-        message: "O usuário #{user.name} ainda não cadastrou o reconhecimento facial. Entre com sua senha tradicional e ative a verificação facial no seu perfil."
-      }, status: :unprocessable_entity
-      return
-    end
 
     if captured_image.blank?
       render json: {
@@ -81,37 +55,74 @@ class SessionsController < ApplicationController
       return
     end
 
-    # Execute biometric verification against stored face
-    service = FaceRecognitionService.new(user, captured_image)
-    result = service.verify!
+    verified_candidates = User.verified_users
 
-    if result.success?
-      session[:user_id] = user.id
-      user.update(online_now: true)
+    if verified_candidates.empty?
+      render json: {
+        success: false,
+        error_type: "not_enrolled",
+        message: "Nenhum usuário com biometria cadastrada no sistema. Faça o login tradicional com sua senha e ative o Selo de Verificação Facial no seu perfil."
+      }, status: :unprocessable_entity
+      return
+    end
+
+    # If identifier was optionally passed, filter to that user
+    if params[:identifier].present?
+      ident = params[:identifier].to_s.strip.downcase.gsub(/^@/, "")
+      specific_user = User.where("lower(username) = ? OR lower(email_or_phone) = ?", ident, ident).first
+      if specific_user
+        unless specific_user.verified?
+          render json: {
+            success: false,
+            error_type: "not_enrolled",
+            message: "O usuário #{specific_user.name} ainda não possui biometria facial cadastrada. Entre com sua senha tradicional."
+          }, status: :unprocessable_entity
+          return
+        end
+        verified_candidates = [specific_user]
+      end
+    end
+
+    # Biometric identification (1:N search)
+    best_match = nil
+    highest_score = 0.0
+
+    verified_candidates.each do |candidate|
+      service = FaceRecognitionService.new(candidate, captured_image)
+      result = service.verify!
+      if result.success? && result.similarity > highest_score
+        highest_score = result.similarity
+        best_match = candidate
+      end
+      break if highest_score >= 95.0 # Early-exit optimization
+    end
+
+    if best_match && highest_score >= 85.0
+      session[:user_id] = best_match.id
+      best_match.update(online_now: true)
 
       render json: {
         success: true,
         authenticated: true,
-        similarity: result.similarity,
-        message: "🎉 Reconhecimento facial aprovado (#{result.similarity}%)! Bem-vindo(a) de volta, #{user.name.split(' ').first}!",
+        similarity: highest_score,
+        message: "🎉 Reconhecimento facial aprovado (#{highest_score}%)! Bem-vindo(a) de volta, #{best_match.name.split(' ').first}!",
         user: {
-          id: user.id,
-          name: user.name,
-          username: user.username,
-          avatar: user.display_avatar,
+          id: best_match.id,
+          name: best_match.name,
+          username: best_match.username,
+          avatar: best_match.display_avatar,
           verified: true,
-          bio: user.bio,
-          intent: user.intentions || "Relacionamento Sério",
-          vibe: user.vibe || "🍹 No balcão do bar"
+          bio: best_match.bio,
+          intent: best_match.intentions || "Relacionamento Sério",
+          vibe: best_match.vibe || "🍹 No balcão do bar"
         }
       }, status: :ok
     else
       render json: {
         success: false,
         authenticated: false,
-        similarity: result.similarity,
         error_type: "biometric_mismatch",
-        message: "❌ Rosto não reconhecido. Tente com boa iluminação ou entre com sua senha."
+        message: "❌ Rosto não reconhecido entre os usuários cadastrados. Tente novamente com boa iluminação ou entre com sua senha."
       }, status: :unauthorized
     end
   end

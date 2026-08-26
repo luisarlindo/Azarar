@@ -1337,13 +1337,11 @@
     const progressBar = document.getElementById('faceProgressBar');
     const wrap = document.getElementById('cameraStreamWrap');
     const startBtn = document.getElementById('btnStartFaceScan');
-    const userWrap = document.getElementById('faceLoginUserWrap');
     const title = modal?.querySelector('.modal-title');
 
     if (!modal) return;
 
     if (title) title.textContent = 'Reconhecimento Facial Anti-Fake';
-    if (userWrap) userWrap.style.display = 'none';
     if (wrap) wrap.classList.remove('scan-success');
     if (progressBar) progressBar.style.width = '0%';
     if (badgeText) badgeText.textContent = 'Posicione seu rosto no centro';
@@ -1379,20 +1377,11 @@
     const progressBar = document.getElementById('faceProgressBar');
     const wrap = document.getElementById('cameraStreamWrap');
     const startBtn = document.getElementById('btnStartFaceScan');
-    const userWrap = document.getElementById('faceLoginUserWrap');
     const title = modal?.querySelector('.modal-title');
 
     if (!modal) return;
 
     if (title) title.textContent = 'Entrar com Reconhecimento Facial (Face ID)';
-    if (userWrap) userWrap.style.display = 'block';
-    
-    // Auto-fill from login input if already typed
-    const loginTyped = document.getElementById('loginUser')?.value.trim();
-    const faceUserInp = document.getElementById('txtFaceLoginUser');
-    if (faceUserInp && loginTyped) {
-      faceUserInp.value = loginTyped;
-    }
 
     if (wrap) wrap.classList.remove('scan-success');
     if (progressBar) progressBar.style.width = '0%';
@@ -1465,9 +1454,7 @@
     }, 1400);
 
     if (faceModalMode === 'login') {
-      // FACE ID LOGIN FLOW
-      const typedUser = document.getElementById('txtFaceLoginUser')?.value.trim() || document.getElementById('loginUser')?.value.trim() || '';
-
+      // 1-CLICK FACE ID LOGIN FLOW (Automatic 1:N Identification)
       fetch('/api/v1/face_login', {
         method: 'POST',
         headers: {
@@ -1475,8 +1462,7 @@
           'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
         },
         body: JSON.stringify({
-          captured_image: capturedFrame,
-          identifier: typedUser
+          captured_image: capturedFrame
         })
       })
       .then(async (response) => {
