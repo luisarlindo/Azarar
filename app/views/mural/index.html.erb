@@ -1,4 +1,4 @@
-﻿<div class="tab-page tab-radar active" style="display: flex;">
+<div class="tab-page tab-radar active" style="display: flex;">
   <div class="radar-control-card">
     <div class="control-header">
       <div class="control-title-wrap">
@@ -121,7 +121,7 @@
   }
 
   function setRadius(meters) {
-    fetch('<%= profile_toggle_online_path %>', {
+    fetch('<%= toggle_online_profile_path %>', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -138,7 +138,7 @@
   }
 
   function toggleOnlineStatus(checked) {
-    fetch('<%= profile_toggle_online_path %>', {
+    fetch('<%= toggle_online_profile_path %>', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -154,7 +154,7 @@
           text.innerText = 'Online';
         } else {
           badge.classList.add('offline');
-          text.innerText = 'InvisÃ­vel';
+          text.innerText = 'Invisível';
         }
       }
     });
