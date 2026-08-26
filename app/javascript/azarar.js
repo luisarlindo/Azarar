@@ -465,35 +465,46 @@
       document.getElementById('profHeroAvatar')
     ];
     avatarEls.forEach(el => {
-      if (el) el.src = currentUser.avatar;
+      if (el && currentUser.avatar) el.src = currentUser.avatar;
     });
 
-    document.getElementById('profFullName').textContent = currentUser.name;
-    document.getElementById('profHandle').textContent = '@' + currentUser.username;
-    document.getElementById('profBio').textContent = currentUser.bio || 'Adicione sua biografia...';
-    document.getElementById('profLocation').textContent = `${currentUser.location || 'São Paulo, SP'} • No seu raio agora`;
+    const nameEl = document.getElementById('profFullName');
+    if (nameEl) nameEl.textContent = currentUser.name || 'Seu Nome';
+
+    const handleEl = document.getElementById('profHandle');
+    if (handleEl) handleEl.textContent = '@' + (currentUser.username || 'usuario');
+
+    const bioEl = document.getElementById('profBio');
+    if (bioEl) bioEl.textContent = currentUser.bio || 'Adicione sua biografia...';
+
+    const locEl = document.getElementById('profLocation');
+    if (locEl) locEl.textContent = `${currentUser.location || 'São Paulo, SP'} • No seu raio agora`;
     
     const intentBadge = document.getElementById('profIntentBadge');
     if (intentBadge) {
-      intentBadge.innerHTML = `<span>${getIntentIcon(currentUser.intent)} ${currentUser.intent}</span>`;
+      intentBadge.innerHTML = `<span>${getIntentIcon(currentUser.intent)} ${currentUser.intent || 'Casual'}</span>`;
     }
     const tinderIntent = document.getElementById('tinderIntentLabel');
     if (tinderIntent) {
-      tinderIntent.textContent = `${getIntentIcon(currentUser.intent)} ${currentUser.intent}`;
+      tinderIntent.textContent = `${getIntentIcon(currentUser.intent)} ${currentUser.intent || 'Casual'}`;
     }
 
-    const userPosts = Storage.getPosts().filter(p => p.authorId === currentUser.id);
-    document.getElementById('profStatPosts').textContent = userPosts.length + (currentUser.photos?.length || 0);
-    document.getElementById('profStatFollowers').textContent = currentUser.followersCount || 148;
-    document.getElementById('profStatFollowing').textContent = currentUser.followingCount || 92;
+    const statPosts = document.getElementById('profStatPosts');
+    const statFollowers = document.getElementById('profStatFollowers');
+    const statFollowing = document.getElementById('profStatFollowing');
 
-    updateVerificationUI();
-    renderRadarUsers();
-    renderMuralMessages();
-    renderStories();
-    renderFeedPosts();
-    renderDirectConversations();
-    renderProfilePhotoGrid();
+    const userPosts = Storage.getPosts().filter(p => p.authorId === currentUser.id);
+    if (statPosts) statPosts.textContent = userPosts.length + (currentUser.photos?.length || 0);
+    if (statFollowers) statFollowers.textContent = currentUser.followersCount || 148;
+    if (statFollowing) statFollowing.textContent = currentUser.followingCount || 92;
+
+    try { updateVerificationUI(); } catch(e) { console.error('verif err:', e); }
+    try { renderRadarUsers(); } catch(e) { console.error('radar err:', e); }
+    try { renderMuralMessages(); } catch(e) { console.error('mural err:', e); }
+    try { renderStories(); } catch(e) { console.error('stories err:', e); }
+    try { renderFeedPosts(); } catch(e) { console.error('feed err:', e); }
+    try { renderDirectConversations(); } catch(e) { console.error('chats err:', e); }
+    try { renderProfilePhotoGrid(); } catch(e) { console.error('grid err:', e); }
   }
 
   function switchTab(tabId) {
