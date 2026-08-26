@@ -336,19 +336,35 @@
                 </label>
               </div>
 
-              <!-- Radius Selector Chips -->
-              <div class="radius-selector-wrap">
+              <!-- Dynamic Draggable Radius Range Slider (5m to 2km) -->
+              <div class="radius-slider-box">
                 <div class="radius-label-row">
-                  <span class="radius-title">Raio de Proximidade:</span>
+                  <div class="radius-title-wrap">
+                    <span class="gps-pulse-dot" title="GPS Satélite Ativo"></span>
+                    <span class="radius-title">Raio de Proximidade:</span>
+                  </div>
                   <strong class="radius-val-highlight" id="lblCurrentRadius">500 metros</strong>
                 </div>
-                <div class="radius-chips-list" id="radiusChipsList">
-                  <button class="radius-chip" data-radius="200" onclick="window.azararApp.setProximityRadius(200)">200m</button>
-                  <button class="radius-chip" data-radius="400" onclick="window.azararApp.setProximityRadius(400)">400m</button>
-                  <button class="radius-chip active" data-radius="500" onclick="window.azararApp.setProximityRadius(500)">500m</button>
-                  <button class="radius-chip" data-radius="1000" onclick="window.azararApp.setProximityRadius(1000)">1 km</button>
-                  <button class="radius-chip" data-radius="2000" onclick="window.azararApp.setProximityRadius(2000)">2 km</button>
-                  <button class="radius-chip" data-radius="5000" onclick="window.azararApp.setProximityRadius(5000)">5 km</button>
+
+                <div class="range-slider-wrapper">
+                  <input
+                    type="range"
+                    id="rangeProximityRadius"
+                    class="proximity-range-slider"
+                    min="5"
+                    max="2000"
+                    step="5"
+                    value="500"
+                    oninput="window.azararApp.onRadiusSliderInput(this.value)"
+                    onchange="window.azararApp.onRadiusSliderChange(this.value)"
+                  />
+                  <div class="range-slider-scale">
+                    <span class="scale-point" onclick="window.azararApp.setProximityRadius(5)">5m</span>
+                    <span class="scale-point" onclick="window.azararApp.setProximityRadius(200)">200m</span>
+                    <span class="scale-point active-tick" onclick="window.azararApp.setProximityRadius(500)">500m</span>
+                    <span class="scale-point" onclick="window.azararApp.setProximityRadius(1000)">1 km</span>
+                    <span class="scale-point" onclick="window.azararApp.setProximityRadius(2000)">2 km</span>
+                  </div>
                 </div>
               </div>
             </div>

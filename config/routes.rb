@@ -29,6 +29,9 @@ Rails.application.routes.draw do
       post "verify_face", to: "/face_verifications#create"
       delete "reset_face", to: "/face_verifications#destroy"
       post "face_login", to: "/sessions#face_login"
+      post "update_location", to: "/locations#update"
+      post "update_radius", to: "/locations#update_radius"
+      get "nearby_users", to: "/locations#nearby"
     end
   end
 end

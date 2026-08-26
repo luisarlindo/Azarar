@@ -16,8 +16,8 @@
       name: 'Luiza Mendes',
       username: 'luizamendes',
       age: 24,
-      distance: 180,
-      location: 'Vila Madalena, SP',
+      distance: 25,
+      location: 'No mesmo ambiente • 25m',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
       intent: 'Casual',
       vibe: '🍹 No balcão do bar',
@@ -38,8 +38,8 @@
       name: 'Rodrigo Alencar',
       username: 'rodrigo.ale',
       age: 27,
-      distance: 350,
-      location: 'Jardins, SP',
+      distance: 85,
+      location: 'No lounge VIP • 85m',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
       intent: 'Relacionamento Sério',
       vibe: '🛋️ No lounge VIP',
@@ -59,8 +59,8 @@
       name: 'Camila Rocha',
       username: 'camilinha.r',
       age: 22,
-      distance: 480,
-      location: 'Pinheiros, SP',
+      distance: 220,
+      location: 'Na mesma quadra • 220m',
       avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
       intent: 'Sexo',
       vibe: '🎧 Na pista de dança',
@@ -80,8 +80,8 @@
       name: 'Gabriel Siqueira',
       username: 'gabi_siqueira',
       age: 26,
-      distance: 850,
-      location: 'Bela Vista, SP',
+      distance: 480,
+      location: 'Vila Madalena • 480m',
       avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80',
       intent: 'Companhia',
       vibe: '🍻 Com a galera',
@@ -100,8 +100,8 @@
       name: 'Isabela Fontes',
       username: 'isafontes',
       age: 25,
-      distance: 1400,
-      location: 'Itaim Bibi, SP',
+      distance: 850,
+      location: 'Pinheiros • 850m',
       avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
       intent: 'Casual',
       vibe: '🍹 No balcão do bar',
@@ -120,8 +120,8 @@
       name: 'Matheus Prado',
       username: 'matheus.prado',
       age: 29,
-      distance: 3200,
-      location: 'Moema, SP',
+      distance: 1450,
+      location: 'Jardins • 1.4 km',
       avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
       intent: 'Relacionamento Sério',
       vibe: '🎧 Na pista de dança',
@@ -502,6 +502,8 @@
     if (statFollowing) statFollowing.textContent = currentUser.followingCount || 92;
 
     try { updateVerificationUI(); } catch(e) { console.error('verif err:', e); }
+    try { updateSliderVisual(currentRadius); } catch(e) { console.error('slider err:', e); }
+    try { initGPSLocation(); } catch(e) { console.error('gps err:', e); }
     try { renderRadarUsers(); } catch(e) { console.error('radar err:', e); }
     try { renderMuralMessages(); } catch(e) { console.error('mural err:', e); }
     try { renderStories(); } catch(e) { console.error('stories err:', e); }
@@ -582,25 +584,105 @@
     renderRadarUsers();
   }
 
-  function setProximityRadius(radiusMeters) {
-    currentRadius = radiusMeters;
+  // ==========================================================================
+  // GPS GEOLOCATION & DRAGGABLE RANGE SLIDER (5m to 2km)
+  // ==========================================================================
+  let userCoordinates = null;
 
-    document.querySelectorAll('.radius-chip').forEach(chip => {
-      if (parseInt(chip.getAttribute('data-radius')) === radiusMeters) {
-        chip.classList.add('active');
+  function initGPSLocation() {
+    if (!navigator.geolocation) return;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        userCoordinates = {
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+          accuracy: pos.coords.accuracy
+        };
+        syncLocationWithServer();
+      },
+      (err) => {
+        console.info('GPS fallback mode active:', err.message);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+    );
+  }
+
+  function syncLocationWithServer() {
+    if (!userCoordinates) return;
+    fetch('/api/v1/update_location', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+      },
+      body: JSON.stringify({
+        latitude: userCoordinates.latitude,
+        longitude: userCoordinates.longitude,
+        radius_meters: currentRadius
+      })
+    }).catch(() => {});
+  }
+
+  function formatRadiusLabel(val) {
+    const meters = parseInt(val, 10);
+    if (meters >= 1000) {
+      const km = (meters / 1000.0).toFixed(meters % 1000 === 0 ? 0 : 1);
+      return `${km} km (${meters}m)`;
+    }
+    return `${meters} metros`;
+  }
+
+  function updateSliderVisual(meters) {
+    const slider = document.getElementById('rangeProximityRadius');
+    const lblEl = document.getElementById('lblCurrentRadius');
+    const muralLbl = document.getElementById('muralRadiusText');
+    const m = parseInt(meters, 10);
+
+    if (slider) {
+      slider.value = m;
+      const min = parseInt(slider.min, 10) || 5;
+      const max = parseInt(slider.max, 10) || 2000;
+      const pct = ((m - min) / (max - min)) * 100;
+      slider.style.setProperty('--slider-pct', `${pct}%`);
+    }
+
+    const label = formatRadiusLabel(m);
+    if (lblEl) lblEl.textContent = label;
+    if (muralLbl) muralLbl.textContent = m >= 1000 ? `${(m / 1000.0).toFixed(1)} km` : `${m}m`;
+
+    document.querySelectorAll('.scale-point').forEach(pt => {
+      const txt = pt.textContent.trim();
+      const tickVal = txt.includes('km') ? parseInt(txt) * 1000 : parseInt(txt);
+      if (Math.abs(tickVal - m) <= 25) {
+        pt.classList.add('active-tick');
       } else {
-        chip.classList.remove('active');
+        pt.classList.remove('active-tick');
       }
     });
+  }
 
-    const label = radiusMeters >= 1000 ? `${radiusMeters / 1000} km` : `${radiusMeters} metros`;
-    const lblEl = document.getElementById('lblCurrentRadius');
-    if (lblEl) lblEl.textContent = label;
+  function onRadiusSliderInput(val) {
+    currentRadius = parseInt(val, 10);
+    updateSliderVisual(currentRadius);
+    renderRadarUsers();
+  }
 
-    const muralLbl = document.getElementById('muralRadiusText');
-    if (muralLbl) muralLbl.textContent = label;
+  function onRadiusSliderChange(val) {
+    currentRadius = parseInt(val, 10);
+    updateSliderVisual(currentRadius);
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast(`📡 Raio atualizado para ${formatRadiusLabel(currentRadius)}`);
+    syncLocationWithServer();
+    renderRadarUsers();
+  }
 
-    showToast(`📡 Raio definido para ${label}`);
+  function setProximityRadius(radiusMeters) {
+    currentRadius = parseInt(radiusMeters, 10);
+    updateSliderVisual(currentRadius);
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast(`📡 Raio definido para ${formatRadiusLabel(currentRadius)}`);
+    syncLocationWithServer();
     renderRadarUsers();
   }
 
@@ -1727,6 +1809,8 @@
     switchRadarSubTab,
     switchProfileTab,
     setProximityRadius,
+    onRadiusSliderInput,
+    onRadiusSliderChange,
     toggleOnlineStatus,
     toggleFollowUser,
     toggleFollowActiveChatUser,
