@@ -19,4 +19,13 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show], controller: "profiles"
   resources :direct_messages, only: [:index, :show, :create]
+
+  resource :face_verification, only: [:create, :destroy]
+
+  namespace :api do
+    namespace :v1 do
+      post "verify_face", to: "/face_verifications#create"
+      delete "reset_face", to: "/face_verifications#destroy"
+    end
+  end
 end

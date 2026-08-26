@@ -1,4 +1,4 @@
-﻿class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base
   helper_method :current_user, :logged_in?
 
   private
@@ -13,7 +13,7 @@
 
   def authenticate_user!
     unless logged_in?
-      flash[:alert] = "FaÃ§a login para continuar"
+      flash[:alert] = "Faça login para continuar"
       redirect_to root_path
     end
   end

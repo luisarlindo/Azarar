@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_24_000005) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_26_060704) do
   create_table "direct_messages", force: :cascade do |t|
     t.text "content", null: false
     t.datetime "created_at", null: false
@@ -59,6 +59,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_24_000005) do
     t.date "birthdate"
     t.datetime "created_at", null: false
     t.string "email_or_phone", null: false
+    t.text "face_scan_data"
+    t.float "face_similarity_score"
     t.string "intentions"
     t.float "latitude"
     t.float "longitude"
@@ -68,6 +70,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_24_000005) do
     t.integer "radius_meters", default: 500, null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
+    t.boolean "verified", default: false, null: false
+    t.datetime "verified_at"
+    t.string "vibe", default: "🍹 No balcão do bar"
     t.index ["email_or_phone"], name: "index_users_on_email_or_phone", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
   end

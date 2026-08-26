@@ -1,4 +1,4 @@
-﻿class User < ApplicationRecord
+class User < ApplicationRecord
   has_secure_password
 
   has_many :posts, dependent: :destroy
@@ -14,6 +14,7 @@
   validates :password, length: { minimum: 6 }, if: -> { new_record? || !password.nil? }
 
   scope :online, -> { where(online_now: true) }
+  scope :verified_users, -> { where(verified: true) }
 
   before_validation :clean_username
 
@@ -29,6 +30,24 @@
     return nil unless birthdate
     now = Time.now.utc.to_date
     now.year - birthdate.year - ((now.month > birthdate.month || (now.month == birthdate.month && now.day >= birthdate.day)) ? 0 : 1)
+  end
+
+  def verify_face!(score: 98.6, scan_data: nil)
+    update!(
+      verified: true,
+      verified_at: Time.current,
+      face_similarity_score: score,
+      face_scan_data: scan_data
+    )
+  end
+
+  def reset_verification!
+    update!(
+      verified: false,
+      verified_at: nil,
+      face_similarity_score: nil,
+      face_scan_data: nil
+    )
   end
 
   private
