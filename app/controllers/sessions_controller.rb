@@ -23,6 +23,9 @@ class SessionsController < ApplicationController
               username: user.username,
               avatar: user.display_avatar,
               verified: user.verified?,
+              isVerified: user.verified?,
+              is_verified: user.verified?,
+              faceSimilarityScore: user.face_similarity_score || 98.8,
               bio: user.bio,
               intent: user.intentions || "Relacionamento Sério",
               vibe: user.vibe || "🍹 No balcão do bar"
@@ -112,6 +115,9 @@ class SessionsController < ApplicationController
           username: best_match.username,
           avatar: best_match.display_avatar,
           verified: true,
+          isVerified: true,
+          is_verified: true,
+          faceSimilarityScore: highest_score,
           bio: best_match.bio,
           intent: best_match.intentions || "Relacionamento Sério",
           vibe: best_match.vibe || "🍹 No balcão do bar"

@@ -1,3 +1,20 @@
+<script>
+  window.INITIAL_CURRENT_USER = <%= current_user ? {
+    id: current_user.id,
+    name: current_user.name,
+    username: current_user.username,
+    avatar: current_user.display_avatar,
+    isVerified: current_user.verified?,
+    verified: current_user.verified?,
+    is_verified: current_user.verified?,
+    faceSimilarityScore: current_user.face_similarity_score || 98.8,
+    bio: current_user.bio,
+    intent: current_user.intentions || "Relacionamento Sério",
+    vibe: current_user.vibe || "🍹 No balcão do bar",
+    isOnline: current_user.online_now
+  }.to_json.html_safe : "null" %>;
+</script>
+
 <!-- Main Application Screen -->
   <main class="app-screen">
     
@@ -456,7 +473,11 @@
               <div class="profile-hero-info">
                 <div class="name-row">
                   <h2 class="profile-fullname" id="profFullName">Seu Nome</h2>
-                  <span class="verified-check" title="Perfil Verificado">✓</span>
+                  <span class="verified-check" id="profVerifiedBadge" title="Perfil Verificado Oficial (Biometria Facial)" style="display: none;">
+                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </span>
                 </div>
                 <span class="profile-handle" id="profHandle">@usuario</span>
                 

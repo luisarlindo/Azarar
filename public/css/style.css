@@ -1712,16 +1712,19 @@ html, body {
 }
 
 .verified-check {
-  background: var(--primary-pink);
+  background: #0ea5e9;
   color: #ffffff;
-  font-size: 9px;
-  font-weight: 800;
-  width: 15px;
-  height: 15px;
+  width: 19px;
+  height: 19px;
   border-radius: 50%;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 0 12px rgba(14, 165, 233, 0.8), 0 0 4px rgba(255, 255, 255, 0.8);
+  flex-shrink: 0;
+  margin-left: 6px;
+  vertical-align: middle;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
 }
 
 .profile-handle {

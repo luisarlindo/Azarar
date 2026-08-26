@@ -30,6 +30,9 @@ class FaceVerificationsController < ApplicationController
           name: user&.name,
           username: user&.username,
           verified: true,
+          isVerified: true,
+          is_verified: true,
+          faceSimilarityScore: result.similarity,
           face_similarity_score: result.similarity
         }
       }, status: :ok

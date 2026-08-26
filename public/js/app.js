@@ -274,7 +274,10 @@
   // ==========================================================================
   // 3. APP STATE & REFERENCES
   // ==========================================================================
-  let currentUser = Storage.getCurrentUser();
+  let currentUser = (typeof window !== 'undefined' && window.INITIAL_CURRENT_USER) ? window.INITIAL_CURRENT_USER : Storage.getCurrentUser();
+  if (typeof window !== 'undefined' && window.INITIAL_CURRENT_USER) {
+    Storage.saveCurrentUser(currentUser);
+  }
   let currentRadius = 500;
   let isOnlineNow = currentUser ? (currentUser.isOnline ?? true) : true;
   let currentActiveTab = 'radar';
@@ -523,7 +526,10 @@
     if (tabId === 'radar') renderRadarUsers();
     if (tabId === 'feed') renderFeedPosts();
     if (tabId === 'messages') renderDirectConversations();
-    if (tabId === 'profile') renderProfilePhotoGrid();
+    if (tabId === 'profile') {
+      updateVerificationUI();
+      renderProfilePhotoGrid();
+    }
   }
 
   function getIntentIcon(intent) {
@@ -1247,24 +1253,36 @@
   // ==========================================================================
   let currentCameraStream = null;
 
+  function isUserVerified(u) {
+    if (!u) return false;
+    return Boolean(u.isVerified === true || u.verified === true || u.is_verified === true);
+  }
+
   function updateVerificationUI() {
     const card = document.getElementById('faceVerificationCard');
     const icon = document.getElementById('verifIcon');
     const title = document.getElementById('verifTitle');
     const desc = document.getElementById('verifDesc');
     const btn = document.getElementById('btnOpenFaceVerif');
-    const checkmark = document.querySelector('.verified-check');
+    const checkmark = document.getElementById('profVerifiedBadge') || document.querySelector('.verified-check');
 
     if (!card) return;
 
-    if (currentUser?.isVerified) {
+    const verified = isUserVerified(currentUser);
+
+    if (verified) {
+      if (currentUser) {
+        currentUser.isVerified = true;
+        currentUser.verified = true;
+      }
       card.classList.add('is-verified');
-      if (icon) icon.textContent = '✅';
-      if (title) title.textContent = '🛡️ Perfil 100% Verificado';
-      if (desc) desc.textContent = 'Identidade facial autenticada com sucesso! Clique em "Revalidar" para testar a câmera novamente.';
+      if (icon) icon.textContent = '🛡️';
+      if (title) title.innerHTML = '🛡️ Perfil 100% Verificado <span class="verif-card-badge-pill">Oficial</span>';
+      const score = currentUser?.faceSimilarityScore || currentUser?.face_similarity_score || 98.8;
+      if (desc) desc.innerHTML = `Identidade facial autenticada com sucesso <strong>(${score}% de similaridade)</strong>. Clique em "Revalidar" para testar a câmera novamente.`;
       if (btn) {
         btn.textContent = '🔄 Revalidar';
-        btn.classList.remove('verified-done');
+        btn.classList.add('verified-done');
         btn.onclick = openFaceVerificationModal;
       }
       if (checkmark) checkmark.style.display = 'inline-flex';
