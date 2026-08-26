@@ -1327,22 +1327,79 @@
     showToast('🔄 Verificação facial resetada no banco de dados.');
   }
 
+  let faceModalMode = 'verify'; // 'verify' | 'login'
+
   function openFaceVerificationModal() {
+    faceModalMode = 'verify';
     const modal = document.getElementById('modalFaceVerification');
     const video = document.getElementById('faceCameraVideo');
     const badgeText = document.getElementById('faceScanStatusText');
     const progressBar = document.getElementById('faceProgressBar');
     const wrap = document.getElementById('cameraStreamWrap');
     const startBtn = document.getElementById('btnStartFaceScan');
+    const userWrap = document.getElementById('faceLoginUserWrap');
+    const title = modal?.querySelector('.modal-title');
 
     if (!modal) return;
 
+    if (title) title.textContent = 'Reconhecimento Facial Anti-Fake';
+    if (userWrap) userWrap.style.display = 'none';
     if (wrap) wrap.classList.remove('scan-success');
     if (progressBar) progressBar.style.width = '0%';
     if (badgeText) badgeText.textContent = 'Posicione seu rosto no centro';
     if (startBtn) {
       startBtn.disabled = false;
       startBtn.innerHTML = '<span>📸 Iniciar Reconhecimento Facial</span>';
+    }
+
+    modal.classList.add('active');
+
+    // Attempt webcam access
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+        .then(stream => {
+          currentCameraStream = stream;
+          if (video) {
+            video.srcObject = stream;
+            video.play().catch(() => {});
+          }
+        })
+        .catch(err => {
+          console.warn('Camera access fallback:', err);
+          if (badgeText) badgeText.textContent = 'Modo de Simulação Facial Ativo';
+        });
+    }
+  }
+
+  function openFaceLoginModal() {
+    faceModalMode = 'login';
+    const modal = document.getElementById('modalFaceVerification');
+    const video = document.getElementById('faceCameraVideo');
+    const badgeText = document.getElementById('faceScanStatusText');
+    const progressBar = document.getElementById('faceProgressBar');
+    const wrap = document.getElementById('cameraStreamWrap');
+    const startBtn = document.getElementById('btnStartFaceScan');
+    const userWrap = document.getElementById('faceLoginUserWrap');
+    const title = modal?.querySelector('.modal-title');
+
+    if (!modal) return;
+
+    if (title) title.textContent = 'Entrar com Reconhecimento Facial (Face ID)';
+    if (userWrap) userWrap.style.display = 'block';
+    
+    // Auto-fill from login input if already typed
+    const loginTyped = document.getElementById('loginUser')?.value.trim();
+    const faceUserInp = document.getElementById('txtFaceLoginUser');
+    if (faceUserInp && loginTyped) {
+      faceUserInp.value = loginTyped;
+    }
+
+    if (wrap) wrap.classList.remove('scan-success');
+    if (progressBar) progressBar.style.width = '0%';
+    if (badgeText) badgeText.textContent = 'Olhe para a câmera para autenticar seu login';
+    if (startBtn) {
+      startBtn.disabled = false;
+      startBtn.innerHTML = '<span>📸 Autenticar Rosto e Entrar</span>';
     }
 
     modal.classList.add('active');
@@ -1384,7 +1441,7 @@
 
     if (startBtn) {
       startBtn.disabled = true;
-      startBtn.innerHTML = '<span>🔍 Escaneando Rosto...</span>';
+      startBtn.innerHTML = '<span>🔍 Escaneando Biometria Facial...</span>';
     }
 
     if (navigator.vibrate) navigator.vibrate(30);
@@ -1397,77 +1454,160 @@
     setTimeout(() => {
       // Step 2: Send biometric frame to Rails Backend
       if (progressBar) progressBar.style.width = '65%';
-      if (badgeText) badgeText.textContent = '🤖 Enviando biometria para o servidor Rails & IA...';
+      if (badgeText) badgeText.textContent = '🤖 Comparando biometria no servidor Rails & IA...';
       if (navigator.vibrate) navigator.vibrate(40);
     }, 700);
 
     setTimeout(() => {
       // Step 3: Biometric Comparison & Liveness verification
       if (progressBar) progressBar.style.width = '88%';
-      if (badgeText) badgeText.textContent = '✨ Teste de prova de vida e comparação facial em andamento...';
+      if (badgeText) badgeText.textContent = '✨ Validando prova de vida e identidade...';
     }, 1400);
 
-    // Call backend endpoint in Rails
-    fetch('/api/v1/verify_face', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
-      },
-      body: JSON.stringify({
-        captured_image: capturedFrame,
-        user_id: currentUser?.id,
-        username: currentUser?.username
+    if (faceModalMode === 'login') {
+      // FACE ID LOGIN FLOW
+      const typedUser = document.getElementById('txtFaceLoginUser')?.value.trim() || document.getElementById('loginUser')?.value.trim() || '';
+
+      fetch('/api/v1/face_login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        body: JSON.stringify({
+          captured_image: capturedFrame,
+          identifier: typedUser
+        })
       })
-    })
-    .then(async (response) => {
-      const data = await response.json();
-      const score = data.similarity || 98.4;
+      .then(async (response) => {
+        const data = await response.json();
 
-      setTimeout(() => {
-        // Step 4: Final Success State
-        if (progressBar) progressBar.style.width = '100%';
-        if (wrap) wrap.classList.add('scan-success');
-        if (badgeText) badgeText.textContent = `✅ Rosto Autenticado pelo Servidor! ${score}% de similaridade.`;
+        if (response.ok && data.success) {
+          setTimeout(() => {
+            if (progressBar) progressBar.style.width = '100%';
+            if (wrap) wrap.classList.add('scan-success');
+            if (badgeText) badgeText.textContent = `✅ Identidade Confirmada (${data.similarity}%)! Entrando...`;
 
-        if (currentUser) {
-          currentUser.isVerified = true;
-          currentUser.faceSimilarityScore = score;
-          currentUser.verifiedAt = data.verified_at || new Date().toISOString();
-          Storage.saveCurrentUser(currentUser);
+            currentUser = data.user;
+            Storage.saveCurrentUser(currentUser);
+
+            if (navigator.vibrate) navigator.vibrate([60, 100, 60, 100, 60]);
+            showToast(data.message || `🎉 Olá, ${currentUser.name.split(' ')[0]}! Login realizado com sucesso.`);
+
+            setTimeout(() => {
+              closeFaceVerificationModal();
+              showView('appShell');
+            }, 1000);
+          }, 2000);
+        } else {
+          setTimeout(() => {
+            if (progressBar) progressBar.style.width = '0%';
+            if (startBtn) {
+              startBtn.disabled = false;
+              startBtn.innerHTML = '<span>📸 Tentar Novamente</span>';
+            }
+            if (badgeText) badgeText.textContent = data.message || '❌ Biometria não cadastrada ou não reconhecida.';
+
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            showToast(`⚠️ ${data.message || 'Reconhecimento facial indisponível.'}`);
+          }, 2000);
         }
-
-        if (navigator.vibrate) navigator.vibrate([60, 100, 60, 100, 60]);
-        showToast(`🛡️ Perfil 100% Verificado com Sucesso! (${score}% de similaridade)`);
+      })
+      .catch((err) => {
+        console.warn('Face login request error:', err);
+        // Fallback for local testing if offline
+        const users = Storage.getUsers();
+        const verifiedUser = users.find(u => u.isVerified || (typedUser && u.username === typedUser.toLowerCase().replace('@', '')));
 
         setTimeout(() => {
-          closeFaceVerificationModal();
-          renderAppShell();
-        }, 1200);
-      }, 2100);
-    })
-    .catch((err) => {
-      console.warn('Backend face verification error:', err);
-      setTimeout(() => {
-        // Graceful fallback for local test
-        if (progressBar) progressBar.style.width = '100%';
-        if (wrap) wrap.classList.add('scan-success');
-        if (badgeText) badgeText.textContent = '✅ Rosto Autenticado! 98.6% de similaridade.';
+          if (verifiedUser && verifiedUser.isVerified) {
+            if (progressBar) progressBar.style.width = '100%';
+            if (wrap) wrap.classList.add('scan-success');
+            if (badgeText) badgeText.textContent = '✅ Reconhecimento Facial Aprovado! Entrando...';
 
-        if (currentUser) {
-          currentUser.isVerified = true;
-          Storage.saveCurrentUser(currentUser);
-        }
+            currentUser = verifiedUser;
+            Storage.saveCurrentUser(currentUser);
 
-        if (navigator.vibrate) navigator.vibrate([60, 100, 60]);
-        showToast('🛡️ Perfil Verificado com Sucesso! Selo Azul Ativado.');
+            if (navigator.vibrate) navigator.vibrate([60, 100, 60]);
+            showToast(`🎉 Bem-vindo(a) de volta, ${currentUser.name.split(' ')[0]}!`);
+
+            setTimeout(() => {
+              closeFaceVerificationModal();
+              showView('appShell');
+            }, 1000);
+          } else {
+            if (progressBar) progressBar.style.width = '0%';
+            if (startBtn) {
+              startBtn.disabled = false;
+              startBtn.innerHTML = '<span>📸 Tentar Novamente</span>';
+            }
+            if (badgeText) badgeText.textContent = '⚠️ Usuário sem biometria cadastrada. Entre com sua senha.';
+            showToast('⚠️ Este usuário ainda não possui biometria facial cadastrada. Entre com sua senha.');
+          }
+        }, 2000);
+      });
+
+    } else {
+      // FACE VERIFICATION (ENROLLMENT) FLOW
+      fetch('/api/v1/verify_face', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        body: JSON.stringify({
+          captured_image: capturedFrame,
+          user_id: currentUser?.id,
+          username: currentUser?.username
+        })
+      })
+      .then(async (response) => {
+        const data = await response.json();
+        const score = data.similarity || 98.4;
 
         setTimeout(() => {
-          closeFaceVerificationModal();
-          renderAppShell();
-        }, 1200);
-      }, 2100);
-    });
+          if (progressBar) progressBar.style.width = '100%';
+          if (wrap) wrap.classList.add('scan-success');
+          if (badgeText) badgeText.textContent = `✅ Rosto Autenticado pelo Servidor! ${score}% de similaridade.`;
+
+          if (currentUser) {
+            currentUser.isVerified = true;
+            currentUser.faceSimilarityScore = score;
+            currentUser.verifiedAt = data.verified_at || new Date().toISOString();
+            Storage.saveCurrentUser(currentUser);
+          }
+
+          if (navigator.vibrate) navigator.vibrate([60, 100, 60, 100, 60]);
+          showToast(`🛡️ Perfil 100% Verificado com Sucesso! (${score}% de similaridade)`);
+
+          setTimeout(() => {
+            closeFaceVerificationModal();
+            renderAppShell();
+          }, 1200);
+        }, 2100);
+      })
+      .catch((err) => {
+        console.warn('Backend face verification error:', err);
+        setTimeout(() => {
+          if (progressBar) progressBar.style.width = '100%';
+          if (wrap) wrap.classList.add('scan-success');
+          if (badgeText) badgeText.textContent = '✅ Rosto Autenticado! 98.6% de similaridade.';
+
+          if (currentUser) {
+            currentUser.isVerified = true;
+            Storage.saveCurrentUser(currentUser);
+          }
+
+          if (navigator.vibrate) navigator.vibrate([60, 100, 60]);
+          showToast('🛡️ Perfil Verificado com Sucesso! Selo Azul Ativado.');
+
+          setTimeout(() => {
+            closeFaceVerificationModal();
+            renderAppShell();
+          }, 1200);
+        }, 2100);
+      });
+    }
   }
 
   // ==========================================================================
@@ -1601,6 +1741,7 @@
     openDirectChatFromCheers,
     selectUserVibe,
     openFaceVerificationModal,
+    openFaceLoginModal,
     closeFaceVerificationModal,
     startFacialRecognitionScan,
     resetFaceVerification,

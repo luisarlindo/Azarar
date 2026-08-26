@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   root "home#index"
 
   resource :registration, only: [:create]
-  resource :session, only: [:create, :destroy]
+  resource :session, only: [:create, :destroy] do
+    post :face_login
+  end
 
   resources :mural, only: [:index]
   resources :mural_messages, only: [:create]
@@ -26,6 +28,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       post "verify_face", to: "/face_verifications#create"
       delete "reset_face", to: "/face_verifications#destroy"
+      post "face_login", to: "/sessions#face_login"
     end
   end
 end
