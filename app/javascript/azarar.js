@@ -1250,11 +1250,11 @@
       card.classList.add('is-verified');
       if (icon) icon.textContent = '✅';
       if (title) title.textContent = '🛡️ Perfil 100% Verificado';
-      if (desc) desc.textContent = 'Identidade facial autenticada com sucesso. Você transmite máxima confiança no radar!';
+      if (desc) desc.textContent = 'Identidade facial autenticada com sucesso! Clique em "Revalidar" para testar a câmera novamente.';
       if (btn) {
-        btn.textContent = '✓ Verificado';
-        btn.classList.add('verified-done');
-        btn.onclick = null;
+        btn.textContent = '🔄 Revalidar';
+        btn.classList.remove('verified-done');
+        btn.onclick = openFaceVerificationModal;
       }
       if (checkmark) checkmark.style.display = 'inline-flex';
     } else {
@@ -1268,6 +1268,15 @@
         btn.onclick = openFaceVerificationModal;
       }
       if (checkmark) checkmark.style.display = 'none';
+    }
+  }
+
+  function resetFaceVerification() {
+    if (currentUser) {
+      currentUser.isVerified = false;
+      Storage.saveCurrentUser(currentUser);
+      updateVerificationUI();
+      showToast('🔄 Verificação facial resetada para novo teste.');
     }
   }
 
@@ -1504,6 +1513,7 @@
     openFaceVerificationModal,
     closeFaceVerificationModal,
     startFacialRecognitionScan,
+    resetFaceVerification,
     openDirectChat,
     closeDirectChat,
     openNewPostModal,
