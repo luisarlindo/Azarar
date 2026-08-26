@@ -1,9 +1,13 @@
-﻿class MuralController < ApplicationController
+class MuralController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @mural_messages = MuralMessage.includes(:user).recent.reverse
-    @mural_message = MuralMessage.new
-    @online_users = User.online.where.not(id: current_user.id)
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json do
+        @mural_messages = MuralMessage.includes(:user).recent.reverse
+        render json: @mural_messages
+      end
+    end
   end
 end

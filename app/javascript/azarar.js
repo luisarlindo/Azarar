@@ -1276,8 +1276,8 @@
         currentUser.verified = true;
       }
       card.classList.add('is-verified');
-      if (icon) icon.textContent = '🛡️';
-      if (title) title.innerHTML = '🛡️ Perfil 100% Verificado <span class="verif-card-badge-pill">Oficial</span>';
+      if (icon) icon.innerHTML = '<span class="verif-icon-circle-blue">✓</span>';
+      if (title) title.innerHTML = 'Perfil 100% Verificado <span class="verif-card-badge-pill">Oficial</span>';
       const score = currentUser?.faceSimilarityScore || currentUser?.face_similarity_score || 98.8;
       if (desc) desc.innerHTML = `Identidade facial autenticada com sucesso <strong>(${score}% de similaridade)</strong>. Clique em "Revalidar" para testar a câmera novamente.`;
       if (btn) {

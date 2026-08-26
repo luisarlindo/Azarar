@@ -1,10 +1,24 @@
-﻿class ProfilesController < ApplicationController
+class ProfilesController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    @user = params[:id] ? User.find_by(id: params[:id]) : current_user
-    @user ||= current_user
-    @posts = @user.posts.recent
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json do
+        @user = params[:id] ? User.find_by(id: params[:id]) : current_user
+        @user ||= current_user
+        render json: {
+          id: @user.id,
+          name: @user.name,
+          username: @user.username,
+          avatar: @user.display_avatar,
+          verified: @user.verified?,
+          bio: @user.bio,
+          intent: @user.intentions,
+          vibe: @user.vibe
+        }
+      end
+    end
   end
 
   def edit
