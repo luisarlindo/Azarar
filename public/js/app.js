@@ -504,6 +504,7 @@
     try { updateVerificationUI(); } catch(e) { console.error('verif err:', e); }
     try { updateSliderVisual(currentRadius); } catch(e) { console.error('slider err:', e); }
     try { initGPSLocation(); } catch(e) { console.error('gps err:', e); }
+    try { CableManager.init(); } catch(e) { console.error('cable err:', e); }
     try { renderRadarUsers(); } catch(e) { console.error('radar err:', e); }
     try { renderMuralMessages(); } catch(e) { console.error('mural err:', e); }
     try { renderStories(); } catch(e) { console.error('stories err:', e); }
@@ -785,10 +786,15 @@
 
     showToast(`🥂 Você enviou um Brinde para ${target.name.split(' ')[0]}!`);
 
-    // Simulated mutual response trigger (celebration match)
-    setTimeout(() => {
-      showCheersCelebration(target);
-    }, 1000);
+    // Broadcast over ActionCable WebSocket
+    CableManager.send('CheersChannel', 'send_cheers', { target_id: userId });
+
+    // Simulated mutual response trigger if chatting with seed bots
+    if (String(userId).startsWith('usr_')) {
+      setTimeout(() => {
+        showCheersCelebration(target);
+      }, 1000);
+    }
   }
 
   let activeCheersUser = null;
@@ -846,6 +852,183 @@
     renderAppShell();
   }
 
+  // ==========================================================================
+  // 6. ACTIONCABLE WEBSOCKETS REAL-TIME ENGINE (Mural, Direct Chat, Cheers)
+  // ==========================================================================
+  const CableManager = {
+    socket: null,
+    connected: false,
+    reconnectTimer: null,
+    subscriptions: {},
+
+    init() {
+      if (!currentUser) return;
+      this.connect();
+    },
+
+    connect() {
+      if (this.socket && (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING)) {
+        return;
+      }
+
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      const wsUrl = `${protocol}//${host}/cable`;
+
+      try {
+        this.socket = new WebSocket(wsUrl);
+
+        this.socket.onopen = () => {
+          this.connected = true;
+          clearTimeout(this.reconnectTimer);
+          // Subscribe to channels
+          this.subscribe('MuralChannel', { channel: 'MuralChannel' });
+          this.subscribe('DirectChatChannel', { channel: 'DirectChatChannel' });
+          this.subscribe('CheersChannel', { channel: 'CheersChannel' });
+        };
+
+        this.socket.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'ping' || data.type === 'welcome' || data.type === 'confirm_subscription') {
+              return;
+            }
+            if (data.message) {
+              this.handleBroadcast(data.message);
+            }
+          } catch (e) {
+            console.error('Cable parse error:', e);
+          }
+        };
+
+        this.socket.onclose = () => {
+          this.connected = false;
+          this.scheduleReconnect();
+        };
+
+        this.socket.onerror = () => {
+          this.connected = false;
+        };
+      } catch (err) {
+        console.error('WebSocket connection error:', err);
+        this.scheduleReconnect();
+      }
+    },
+
+    scheduleReconnect() {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = setTimeout(() => {
+        if (currentUser) this.connect();
+      }, 3500);
+    },
+
+    subscribe(name, identifierObj) {
+      const identifier = JSON.stringify(identifierObj);
+      this.subscriptions[name] = identifier;
+      if (this.connected && this.socket.readyState === WebSocket.OPEN) {
+        this.socket.send(JSON.stringify({
+          command: 'subscribe',
+          identifier: identifier
+        }));
+      }
+    },
+
+    send(channelName, action, payload = {}) {
+      const identifier = this.subscriptions[channelName];
+      if (!identifier || !this.connected || this.socket.readyState !== WebSocket.OPEN) {
+        return false;
+      }
+      this.socket.send(JSON.stringify({
+        command: 'message',
+        identifier: identifier,
+        data: JSON.stringify({ action: action, ...payload })
+      }));
+      return true;
+    },
+
+    handleBroadcast(payload) {
+      if (!payload || !payload.action) return;
+
+      // 1. MURAL MESSAGE IN REAL TIME
+      if (payload.action === 'new_mural_message') {
+        const msg = payload.message;
+        if (!msg) return;
+        const muralMsgs = Storage.getMuralMessages();
+        const isFromMe = currentUser && String(msg.authorId) === String(currentUser.id);
+
+        if (!muralMsgs.some(m => m.id === msg.id || (isFromMe && m.text === msg.content && Math.abs(Date.now() - (m.createdAt || 0)) < 4000))) {
+          muralMsgs.push({
+            id: msg.id,
+            userId: msg.authorId,
+            userName: isFromMe ? 'Você' : msg.authorName,
+            userAvatar: msg.authorAvatar,
+            distanceText: `${msg.distance || 15}m`,
+            text: msg.content,
+            time: msg.time || 'Agora',
+            likes: msg.likes || 0,
+            isMe: isFromMe,
+            createdAt: Date.now()
+          });
+          Storage.saveMuralMessages(muralMsgs);
+          renderMuralMessages();
+
+          if (!isFromMe) {
+            if (navigator.vibrate) navigator.vibrate(20);
+            showToast(`📢 ${msg.authorName.split(' ')[0]} postou no mural perto de você!`);
+          }
+        }
+      }
+
+      // 2. DIRECT CHAT MESSAGE IN REAL TIME
+      else if (payload.action === 'new_direct_message') {
+        const msg = payload.message;
+        if (!msg) return;
+        const isFromMe = currentUser && String(msg.senderId) === String(currentUser.id);
+        const partnerId = isFromMe ? String(msg.recipientId) : String(msg.senderId);
+
+        const allChats = Storage.getDirectMessages();
+        if (!allChats[partnerId]) {
+          allChats[partnerId] = [
+            { text: `🥂 Brinde aceito! Vocês estão no mesmo local. Este chat expira em 3 horas.`, isMe: false, time: 'Agora' }
+          ];
+        }
+
+        const existing = allChats[partnerId];
+        const isDuplicate = existing.some(m => m.id === msg.id || (m.isMe === isFromMe && m.text === msg.text && Math.abs(Date.now() - (m.createdAt || 0)) < 4000));
+
+        if (!isDuplicate) {
+          existing.push({
+            id: msg.id,
+            text: msg.text,
+            isMe: isFromMe,
+            time: msg.time || 'Agora',
+            createdAt: Date.now()
+          });
+          Storage.saveDirectMessages(allChats);
+
+          if (activeChatUserId && String(activeChatUserId) === partnerId) {
+            renderDirectChatMessages();
+            if (!isFromMe && navigator.vibrate) navigator.vibrate([30, 50, 30]);
+          } else {
+            renderDirectConversations();
+            if (!isFromMe) {
+              if (navigator.vibrate) navigator.vibrate([50, 80, 50]);
+              showToast(`💬 ${msg.senderName.split(' ')[0]}: "${msg.text}"`);
+            }
+          }
+        }
+      }
+
+      // 3. CHEERS RECEIVED IN REAL TIME
+      else if (payload.action === 'cheers_received') {
+        const fromUser = payload.from_user;
+        if (!fromUser) return;
+        showCheersCelebration(fromUser);
+        showToast(`🥂 ${fromUser.name.split(' ')[0]} acabou de brindar com você!`);
+      }
+    }
+  };
+
   // --- MURAL / CHAT ABERTO ---
   function renderMuralMessages() {
     const scrollBox = document.getElementById('muralMessagesList');
@@ -898,7 +1081,8 @@
       distanceText: 'No local',
       text: text,
       time: timeStr,
-      isMe: true
+      isMe: true,
+      createdAt: Date.now()
     };
 
     const msgs = Storage.getMuralMessages();
@@ -908,6 +1092,9 @@
     input.value = '';
     renderMuralMessages();
     showToast('🚀 Mensagem enviada no mural do raio!');
+
+    // Broadcast over ActionCable WebSocket
+    CableManager.send('MuralChannel', 'speak', { content: text });
   }
 
   // ==========================================================================
@@ -1197,34 +1384,44 @@
     allChats[activeChatUserId].push({
       text: text,
       isMe: true,
-      time: timeStr
+      time: timeStr,
+      createdAt: Date.now()
     });
 
     Storage.saveDirectMessages(allChats);
     input.value = '';
     renderDirectChatMessages();
 
-    // Auto-reply response tailored to in-person meeting
-    setTimeout(() => {
-      if (activeChatUserId) {
-        const replies = [
-          `Bora! Tô aqui no balcão de jaqueta preta 🍹 Pode vir!`,
-          `Com certeza! Qual mesa você tá? Te vejo aí em 2 min 🥂`,
-          `Adorei a atitude! Vem pro lounge VIP que tem espaço com a galera ✨`,
-          `Fechou! Tô perto da pista de dança, vem pra cá 💃`
-        ];
-        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+    // Broadcast over ActionCable WebSocket to real connected user
+    CableManager.send('DirectChatChannel', 'speak', {
+      recipient_id: activeChatUserId,
+      content: text
+    });
 
-        allChats[activeChatUserId].push({
-          text: randomReply,
-          isMe: false,
-          time: timeStr
-        });
-        Storage.saveDirectMessages(allChats);
-        renderDirectChatMessages();
-        if (navigator.vibrate) navigator.vibrate(30);
-      }
-    }, 1300);
+    // Auto-reply response for mock seed users
+    if (String(activeChatUserId).startsWith('usr_')) {
+      setTimeout(() => {
+        if (activeChatUserId) {
+          const replies = [
+            `Bora! Tô aqui no balcão de jaqueta preta 🍹 Pode vir!`,
+            `Com certeza! Qual mesa você tá? Te vejo aí em 2 min 🥂`,
+            `Adorei a atitude! Vem pro lounge VIP que tem espaço com a galera ✨`,
+            `Fechou! Tô perto da pista de dança, vem pra cá 💃`
+          ];
+          const randomReply = replies[Math.floor(Math.random() * replies.length)];
+
+          allChats[activeChatUserId].push({
+            text: randomReply,
+            isMe: false,
+            time: timeStr,
+            createdAt: Date.now()
+          });
+          Storage.saveDirectMessages(allChats);
+          renderDirectChatMessages();
+          if (navigator.vibrate) navigator.vibrate(30);
+        }
+      }, 1300);
+    }
   }
 
   function selectUserVibe(vibeText) {

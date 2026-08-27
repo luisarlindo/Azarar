@@ -3,6 +3,7 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       session[:user_id] = @user.id
+      cookies.encrypted[:user_id] = @user.id
       flash[:notice] = "Conta criada com sucesso! Bem-vindo(a) ao Azarar."
       redirect_to root_path
     else

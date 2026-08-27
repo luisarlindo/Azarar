@@ -7,6 +7,7 @@ class SessionsController < ApplicationController
 
     if user&.authenticate(params[:password])
       session[:user_id] = user.id
+      cookies.encrypted[:user_id] = user.id
       user.update(online_now: true)
 
       respond_to do |format|
@@ -102,6 +103,7 @@ class SessionsController < ApplicationController
 
     if best_match && highest_score >= 85.0
       session[:user_id] = best_match.id
+      cookies.encrypted[:user_id] = best_match.id
       best_match.update(online_now: true)
 
       render json: {
@@ -138,6 +140,7 @@ class SessionsController < ApplicationController
       current_user.update(online_now: false)
     end
     session[:user_id] = nil
+    cookies.delete(:user_id)
     flash[:notice] = "Você saiu da sua conta."
     redirect_to root_path
   end
