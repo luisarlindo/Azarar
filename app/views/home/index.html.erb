@@ -21,13 +21,13 @@
     <!-- Screen Container (Isolated In-App Views Container) -->
     <div class="screen-container <%= current_user ? 'view-mode-app-shell' : 'view-mode-home' %>" id="screenContainer">
       
+      <!-- Ambient Particles Canvas (Persistent Across All Screens) -->
+      <canvas id="particlesCanvas" class="particles-canvas"></canvas>
+      
       <!-- ============================================ -->
       <!-- VIEW 1: HOME / LANDING SCREEN (Logged Out)  -->
       <!-- ============================================ -->
       <section class="app-view view-home <%= current_user ? '' : 'active' %>" id="viewHome" style="<%= current_user ? 'display: none !important;' : 'display: flex !important;' %>">
-        
-        <!-- Ambient Particles Canvas -->
-        <canvas id="particlesCanvas" class="particles-canvas"></canvas>
 
         <!-- Top Branding Section -->
         <header class="app-header">

@@ -8,24 +8,26 @@
   --primary-pink: #ff2a7a;
   --primary-pink-hover: #ff156d;
   --primary-pink-glow: rgba(255, 42, 122, 0.55);
-  --primary-pink-soft: rgba(255, 42, 122, 0.15);
+  --primary-pink-soft: rgba(255, 42, 122, 0.18);
   --magenta-gradient: linear-gradient(90deg, #ff1a72 0%, #ff2b88 50%, #f41b6c 100%);
   --magenta-gradient-hover: linear-gradient(90deg, #ff0866 0%, #ff1c7e 50%, #e00f5f 100%);
   
-  --bg-deep-dark: #07030e;
-  --bg-view-solid: #0d0517;
-  --bg-card: rgba(22, 9, 32, 0.85);
-  --bg-card-hover: rgba(32, 13, 48, 0.95);
-  --bg-input: rgba(255, 255, 255, 0.06);
-  --bg-input-focus: rgba(255, 255, 255, 0.1);
+  --bg-deep-dark: #080210;
+  --bg-view-solid: #0d041a;
+  --bg-card: rgba(32, 10, 50, 0.74);
+  --bg-card-hover: rgba(46, 15, 72, 0.88);
+  --bg-card-glass: linear-gradient(135deg, rgba(48, 14, 76, 0.68) 0%, rgba(22, 7, 36, 0.82) 100%);
+  --bg-input: rgba(255, 255, 255, 0.08);
+  --bg-input-focus: rgba(255, 255, 255, 0.14);
   
   --text-white: #ffffff;
-  --text-muted: rgba(255, 255, 255, 0.82);
-  --text-dim: rgba(255, 255, 255, 0.52);
+  --text-muted: rgba(255, 255, 255, 0.85);
+  --text-dim: rgba(255, 255, 255, 0.55);
   
-  --border-glass: rgba(255, 60, 150, 0.35);
-  --border-input: rgba(255, 255, 255, 0.15);
-  --border-glass-subtle: rgba(255, 255, 255, 0.1);
+  --border-glass: rgba(255, 60, 150, 0.32);
+  --border-input: rgba(255, 255, 255, 0.18);
+  --border-glass-subtle: rgba(255, 60, 150, 0.20);
+  --border-glass-glow: rgba(255, 42, 122, 0.55);
   
   --intent-serious: #38bdf8;
   --intent-casual: #f59e0b;
@@ -122,10 +124,31 @@ html, body {
 }
 
 .screen-container.view-mode-register,
-.screen-container.view-mode-login,
+.screen-container.view-mode-login {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(255, 42, 122, 0.30) 0%, transparent 60%),
+    radial-gradient(circle at 90% 40%, rgba(168, 85, 247, 0.22) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(22, 7, 36, 0.88) 0%, rgba(10, 3, 18, 0.94) 100%),
+    url('/assets/images/bg.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #0c0316;
+}
+
 .screen-container.view-mode-app-shell {
-  background: radial-gradient(circle at 50% 0%, #220834 0%, #11041d 45%, #07020d 100%);
-  background-color: var(--bg-view-solid);
+  background-image: 
+    radial-gradient(ellipse 90% 55% at 50% -8%, rgba(255, 42, 122, 0.34) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 50% at 95% 40%, rgba(168, 85, 247, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 75% 55% at 5% 75%, rgba(255, 26, 114, 0.26) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 45% at 50% 105%, rgba(147, 51, 234, 0.25) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(20, 6, 32, 0.80) 0%, rgba(11, 3, 19, 0.90) 100%),
+    url('/assets/images/bg.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #0b0314;
 }
 
 .particles-canvas {
@@ -674,10 +697,11 @@ html, body {
   align-items: center !important;
   justify-content: space-between !important;
   padding: calc(var(--safe-top) + 12px) 16px 12px !important;
-  background: rgba(13, 5, 23, 0.98) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-bottom: 1px solid var(--border-glass-subtle) !important;
+  background: linear-gradient(180deg, rgba(32, 10, 52, 0.88) 0%, rgba(18, 5, 30, 0.78) 100%) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 42, 122, 0.24) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.08) inset !important;
   flex-shrink: 0 !important;
   z-index: 50 !important;
   width: 100% !important;
@@ -794,12 +818,14 @@ html, body {
    TAB 1: RADAR & "ESTOU ONLINE AGORA"
    ========================================================================== */
 .radar-control-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-glass);
+  background: linear-gradient(145deg, rgba(48, 15, 74, 0.72) 0%, rgba(22, 7, 36, 0.84) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 60, 150, 0.34);
   border-radius: var(--radius-lg);
   padding: 14px 16px;
   margin-bottom: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 42, 122, 0.1);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), 0 0 24px rgba(255, 42, 122, 0.15);
 }
 
 .control-header {
@@ -982,8 +1008,10 @@ html, body {
 
 .subnav-radar {
   display: flex;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border-glass-subtle);
+  background: rgba(36, 12, 58, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 60, 150, 0.28);
   border-radius: var(--radius-md);
   padding: 4px;
   margin-bottom: 14px;
@@ -1017,10 +1045,10 @@ html, body {
 }
 
 .subnav-btn.active {
-  background: rgba(255, 42, 122, 0.22);
+  background: linear-gradient(135deg, rgba(255, 42, 122, 0.40) 0%, rgba(168, 85, 247, 0.35) 100%);
   color: #ffffff;
   border: 1px solid var(--primary-pink);
-  box-shadow: 0 0 12px var(--primary-pink-soft);
+  box-shadow: 0 0 16px var(--primary-pink-glow);
 }
 
 .nearby-users-grid {
@@ -1031,19 +1059,22 @@ html, body {
 
 .user-radar-card {
   position: relative;
-  background: var(--bg-card);
-  border: 1px solid var(--border-glass);
+  background: linear-gradient(155deg, rgba(42, 13, 66, 0.74) 0%, rgba(19, 6, 31, 0.86) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 60, 150, 0.30);
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 42, 122, 0.08);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .user-radar-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 80, 170, 0.6);
+  transform: translateY(-3px);
+  border-color: rgba(255, 80, 170, 0.75);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 24px rgba(255, 42, 122, 0.25);
 }
 
 .card-img-wrap {
@@ -1404,10 +1435,13 @@ html, body {
 }
 
 .feed-post-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-glass-subtle);
+  background: linear-gradient(150deg, rgba(42, 13, 66, 0.74) 0%, rgba(19, 6, 31, 0.86) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 60, 150, 0.28);
   border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 42, 122, 0.10);
 }
 
 .post-header {
@@ -1648,11 +1682,21 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
-  background: var(--bg-card);
-  border: 1px solid var(--border-glass-subtle);
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(42, 13, 64, 0.70) 0%, rgba(20, 6, 32, 0.82) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 60, 150, 0.25);
   border-radius: var(--radius-md);
   cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.conversation-item:hover {
+  background: linear-gradient(135deg, rgba(54, 16, 82, 0.82) 0%, rgba(26, 8, 40, 0.90) 100%);
+  border-color: var(--primary-pink);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4), 0 0 14px rgba(255, 42, 122, 0.16);
+  transform: translateX(3px);
 }
 
 .conv-avatar-wrap {
@@ -1988,10 +2032,11 @@ html, body {
   width: 100%;
   max-width: 480px;
   height: 64px;
-  background: rgba(13, 4, 22, 0.96);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border-glass);
+  background: linear-gradient(0deg, rgba(28, 8, 44, 0.95) 0%, rgba(18, 5, 28, 0.84) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-top: 1px solid rgba(255, 42, 122, 0.28);
+  box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 42, 122, 0.12);
   display: flex;
   align-items: center;
   justify-content: space-around;
