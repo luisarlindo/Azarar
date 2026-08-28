@@ -512,16 +512,16 @@
     const userPosts = Storage.getPosts().filter(p => p.authorId === currentUser.id);
     if (statPosts) statPosts.textContent = userPosts.length + (currentUser.photos?.length || 0);
     if (statFollowers) statFollowers.textContent = currentUser.followersCount || 148;
-    if (statFollowing) statFollowing.textContent = currentUser.followingCount || 92;
-
     try { updateVerificationUI(); } catch(e) { console.error('verif err:', e); }
-    try { updateSliderVisual(currentRadius); } catch(e) { console.error('slider err:', e); }
+    try { updateDiscreteSliderVisual(currentRadius); } catch(e) { console.error('slider err:', e); }
     try { initGPSLocation(); } catch(e) { console.error('gps err:', e); }
     try { CableManager.init(); } catch(e) { console.error('cable err:', e); }
     try { renderRadarUsers(); } catch(e) { console.error('radar err:', e); }
+    try { activateRadarSpin(15); } catch(e) { console.error('spin err:', e); }
+    try { initRadarIdlePulses(); } catch(e) { console.error('idle pulses err:', e); }
     try { renderMuralMessages(); } catch(e) { console.error('mural err:', e); }
     try { renderStories(); } catch(e) { console.error('stories err:', e); }
-    try { renderFeedPosts(); } catch(e) { console.error('feed err:', e); }
+    try { renderLoungeVipMoments(); } catch(e) { console.error('lounge err:', e); }
     try { renderDirectConversations(); } catch(e) { console.error('chats err:', e); }
     try { renderProfilePhotoGrid(); } catch(e) { console.error('grid err:', e); }
   }
@@ -545,8 +545,11 @@
     }
     if (activeNav) activeNav.classList.add('active');
 
-    if (tabId === 'radar') renderRadarUsers();
-    if (tabId === 'feed') renderFeedPosts();
+    if (tabId === 'radar') {
+      activateRadarSpin(15);
+      renderRadarUsers();
+    }
+    if (tabId === 'feed') renderLoungeVipMoments();
     if (tabId === 'likes') renderLikesTab();
     if (tabId === 'messages') renderDirectConversations();
     if (tabId === 'profile') {
@@ -688,6 +691,49 @@
     }).catch(() => {});
   }
 
+  // ==========================================================================
+  // 6. RADAR: DISCRETE SYNCHRONIZED STEPS & SMART ROTATION (15s on move)
+  // ==========================================================================
+  const RADAR_STEPS = [5, 50, 150, 250, 500, 1000, 2000];
+  const PLAN_LIMITS = {
+    free: 150,
+    prata: 500,
+    ouro: 1000,
+    platina: 2000
+  };
+  let currentVipPlan = 'free'; // 'free', 'prata', 'ouro', 'platina'
+  let radarSpinTimeout = null;
+  let radarIdleInterval = null;
+
+  function activateRadarSpin(seconds = 15) {
+    const beam = document.getElementById('radarSweepBeam');
+    if (!beam) return;
+    beam.classList.add('is-spinning');
+    beam.classList.remove('is-idle');
+    if (radarSpinTimeout) clearTimeout(radarSpinTimeout);
+    radarSpinTimeout = setTimeout(() => {
+      beam.classList.remove('is-spinning');
+      beam.classList.add('is-idle');
+    }, seconds * 1000);
+  }
+
+  function initRadarIdlePulses() {
+    if (radarIdleInterval) clearInterval(radarIdleInterval);
+    radarIdleInterval = setInterval(() => {
+      const beam = document.getElementById('radarSweepBeam');
+      if (beam && !beam.classList.contains('is-spinning')) {
+        beam.classList.add('is-spinning');
+        beam.classList.remove('is-idle');
+        setTimeout(() => {
+          if (!radarSpinTimeout || beam.classList.contains('is-idle')) {
+            beam.classList.remove('is-spinning');
+            beam.classList.add('is-idle');
+          }
+        }, 5000);
+      }
+    }, 25000);
+  }
+
   function formatRadiusLabel(val) {
     const meters = parseInt(val, 10);
     if (meters >= 1000) {
@@ -698,11 +744,11 @@
   }
 
   // Exact math requested by user for concentric distance rings:
-  // - Outer circle = max selected distance (e.g. 1km, 500m, 5m)
+  // - Outer circle = max selected distance (e.g. 1km, 500m, 150m, 5m)
   // - Inner circle = 5m (or 0m if max is 5m)
   // - Middle circle = exactly halfway between min and max
   function calculateRadarDistanceLabels(meters) {
-    const max = parseInt(meters, 10) || 1000;
+    const max = parseInt(meters, 10) || 150;
     let min, mid;
 
     if (max <= 5) {
@@ -714,8 +760,9 @@
       if (max === 1000) mid = 500;
       if (max === 2000) mid = 1000;
       if (max === 500) mid = 250;
-      if (max === 200) mid = 100;
-      if (max === 100) mid = 50;
+      if (max === 250) mid = 125;
+      if (max === 150) mid = 75;
+      if (max === 50) mid = 25;
     }
 
     function fmt(val) {
@@ -734,21 +781,19 @@
     };
   }
 
-  function updateSliderVisual(meters) {
+  function updateDiscreteSliderVisual(meters) {
     const slider = document.getElementById('rangeProximityRadius');
-    const lblEl = document.getElementById('lblCurrentRadius');
-    const lblBig = document.getElementById('lblRadarDistanceValue');
     const lblOuter = document.getElementById('lblRadarRingOuter');
     const lblMiddle = document.getElementById('lblRadarRingMiddle');
     const lblInner = document.getElementById('lblRadarRingInner');
+    const lblBig = document.getElementById('lblRadarDistanceValue');
     const muralLbl = document.getElementById('muralRadiusText');
-    const m = parseInt(meters, 10) || 1000;
+    const m = parseInt(meters, 10) || 150;
+    const idx = RADAR_STEPS.indexOf(m) >= 0 ? RADAR_STEPS.indexOf(m) : 2;
 
     if (slider) {
-      slider.value = m;
-      const min = parseInt(slider.min, 10) || 5;
-      const max = parseInt(slider.max, 10) || 2000;
-      const pct = ((m - min) / (max - min)) * 100;
+      slider.value = idx;
+      const pct = (idx / (RADAR_STEPS.length - 1)) * 100;
       slider.style.setProperty('--slider-pct', `${pct}%`);
     }
 
@@ -757,13 +802,10 @@
     if (lblMiddle) lblMiddle.textContent = ringLabels.middle;
     if (lblInner) lblInner.textContent = ringLabels.inner;
     if (lblBig) lblBig.textContent = ringLabels.current;
-    if (lblEl) lblEl.textContent = formatRadiusLabel(m);
     if (muralLbl) muralLbl.textContent = ringLabels.current;
 
-    document.querySelectorAll('.scale-point').forEach(pt => {
-      const txt = pt.textContent.trim();
-      const tickVal = txt.includes('km') ? parseInt(txt) * 1000 : parseInt(txt);
-      if (Math.abs(tickVal - m) <= 25) {
+    document.querySelectorAll('.discrete-tick').forEach((pt, i) => {
+      if (i === idx) {
         pt.classList.add('active-tick');
       } else {
         pt.classList.remove('active-tick');
@@ -771,48 +813,66 @@
     });
   }
 
-  function onRadiusSliderInput(val) {
-    currentRadius = parseInt(val, 10);
-    updateSliderVisual(currentRadius);
+  function onRadiusStepInput(stepIndex) {
+    const idx = parseInt(stepIndex, 10);
+    const meters = RADAR_STEPS[idx] || 150;
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 150;
+
+    if (meters > maxAllowed) {
+      // Snap slider back to user's plan maximum
+      const allowedIdx = RADAR_STEPS.indexOf(maxAllowed);
+      const slider = document.getElementById('rangeProximityRadius');
+      if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 2;
+      updateDiscreteSliderVisual(maxAllowed);
+      openVipPlansModal();
+      showToast(`🔒 Raio de ${meters >= 1000 ? (meters/1000)+'km' : meters+'m'} disponível nos Planos VIP!`);
+      return;
+    }
+
+    currentRadius = meters;
+    updateDiscreteSliderVisual(currentRadius);
+    activateRadarSpin(15);
     renderRadarUsers();
   }
 
-  function onRadiusSliderChange(val) {
-    currentRadius = parseInt(val, 10);
-    updateSliderVisual(currentRadius);
+  function onRadiusStepChange(stepIndex) {
+    const idx = parseInt(stepIndex, 10);
+    const meters = RADAR_STEPS[idx] || 150;
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 150;
+
+    if (meters > maxAllowed) {
+      openVipPlansModal();
+      return;
+    }
+
+    currentRadius = meters;
+    updateDiscreteSliderVisual(currentRadius);
+    activateRadarSpin(15);
     if (navigator.vibrate) navigator.vibrate(15);
     showToast(`📡 Raio atualizado para ${formatRadiusLabel(currentRadius)}`);
     syncLocationWithServer();
     renderRadarUsers();
   }
 
-  function setProximityRadius(radiusMeters) {
-    currentRadius = parseInt(radiusMeters, 10);
-    updateSliderVisual(currentRadius);
-    if (navigator.vibrate) navigator.vibrate(15);
-    showToast(`📡 Raio definido para ${formatRadiusLabel(currentRadius)}`);
-    syncLocationWithServer();
-    renderRadarUsers();
+  function setProximityStep(stepIndex) {
+    const slider = document.getElementById('rangeProximityRadius');
+    if (slider) slider.value = stepIndex;
+    onRadiusStepInput(stepIndex);
   }
 
-  function switchRadarSubTab(subTab) {
-    const btnUsers = document.getElementById('btnSubnavUsers');
-    const btnMural = document.getElementById('btnSubnavMural');
-    const tabUsers = document.getElementById('subtabUsers');
-    const tabMural = document.getElementById('subtabMural');
+  function updateSliderVisual(meters) {
+    updateDiscreteSliderVisual(meters);
+  }
 
-    if (subTab === 'users') {
-      btnUsers?.classList.add('active');
-      btnMural?.classList.remove('active');
-      if (tabUsers) tabUsers.style.display = 'block';
-      if (tabMural) tabMural.style.display = 'none';
-      renderRadarUsers();
+  function setProximityRadius(radiusMeters) {
+    const m = parseInt(radiusMeters, 10);
+    const idx = RADAR_STEPS.indexOf(m);
+    if (idx >= 0) {
+      setProximityStep(idx);
     } else {
-      btnMural?.classList.add('active');
-      btnUsers?.classList.remove('active');
-      if (tabUsers) tabUsers.style.display = 'none';
-      if (tabMural) tabMural.style.display = 'block';
-      renderMuralMessages();
+      currentRadius = m;
+      updateDiscreteSliderVisual(currentRadius);
+      renderRadarUsers();
     }
   }
 
@@ -831,16 +891,17 @@
 
     if (filtered.length === 0) {
       container.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 24px 12px; color: var(--text-dim);">
-          <div style="font-size: 28px; margin-bottom: 4px;">📡</div>
-          <h4 style="color: #fff; font-size: 13.5px; margin-bottom: 2px;">Nenhum perfil neste raio</h4>
-          <p style="font-size: 11px;">Arraste o slider para aumentar o raio de busca.</p>
+        <div style="text-align: center; padding: 16px 4px; color: var(--text-dim);">
+          <div style="font-size: 20px; margin-bottom: 2px;">📡</div>
+          <span style="color: #fff; font-size: 10.5px; font-weight: 700; display: block;">Ninguém</span>
+          <p style="font-size: 8.5px; margin: 2px 0 0;">Aumente o raio</p>
         </div>
       `;
       return;
     }
 
-    container.innerHTML = filtered.map(u => {
+    // Show up to 5 profiles vertically on the right column
+    container.innerHTML = filtered.slice(0, 5).map(u => {
       const firstName = (u.name || 'Usuário').split(' ')[0];
       return `
         <div class="online-user-item" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
@@ -853,6 +914,138 @@
         </div>
       `;
     }).join('');
+  }
+
+  // ==========================================================================
+  // 7. LOUNGE VIP & MOMENTOS SECRETOS (MONETIZAÇÃO RENTÁVEL)
+  // ==========================================================================
+  function renderLoungeVipMoments() {
+    const container = document.getElementById('vipMomentsGrid');
+    if (!container) return;
+
+    const moments = [
+      {
+        id: 'vip_1',
+        author: 'Fernanda Lima',
+        age: 26,
+        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+        location: 'Camarote Villa Mix',
+        media: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600',
+        caption: 'Curtindo o melhor open bar da cidade 🍸✨',
+        time: 'Há 12 min',
+        isUnlocked: currentVipPlan === 'ouro' || currentVipPlan === 'platina'
+      },
+      {
+        id: 'vip_2',
+        author: 'Rodrigo Santoro',
+        age: 29,
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+        location: 'Rooftop Jardins',
+        media: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600',
+        caption: 'A festa tá só começando! Quem tá por aqui?',
+        time: 'Há 25 min',
+        isUnlocked: currentVipPlan === 'ouro' || currentVipPlan === 'platina'
+      },
+      {
+        id: 'vip_3',
+        author: 'Camila Mendes',
+        age: 24,
+        avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150',
+        location: 'Club Noir Lounge',
+        media: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600',
+        caption: 'Na mesa 12 com as amigas! Vem brindar com a gente 🥂',
+        time: 'Há 40 min',
+        isUnlocked: currentVipPlan === 'ouro' || currentVipPlan === 'platina'
+      }
+    ];
+
+    container.innerHTML = moments.map(m => `
+      <div class="vip-moment-card">
+        <div class="vip-media-wrapper">
+          <img src="${m.media}" alt="${m.author}" class="vip-media-img ${m.isUnlocked ? '' : 'is-blurred'}" />
+          ${!m.isUnlocked ? `
+            <div class="vip-unlock-overlay">
+              <div class="vip-lock-icon">🔒</div>
+              <h4 class="vip-unlock-title">Mídia Secreta do Camarote</h4>
+              <p class="vip-unlock-desc">Livre para assinantes Ouro & Platina ou desbloqueio por R$ 2,90.</p>
+              <button type="button" class="btn-unlock-media" onclick="window.azararApp.unlockSingleMoment('${m.id}')">
+                🔓 Desbloquear Agora (R$ 2,90)
+              </button>
+            </div>
+          ` : ''}
+        </div>
+        <div style="padding: 12px 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <img src="${m.avatar}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" />
+              <div>
+                <h4 style="font-size: 13px; font-weight: 700; color: #fff; margin: 0;">${m.author}, ${m.age}</h4>
+                <span style="font-size: 10px; color: var(--text-dim);">📍 ${m.location}</span>
+              </div>
+            </div>
+            <span style="font-size: 10px; color: var(--text-dim);">${m.time}</span>
+          </div>
+          <p style="font-size: 12px; color: var(--text-muted); margin: 8px 0 0;">${m.caption}</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function openVipPlansModal() {
+    const modal = document.getElementById('modalVipPlans');
+    if (modal) modal.classList.add('active');
+  }
+
+  function closeVipPlansModal() {
+    const modal = document.getElementById('modalVipPlans');
+    if (modal) modal.classList.remove('active');
+  }
+
+  function openFlashBoostModal() {
+    const modal = document.getElementById('modalFlashBoost');
+    if (modal) modal.classList.add('active');
+  }
+
+  function closeFlashBoostModal() {
+    const modal = document.getElementById('modalFlashBoost');
+    if (modal) modal.classList.remove('active');
+  }
+
+  function selectVipPlan(planKey) {
+    document.querySelectorAll('.vip-plan-card').forEach(c => c.classList.remove('selected'));
+    const target = document.getElementById(`planCard${planKey.charAt(0).toUpperCase() + planKey.slice(1)}`);
+    if (target) target.classList.add('selected');
+  }
+
+  function subscribeToPlan(tierKey, tierName, price) {
+    currentVipPlan = tierKey;
+    closeVipPlansModal();
+    if (navigator.vibrate) navigator.vibrate([30, 50, 30, 50]);
+    showToast(`🎉 Parabéns! Você agora é assinante ${tierName}!`);
+    
+    // Update max radius allowance
+    const newMax = PLAN_LIMITS[tierKey] || 150;
+    currentRadius = Math.min(currentRadius, newMax);
+    updateDiscreteSliderVisual(currentRadius);
+    renderLoungeVipMoments();
+  }
+
+  function activateFlashBoost() {
+    closeFlashBoostModal();
+    if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
+    showToast('⚡ Flash Boost ativado! Seu perfil está no topo da balada por 1 hora!');
+  }
+
+  function unlockSingleMoment(momentId) {
+    if (navigator.vibrate) navigator.vibrate(20);
+    showToast('🔓 Mídia VIP desbloqueada com sucesso!');
+    const card = event?.target?.closest('.vip-moment-card');
+    if (card) {
+      const img = card.querySelector('.vip-media-img');
+      const overlay = card.querySelector('.vip-unlock-overlay');
+      if (img) img.classList.remove('is-blurred');
+      if (overlay) overlay.remove();
+    }
   }
 
   function sendCheers(userId) {
@@ -2088,8 +2281,21 @@
     switchRadarSubTab,
     switchProfileTab,
     setProximityRadius,
+    setProximityStep,
+    onRadiusStepInput,
+    onRadiusStepChange,
     onRadiusSliderInput,
     onRadiusSliderChange,
+    activateRadarSpin,
+    openVipPlansModal,
+    closeVipPlansModal,
+    selectVipPlan,
+    subscribeToPlan,
+    openFlashBoostModal,
+    closeFlashBoostModal,
+    activateFlashBoost,
+    unlockSingleMoment,
+    renderLoungeVipMoments,
     toggleOnlineStatus,
     toggleFollowUser,
     toggleFollowActiveChatUser,

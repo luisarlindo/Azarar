@@ -364,133 +364,157 @@
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                       Editar perfil
                     </button>
-                  </div>
-                </div>
+                 <!-- 2. SIDE-BY-SIDE CONTAINER: RADAR (LEFT) + PERFIS ON-LINE (RIGHT) -->
+                <div class="radar-and-profiles-row">
+                  
+                  <!-- LEFT: COMPACT RADAR CARD -->
+                  <div class="radar-col-left">
+                    <div class="radar-dashboard-card">
+                      <div class="radar-card-header">
+                        <div class="radar-header-title-wrap">
+                          <span class="radar-target-icon">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
+                          </span>
+                          <div>
+                            <h3 class="radar-card-title">Pessoas próximas</h3>
+                            <p class="radar-card-subtitle">Encontre conexões no local</p>
+                          </div>
+                        </div>
 
-                <!-- 2. RADAR REALISTA "PESSOAS PRÓXIMAS" CARD -->
-                <div class="radar-dashboard-card">
-                  <div class="radar-card-header">
-                    <div class="radar-header-title-wrap">
-                      <span class="radar-target-icon">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/></svg>
-                      </span>
-                      <div>
-                        <h3 class="radar-card-title">Pessoas próximas</h3>
-                        <p class="radar-card-subtitle">Encontre conexões perto de você</p>
-                      </div>
-                    </div>
-
-                    <button type="button" class="radar-filter-btn" onclick="window.azararApp.toggleRadarFilterModal()" aria-label="Filtros de Proximidade">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-                    </button>
-                  </div>
-
-                  <!-- RADAR DISPLAY VISUALIZER (ROTATING SWEEP + CONCENTRIC DISTANCE LABELS + CENTER HEART) -->
-                  <div class="radar-visualizer-container">
-                    <div class="radar-scope-circle">
-                      
-                      <!-- Cyber grid background lines -->
-                      <div class="radar-grid-axis-h"></div>
-                      <div class="radar-grid-axis-v"></div>
-                      <div class="radar-grid-axis-d1"></div>
-                      <div class="radar-grid-axis-d2"></div>
-
-                      <!-- Continuous 360-degree rotating pink sweep beam -->
-                      <div class="radar-sweep-beam"></div>
-
-                      <!-- Outer Distance Ring (100% size) -->
-                      <div class="radar-ring radar-ring-outer">
-                        <span class="radar-dist-tag" id="lblRadarRingOuter">1 km</span>
+                        <button type="button" class="radar-filter-btn" onclick="window.azararApp.openVipPlansModal()" aria-label="Planos VIP & Filtros" title="Ver Planos VIP">
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        </button>
                       </div>
 
-                      <!-- Middle Distance Ring (60% size) -->
-                      <div class="radar-ring radar-ring-middle">
-                        <span class="radar-dist-tag" id="lblRadarRingMiddle">500 m</span>
+                      <!-- RADAR DISPLAY VISUALIZER (ROTATING SWEEP + CONCENTRIC DISTANCE LABELS + CENTER HEART) -->
+                      <div class="radar-visualizer-container">
+                        <div class="radar-scope-circle">
+                          
+                          <!-- Cyber grid background lines -->
+                          <div class="radar-grid-axis-h"></div>
+                          <div class="radar-grid-axis-v"></div>
+                          <div class="radar-grid-axis-d1"></div>
+                          <div class="radar-grid-axis-d2"></div>
+
+                          <!-- Smart 360-degree rotating pink sweep beam (Activates on slider move for 15s) -->
+                          <div class="radar-sweep-beam is-spinning" id="radarSweepBeam"></div>
+
+                          <!-- Outer Distance Ring (100% size) -->
+                          <div class="radar-ring radar-ring-outer">
+                            <span class="radar-dist-tag" id="lblRadarRingOuter">150 m</span>
+                          </div>
+
+                          <!-- Middle Distance Ring (60% size) -->
+                          <div class="radar-ring radar-ring-middle">
+                            <span class="radar-dist-tag" id="lblRadarRingMiddle">75 m</span>
+                          </div>
+
+                          <!-- Inner Distance Ring (30% size) -->
+                          <div class="radar-ring radar-ring-inner">
+                            <span class="radar-dist-tag" id="lblRadarRingInner">5 m</span>
+                          </div>
+
+                          <!-- Center Pulsing Heart (User's location) -->
+                          <div class="radar-center-point">
+                            <div class="radar-center-glow"></div>
+                            <div class="radar-center-heart-circle">
+                              <svg viewBox="0 0 24 24" width="12" height="12" fill="#ffffff"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </div>
+                          </div>
+
+                        </div>
                       </div>
 
-                      <!-- Inner Distance Ring (30% size) -->
-                      <div class="radar-ring radar-ring-inner">
-                        <span class="radar-dist-tag" id="lblRadarRingInner">250 m</span>
+                      <!-- RADAR FOOTER CONTROLS -->
+                      <div class="radar-controls-footer">
+                        <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.centerGPSLocation()" aria-label="Minha Localização GPS">
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                        </button>
+
+                        <div class="radar-distance-readout">
+                          <span class="radar-distance-big" id="lblRadarDistanceValue">150 m</span>
+                          <span class="radar-distance-caption">RAIO DE BUSCA</span>
+                        </div>
+
+                        <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.recalibrateRadar()" aria-label="Recalibrar Radar">
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                        </button>
                       </div>
 
-                      <!-- Center Pulsing Heart (User's location) -->
-                      <div class="radar-center-point">
-                        <div class="radar-center-glow"></div>
-                        <div class="radar-center-heart-circle">
-                          <svg viewBox="0 0 24 24" width="14" height="14" fill="#ffffff"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                      <!-- Perfectly Synchronized Discrete Range Slider Bar -->
+                      <div class="radar-slider-container">
+                        <div class="discrete-slider-wrapper">
+                          <input
+                            type="range"
+                            id="rangeProximityRadius"
+                            class="proximity-range-slider"
+                            min="0"
+                            max="6"
+                            step="1"
+                            value="2"
+                            oninput="window.azararApp.onRadiusStepInput(this.value)"
+                            onchange="window.azararApp.onRadiusStepChange(this.value)"
+                          />
+                          <div class="discrete-scale-ticks">
+                            <span class="discrete-tick" style="left: 0%;" onclick="window.azararApp.setProximityStep(0)">5m</span>
+                            <span class="discrete-tick" style="left: 16.6%;" onclick="window.azararApp.setProximityStep(1)">50m</span>
+                            <span class="discrete-tick active-tick" style="left: 33.3%;" onclick="window.azararApp.setProximityStep(2)">150m</span>
+                            <span class="discrete-tick" style="left: 50.0%;" onclick="window.azararApp.setProximityStep(3)">250m</span>
+                            <span class="discrete-tick" style="left: 66.6%;" onclick="window.azararApp.setProximityStep(4)">500m</span>
+                            <span class="discrete-tick" style="left: 83.3%;" onclick="window.azararApp.setProximityStep(5)">1 km</span>
+                            <span class="discrete-tick" style="left: 100%;" onclick="window.azararApp.setProximityStep(6)">2 km</span>
+                          </div>
+                        </div>
+                        <div class="free-tier-notice-row">
+                          <span class="free-limit-tag">Plano Grátis: até 150m</span>
+                          <button type="button" class="link-upgrade-inline" onclick="window.azararApp.openVipPlansModal()">Liberar até 2km ⭐</button>
                         </div>
                       </div>
 
                     </div>
                   </div>
 
-                  <!-- RADAR FOOTER CONTROLS & RANGE SLIDER -->
-                  <div class="radar-controls-footer">
-                    <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.centerGPSLocation()" aria-label="Minha Localização GPS">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
-                    </button>
+                  <!-- RIGHT: COMPACT VERTICAL PERFIS ON-LINE COL -->
+                  <div class="profiles-col-right">
+                    <div class="online-profiles-panel">
+                      <div class="online-profiles-header">
+                        <h3 class="online-profiles-title">Perfis on line</h3>
+                      </div>
 
-                    <div class="radar-distance-readout">
-                      <span class="radar-distance-big" id="lblRadarDistanceValue">1 km</span>
-                      <span class="radar-distance-caption">RAIO DE BUSCA</span>
-                    </div>
+                      <div class="online-profiles-vertical-list" id="nearbyUsersList">
+                        <!-- Rendered vertically one below the other with circular avatar + green dot -->
+                      </div>
 
-                    <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.recalibrateRadar()" aria-label="Recalibrar Radar">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
-                    </button>
-                  </div>
-
-                  <!-- Interactive Draggable Proximity Range Slider -->
-                  <div class="radar-slider-container">
-                    <input
-                      type="range"
-                      id="rangeProximityRadius"
-                      class="proximity-range-slider"
-                      min="5"
-                      max="2000"
-                      step="5"
-                      value="1000"
-                      oninput="window.azararApp.onRadiusSliderInput(this.value)"
-                      onchange="window.azararApp.onRadiusSliderChange(this.value)"
-                    />
-                    <div class="range-slider-scale">
-                      <span class="scale-point" onclick="window.azararApp.setProximityRadius(5)">5m</span>
-                      <span class="scale-point" onclick="window.azararApp.setProximityRadius(200)">200m</span>
-                      <span class="scale-point" onclick="window.azararApp.setProximityRadius(500)">500m</span>
-                      <span class="scale-point active-tick" onclick="window.azararApp.setProximityRadius(1000)">1 km</span>
-                      <span class="scale-point" onclick="window.azararApp.setProximityRadius(2000)">2 km</span>
+                      <button type="button" class="btn-view-all-profiles" onclick="window.azararApp.switchTab('likes')">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        Ver todos
+                      </button>
                     </div>
                   </div>
 
                 </div>
 
-              </div>
-
-              <!-- RIGHT / PROFILES COLUMN -->
-              <div class="dashboard-side-col">
-                <div class="online-profiles-panel">
-                  <div class="online-profiles-header">
-                    <h3 class="online-profiles-title">Perfis on line</h3>
-                  </div>
-
-                  <div class="online-profiles-list" id="nearbyUsersList">
-                    <!-- Rendered dynamically via JS with circular avatars + green dot -->
-                  </div>
-
-                  <button type="button" class="btn-view-all-profiles" onclick="window.azararApp.switchTab('feed')">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                    Ver todos
-                  </button>
-                </div>
               </div>
 
             </div>
 
           </div>
 
-          <!-- TAB 2: FEED SOCIAL (ESTILO INSTAGRAM) -->
-          <div class="tab-page tab-feed" id="tabFeed">
+          <!-- TAB 2: LOUNGE VIP & MÍDIAS EXCLUSIVAS (MONETIZAÇÃO) -->
+          <div class="tab-page tab-lounge" id="tabFeed" style="display: none;">
             
+            <!-- VIP Lounge Header & Flash Boost Banner -->
+            <div class="lounge-vip-banner">
+              <div class="vip-banner-content">
+                <span class="vip-sparkle-badge">🔥 CAMAROTE VIP</span>
+                <h3 class="vip-banner-title">Mídias Exclusivas da Noite</h3>
+                <p class="vip-banner-desc">Fotos e momentos secretos de quem está curtindo a festa agora.</p>
+              </div>
+              <button type="button" class="btn-flash-boost" onclick="window.azararApp.openFlashBoostModal()">
+                ⚡ Flash Boost
+              </button>
+            </div>
+
             <!-- Stories Carousel -->
             <div class="stories-section">
               <div class="stories-scroll" id="storiesScroll">
@@ -505,11 +529,6 @@
                 <!-- Other stories populated dynamically -->
                 <div id="dynamicStoriesList" class="dynamic-stories-row"></div>
               </div>
-            </div>
-
-            <!-- Feed Posts Timeline -->
-            <div class="feed-posts-container" id="feedPostsList">
-              <!-- Rendered dynamically via JS -->
             </div>
 
             <!-- Floating Action Button: New Post -->
@@ -964,12 +983,137 @@
           </div>
         </div>
 
-        <div class="face-verif-actions" style="margin-top: 14px;">
-          <button type="button" class="btn-primary" id="btnStartFaceScan" style="height: 48px; width: 100%;" onclick="window.azararApp.startFacialRecognitionScan()">
-            <span>📸 Iniciar Reconhecimento Facial</span>
-          </button>
-          <button type="button" class="btn-outline-login" style="margin-top: 8px; height: 40px; width: 100%; border: 1px solid rgba(255,255,255,0.2);" onclick="window.azararApp.closeFaceVerificationModal()">
-            Cancelar
+    <!-- ============================================ -->
+    <!-- MODAL: PLANOS VIP & UPGRADE                  -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalVipPlans" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeVipPlansModal()"></div>
+      <div class="modal-card-sheet vip-plans-sheet">
+        <div class="modal-header">
+          <div>
+            <span class="vip-sheet-tag">👑 EXPERIÊNCIA PREMIUM</span>
+            <h3 class="modal-title">Escolha seu Plano VIP</h3>
+          </div>
+          <button class="modal-close-btn" onclick="window.azararApp.closeVipPlansModal()">✕</button>
+        </div>
+
+        <p class="vip-sheet-subtitle">Desbloqueie raios maiores no radar, brindes ilimitados e mídias exclusivas no Lounge.</p>
+
+        <!-- PLANS CARDS LIST -->
+        <div class="vip-tiers-list">
+          
+          <!-- PLANO 1: GRÁTIS -->
+          <div class="vip-plan-card" id="planCardFree" onclick="window.azararApp.selectVipPlan('free')">
+            <div class="plan-card-header">
+              <div>
+                <h4 class="plan-name">Grátis</h4>
+                <span class="plan-price">R$ 0,00</span>
+              </div>
+              <span class="plan-badge-current" id="badgePlanFree">Plano Atual</span>
+            </div>
+            <ul class="plan-features">
+              <li>✅ Radar limitado a <strong>150 metros</strong></li>
+              <li>✅ 3 Brindes 🥂 por dia</li>
+              <li>✅ Chat efêmero de 3 horas</li>
+            </ul>
+          </div>
+
+          <!-- PLANO 2: PRATA -->
+          <div class="vip-plan-card" id="planCardPrata" onclick="window.azararApp.selectVipPlan('prata')">
+            <div class="plan-card-header">
+              <div>
+                <h4 class="plan-name silver-glow">🥈 Prata</h4>
+                <span class="plan-price">R$ 19,90 <small>/mês</small></span>
+              </div>
+              <span class="plan-badge-tier">Básico Plus</span>
+            </div>
+            <ul class="plan-features">
+              <li>🚀 Radar expandido até <strong>500 metros</strong></li>
+              <li>🥂 15 Brindes diários</li>
+              <li>👻 Modo Fantasma (Navegação Invisível)</li>
+              <li>🛡️ Selo Prata no Perfil</li>
+            </ul>
+            <button type="button" class="btn-upgrade-tier btn-tier-prata" onclick="event.stopPropagation(); window.azararApp.subscribeToPlan('prata', 'Plano Prata', 19.90)">
+              Assinar Prata (R$ 19,90)
+            </button>
+          </div>
+
+          <!-- PLANO 3: OURO (DESTAQUE) -->
+          <div class="vip-plan-card featured-gold-card" id="planCardOuro" onclick="window.azararApp.selectVipPlan('ouro')">
+            <div class="popular-ribbon">⭐ MAIS ESCOLHIDO</div>
+            <div class="plan-card-header">
+              <div>
+                <h4 class="plan-name gold-glow">🥇 Ouro VIP</h4>
+                <span class="plan-price">R$ 39,90 <small>/mês</small></span>
+              </div>
+              <span class="plan-badge-gold">Recomendado</span>
+            </div>
+            <ul class="plan-features">
+              <li>🎯 Radar até <strong>1.000 metros (1 km)</strong></li>
+              <li>🥂 <strong>Brindes Ilimitados</strong></li>
+              <li>👀 Ver quem te curtiu antes de responder</li>
+              <li>🔓 Acesso e desbloqueio livre no <strong>Lounge VIP</strong></li>
+              <li>⭐ Selo Ouro VIP no Perfil</li>
+            </ul>
+            <button type="button" class="btn-upgrade-tier btn-tier-ouro" onclick="event.stopPropagation(); window.azararApp.subscribeToPlan('ouro', 'Plano Ouro VIP', 39.90)">
+              Assinar Ouro VIP (R$ 39,90)
+            </button>
+          </div>
+
+          <!-- PLANO 4: PLATINA -->
+          <div class="vip-plan-card platinum-glow-card" id="planCardPlatina" onclick="window.azararApp.selectVipPlan('platina')">
+            <div class="plan-card-header">
+              <div>
+                <h4 class="plan-name plat-glow">👑 Platina Black</h4>
+                <span class="plan-price">R$ 69,90 <small>/mês</small></span>
+              </div>
+              <span class="plan-badge-plat">VIP Máximo</span>
+            </div>
+            <ul class="plan-features">
+              <li>🌍 Radar até <strong>2.000 metros (2 km) / Ilimitado</strong></li>
+              <li>⚡ <strong>1 Flash Boost semanal grátis</strong> (topo da balada por 1h)</li>
+              <li>⏳ <strong>Chat sem expiração</strong> (conversas permanentes)</li>
+              <li>💎 Selo Platina Diamante & Verificação Prioritária</li>
+              <li>↩️ Desfazer brindes enviados por engano</li>
+            </ul>
+            <button type="button" class="btn-upgrade-tier btn-tier-platina" onclick="event.stopPropagation(); window.azararApp.subscribeToPlan('platina', 'Plano Platina Black', 69.90)">
+              Assinar Platina (R$ 69,90)
+            </button>
+          </div>
+
+        </div>
+
+        <div class="vip-guarantee-note">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="#22c55e"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          <span>Cancele a qualquer momento. Pagamento seguro via Pix ou Cartão.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: FLASH BOOST (DESTAQUE NA NOITE)      -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalFlashBoost" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeFlashBoostModal()"></div>
+      <div class="modal-card-sheet flash-boost-sheet">
+        <div class="modal-header">
+          <h3 class="modal-title">⚡ Flash Boost Camarote</h3>
+          <button class="modal-close-btn" onclick="window.azararApp.closeFlashBoostModal()">✕</button>
+        </div>
+
+        <div class="boost-hero-graphic">
+          <div class="boost-icon-pulse">⚡</div>
+          <h4 class="boost-callout-title">Seja o Perfil nº 1 da Balada por 1 Hora!</h4>
+          <p class="boost-callout-desc">Seu perfil e momentos serão exibidos no topo do Radar e do Lounge VIP para todos os usuários em um raio de até 10 km.</p>
+        </div>
+
+        <div class="boost-pricing-box">
+          <div class="boost-price-tag">
+            <span class="boost-val">R$ 9,90</span>
+            <span class="boost-period">/ 1 hora de destaque</span>
+          </div>
+          <button type="button" class="btn-primary btn-activate-boost" onclick="window.azararApp.activateFlashBoost()">
+            🚀 Ativar Flash Boost Agora
           </button>
         </div>
       </div>
