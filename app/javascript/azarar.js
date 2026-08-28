@@ -815,21 +815,14 @@
     const meters = RADAR_STEPS[idx] || 150;
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 150;
 
-    if (meters > maxAllowed) {
-      // Snap slider back to user's plan maximum
-      const allowedIdx = RADAR_STEPS.indexOf(maxAllowed);
-      const slider = document.getElementById('rangeProximityRadius');
-      if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 2;
-      updateDiscreteSliderVisual(maxAllowed);
-      openVipPlansModal();
-      showToast(`🔒 Raio de ${meters >= 1000 ? (meters/1000)+'km' : meters+'m'} disponível nos Planos VIP!`);
-      return;
-    }
-
-    currentRadius = meters;
-    updateDiscreteSliderVisual(currentRadius);
+    // Smoothly update the visual labels and concentric rings while sliding
+    updateDiscreteSliderVisual(meters);
     activateRadarSpin(15);
-    renderRadarUsers();
+
+    if (meters <= maxAllowed) {
+      currentRadius = meters;
+      renderRadarUsers();
+    }
   }
 
   function onRadiusStepChange(stepIndex) {
@@ -838,7 +831,15 @@
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 150;
 
     if (meters > maxAllowed) {
+      // Revert slider position smoothly and present VIP plans
+      const allowedIdx = RADAR_STEPS.indexOf(maxAllowed);
+      const slider = document.getElementById('rangeProximityRadius');
+      if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 2;
+      currentRadius = maxAllowed;
+      updateDiscreteSliderVisual(maxAllowed);
+      renderRadarUsers();
       openVipPlansModal();
+      showToast(`🔒 Raio de ${formatRadiusLabel(meters)} disponível nos Planos VIP!`);
       return;
     }
 
@@ -852,9 +853,10 @@
   }
 
   function setProximityStep(stepIndex) {
+    const idx = parseInt(stepIndex, 10);
     const slider = document.getElementById('rangeProximityRadius');
-    if (slider) slider.value = stepIndex;
-    onRadiusStepInput(stepIndex);
+    if (slider) slider.value = idx;
+    onRadiusStepChange(idx);
   }
 
   function updateSliderVisual(meters) {
@@ -1016,15 +1018,29 @@
 
   function subscribeToPlan(tierKey, tierName, price) {
     currentVipPlan = tierKey;
-    closeVipPlansModal();
-    if (navigator.vibrate) navigator.vibrate([30, 50, 30, 50]);
-    showToast(`🎉 Parabéns! Você agora é assinante ${tierName}!`);
-    
-    // Update max radius allowance
     const newMax = PLAN_LIMITS[tierKey] || 150;
-    currentRadius = Math.min(currentRadius, newMax);
+    
+    // Automatically jump to the new plan's max radius so the user sees the immediate benefit!
+    currentRadius = newMax;
+
+    // Update notice tag on home screen
+    const limitTag = document.querySelector('.free-limit-tag');
+    if (limitTag) {
+      if (tierKey === 'free') {
+        limitTag.textContent = 'Plano Grátis: até 150m';
+      } else {
+        limitTag.innerHTML = `⭐ <strong>${tierName}</strong>: até ${newMax >= 1000 ? (newMax/1000)+'km' : newMax+'m'}`;
+      }
+    }
+
+    closeVipPlansModal();
     updateDiscreteSliderVisual(currentRadius);
+    activateRadarSpin(15);
+    renderRadarUsers();
     renderLoungeVipMoments();
+
+    if (navigator.vibrate) navigator.vibrate([30, 50, 30, 50]);
+    showToast(`🎉 Parabéns! Você agora é assinante ${tierName} com alcance de ${formatRadiusLabel(newMax)}!`);
   }
 
   function activateFlashBoost() {
