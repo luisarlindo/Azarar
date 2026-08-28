@@ -2224,7 +2224,7 @@ html, body {
 .mockup-profile-hero-card {
   position: relative;
   width: 100%;
-  min-height: 275px;
+  min-height: 290px;
   border-radius: 24px;
   background-color: #0f0a1c;
   border: 1px solid rgba(255, 60, 150, 0.16);
@@ -2239,7 +2239,7 @@ html, body {
   position: absolute;
   top: 0;
   left: 0;
-  width: 58%;
+  width: 48%;
   height: 100%;
   object-fit: cover;
   object-position: center top;
@@ -2255,10 +2255,10 @@ html, body {
   background: linear-gradient(
     90deg,
     rgba(15, 10, 28, 0) 0%,
-    rgba(15, 10, 28, 0.1) 28%,
-    rgba(15, 10, 28, 0.75) 44%,
-    rgba(15, 10, 28, 0.98) 56%,
-    #0f0a1c 100%
+    rgba(15, 10, 28, 0.12) 20%,
+    rgba(15, 10, 28, 0.78) 38%,
+    rgba(15, 10, 28, 0.98) 48%,
+    #0f0a1c 60%
   );
   z-index: 2;
   pointer-events: none;
@@ -2268,12 +2268,14 @@ html, body {
   position: relative;
   z-index: 3;
   margin-left: auto;
-  width: 58%;
+  width: 54%;
   padding: 14px 12px 14px 4px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 5px;
+  text-align: left;
+  gap: 6px;
   box-sizing: border-box;
 }
 
@@ -2290,13 +2292,17 @@ html, body {
   padding: 3px 8px;
   border-radius: 12px;
   letter-spacing: 0.6px;
+  margin-bottom: 1px;
 }
 
 .mockup-name-row {
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 6px;
-  margin-top: 1px;
+  width: 100%;
+  margin: 0;
+  text-align: left;
 }
 
 .mockup-profile-name {
@@ -2305,6 +2311,7 @@ html, body {
   color: #ffffff;
   margin: 0;
   line-height: 1.1;
+  text-align: left;
 }
 
 .mockup-blue-tick {
@@ -2315,22 +2322,30 @@ html, body {
 }
 
 .mockup-location-row {
-  font-size: 11px;
+  font-size: 11.5px;
   color: #9ca3af;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   gap: 4px;
-  margin-top: -1px;
+  margin: -1px 0 2px;
+  width: 100%;
+  text-align: left;
 }
 
 .mockup-intent-card {
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: flex-start;
+  gap: 9px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 6px 9px;
+  padding: 7px 10px;
   border-radius: 14px;
+  text-align: left;
+  margin: 0;
 }
 
 .mockup-card-icon {
@@ -2341,34 +2356,44 @@ html, body {
 .mockup-intent-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.2;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.25;
 }
 
 .intent-sublabel {
   font-size: 9.5px;
   color: #9ca3af;
+  text-align: left;
 }
 
 .intent-highlight {
-  font-size: 11px;
+  font-size: 11.5px;
   color: #ff2a7a;
   font-weight: 700;
+  text-align: left;
 }
 
 .mockup-bio-card {
+  width: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: flex-start;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.07);
-  padding: 6px 9px;
+  padding: 7px 10px;
   border-radius: 14px;
+  text-align: left;
+  margin: 0;
 }
 
 .mockup-bio-text {
-  font-size: 9.5px;
+  font-size: 10px;
   color: #d1d5db;
-  line-height: 1.2;
+  line-height: 1.25;
+  text-align: left;
 }
 
 .btn-mockup-edit-profile {
@@ -2379,10 +2404,10 @@ html, body {
   background: linear-gradient(90deg, #ff1a72 0%, #d81b60 100%);
   border: none;
   border-radius: 14px;
-  padding: 8px 12px;
+  padding: 9px 12px;
   color: #ffffff;
   font-family: var(--font-ui);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(255, 26, 114, 0.45);
@@ -3537,7 +3562,7 @@ html, body {
 }
 
 /* ==========================================================================
-   BOTTOM NAVIGATION BAR (FIXED)
+   BOTTOM NAVIGATION BAR (EXACTLY MATCHING MOCKUP)
    ========================================================================== */
 .bottom-nav-bar {
   position: fixed;
@@ -3546,21 +3571,19 @@ html, body {
   transform: translateX(-50%);
   width: 100%;
   max-width: 480px;
-  height: 64px;
-  background: linear-gradient(0deg, rgba(28, 8, 44, 0.95) 0%, rgba(18, 5, 28, 0.84) 100%);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-top: 1px solid rgba(255, 42, 122, 0.28);
-  box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 42, 122, 0.12);
+  height: 68px;
+  background: #080312;
+  border-top: 1px solid rgba(255, 60, 150, 0.14);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 8px calc(var(--safe-bottom) + 2px);
+  padding: 4px 10px calc(var(--safe-bottom) + 4px);
   z-index: 60;
+  box-sizing: border-box;
 }
 
 .nav-tab-item {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3568,55 +3591,72 @@ html, body {
   gap: 3px;
   background: transparent;
   border: none;
-  color: var(--text-dim);
+  color: #71717a;
   cursor: pointer;
-  padding: 4px 0;
+  padding: 6px 10px;
+  border-radius: 18px;
+  transition: all 0.2s ease;
+  min-width: 54px;
 }
 
 .nav-tab-icon-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  color: #71717a;
+  transition: color 0.2s ease;
 }
 
-.nav-tab-profile-wrap {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 1.5px solid transparent;
-  overflow: hidden;
-}
-
-.nav-mini-avatar {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.nav-tab-icon-wrap svg {
+  stroke: currentColor;
 }
 
 .nav-tab-label {
   font-family: var(--font-ui);
   font-size: 10px;
-  font-weight: 600;
+  font-weight: 500;
+  color: #71717a;
+  transition: color 0.2s ease;
 }
 
+/* Active tab state: highlighted rounded capsule box with pink icon & text */
 .nav-tab-item.active {
-  color: #ffffff;
-  background: rgba(255, 42, 122, 0.24);
-  border: 1px solid rgba(255, 42, 122, 0.4);
-  border-radius: 16px;
-  padding: 4px 6px;
-  box-shadow: 0 0 16px rgba(255, 42, 122, 0.25);
+  background: rgba(255, 26, 114, 0.18);
+  border: 1px solid rgba(255, 26, 114, 0.35);
+  box-shadow: 0 0 16px rgba(255, 26, 114, 0.2);
+  padding: 6px 14px;
 }
 
 .nav-tab-item.active .nav-tab-icon-wrap {
-  transform: translateY(-1px);
-  filter: drop-shadow(0 0 8px var(--primary-pink));
-  color: #ffffff;
+  color: #ff1a72;
+}
+
+.nav-tab-item.active .nav-tab-icon-wrap svg {
+  fill: #ff1a72;
+  stroke: none;
 }
 
 .nav-tab-item.active .nav-tab-label {
-  color: #ffffff;
+  color: #ff1a72;
   font-weight: 700;
+}
+
+.badge-unread-count {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  background: #ff1a72;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  border-radius: 50%;
+  min-width: 15px;
+  height: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 8px #ff1a72;
 }
 
 /* ==========================================================================
