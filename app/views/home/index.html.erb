@@ -317,56 +317,59 @@
         <div class="tab-content-container" id="tabContentContainer">
           
           <!-- TAB 1: RADAR / INÍCIO (MATCHING MOCKUP) -->
-          <!-- TAB 1: RADAR / INÍCIO (EXACT MOCKUP LAYOUT) -->
+          <!-- TAB 1: RADAR / INÍCIO (EXACT MOCKUP LAYOUT: 73.75% / 26.25%) -->
           <div class="tab-page tab-radar active" id="tabRadar">
             
             <div class="mockup-2col-layout">
               
-              <!-- LEFT COLUMN: PROFILE CARD (PHOTO BACKGROUND) + RADAR CARD -->
+              <!-- LEFT COLUMN (~73.75%): PROFILE HERO CARD + RADAR CARD -->
               <div class="mockup-left-col">
                 
-                <!-- 1. USER PROFILE HERO CARD (PHOTO IS FULL BACKGROUND COVER) -->
-                <div class="hero-profile-card-cover" id="heroProfileCard">
-                  <img src="" id="heroProfileAvatar" alt="Meu Perfil" class="hero-profile-bg-img" />
-                  <div class="hero-profile-gradient-overlay"></div>
+                <!-- 1. USER PROFILE HERO CARD (STRICTLY IDENTICAL TO MOCKUP) -->
+                <div class="mockup-profile-hero-card" id="heroProfileCard">
+                  <!-- Left Side Photo with smooth horizontal fade to dark -->
+                  <img src="" id="heroProfileAvatar" alt="Meu Perfil" class="mockup-profile-photo" />
+                  <div class="mockup-profile-fade-overlay"></div>
 
-                  <div class="hero-profile-inner-content">
-                    <div class="hero-profile-top-bar">
-                      <span class="badge-verified-shield">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-                        VERIFICADO
+                  <!-- Right Side Details -->
+                  <div class="mockup-profile-details">
+                    <div class="mockup-verified-tag">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                      VERIFICADO
+                    </div>
+
+                    <div class="mockup-name-row">
+                      <h3 class="mockup-profile-name" id="heroProfileName">Lucas, 28</h3>
+                      <span class="mockup-blue-tick" title="Verificado Oficial">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="#0ea5e9"><circle cx="12" cy="12" r="10" fill="#0ea5e9"/><path d="M9 12l2 2 4-4" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
                       </span>
                     </div>
 
-                    <div class="hero-profile-bottom-details">
-                      <div class="hero-name-row">
-                        <h3 class="hero-profile-name" id="heroProfileName">Lucas, 28</h3>
-                        <span class="verified-blue-tick" title="Verificado Oficial">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="#0ea5e9"><circle cx="12" cy="12" r="10" fill="#0ea5e9"/><path d="M9 12l2 2 4-4" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-                        </span>
-                      </div>
-
-                      <p class="hero-profile-location">
-                        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        <span id="heroProfileLocation">São Paulo, SP</span>
-                      </p>
-
-                      <div class="hero-profile-pills">
-                        <div class="hero-pill">
-                          <span class="hero-pill-icon">❤️</span>
-                          <span class="hero-pill-text" id="heroProfileIntent">Em busca de <strong>conexões reais</strong></span>
-                        </div>
-                        <div class="hero-pill">
-                          <span class="hero-pill-icon">✨</span>
-                          <span class="hero-pill-text" id="heroProfileBio">Apaixonado por viagens e música 🎸</span>
-                        </div>
-                      </div>
-
-                      <button type="button" class="btn-hero-edit-profile" onclick="window.azararApp.openEditProfileModal()">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                        Editar perfil
-                      </button>
+                    <div class="mockup-location-row">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="#ff2a7a"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                      <span id="heroProfileLocation">São Paulo, SP</span>
                     </div>
+
+                    <!-- Intent Card: 2 lines -->
+                    <div class="mockup-intent-card">
+                      <span class="mockup-card-icon">❤️</span>
+                      <div class="mockup-intent-text">
+                        <span class="intent-sublabel">Em busca de</span>
+                        <strong class="intent-highlight" id="heroProfileIntent">conexões reais</strong>
+                      </div>
+                    </div>
+
+                    <!-- Bio Card: 1 line -->
+                    <div class="mockup-bio-card">
+                      <span class="mockup-card-icon">✨</span>
+                      <span class="mockup-bio-text" id="heroProfileBio">Apaixonado por viagens e música 🎸</span>
+                    </div>
+
+                    <!-- Button: Editar perfil -->
+                    <button type="button" class="btn-mockup-edit-profile" onclick="window.azararApp.openEditProfileModal()">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                      Editar perfil
+                    </button>
                   </div>
                 </div>
 
@@ -473,7 +476,7 @@
 
               </div>
 
-              <!-- RIGHT COLUMN: PERFIS ON LINE (ALONGSIDE PROFILE AND RADAR) -->
+              <!-- RIGHT COLUMN (~26.25%): PERFIS ON LINE (ALONGSIDE PROFILE AND RADAR) -->
               <div class="mockup-right-col">
                 <div class="online-profiles-panel">
                   <div class="online-profiles-header">
@@ -481,7 +484,7 @@
                   </div>
 
                   <div class="online-profiles-vertical-list" id="nearbyUsersList">
-                    <!-- Rendered vertically one below the other with circular avatar + green dot -->
+                    <!-- Rendered vertically one below the other with individual card, circular avatar + green dot -->
                   </div>
 
                   <button type="button" class="btn-view-all-profiles" onclick="window.azararApp.switchTab('likes')">

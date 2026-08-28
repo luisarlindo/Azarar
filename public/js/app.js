@@ -13,13 +13,13 @@
   const SEED_USERS = [
     {
       id: 'usr_1',
-      name: 'Luiza Mendes',
-      username: 'luizamendes',
+      name: 'Marina Silveira',
+      username: 'marina.silv',
       age: 24,
       distance: 25,
       location: 'No mesmo ambiente • 25m',
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
-      intent: 'Casual',
+      intent: 'Conexões reais',
       vibe: '🍹 No balcão do bar',
       bio: 'Apaixonada por vinhos, música ao vivo e boas conversas sem filtro. Se estiver perto, bora tomar um drink?',
       passions: ['🍹 Baladas', '🎧 Indie Rock', '🍷 Vinhos', '✈️ Viagens'],
@@ -29,17 +29,16 @@
       postsCount: 14,
       photos: [
         'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=500&auto=format&fit=crop&q=80'
+        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80'
       ]
     },
     {
       id: 'usr_2',
-      name: 'Rodrigo Alencar',
-      username: 'rodrigo.ale',
-      age: 27,
-      distance: 85,
-      location: 'No lounge VIP • 85m',
+      name: 'Rafael Mendes',
+      username: 'rafa.mendes',
+      age: 26,
+      distance: 50,
+      location: 'No lounge VIP • 50m',
       avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
       intent: 'Relacionamento Sério',
       vibe: '🛋️ No lounge VIP',
@@ -50,69 +49,67 @@
       cheersSent: false,
       postsCount: 9,
       photos: [
-        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80'
+        'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=80'
       ]
     },
     {
       id: 'usr_3',
-      name: 'Camila Rocha',
-      username: 'camilinha.r',
-      age: 22,
-      distance: 220,
-      location: 'Na mesma quadra • 220m',
-      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
-      intent: 'Sexo',
+      name: 'Beatriz Castro',
+      username: 'bia.castro',
+      age: 25,
+      distance: 75,
+      location: 'Perto da pista • 75m',
+      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
+      intent: 'Conexões reais',
       vibe: '🎧 Na pista de dança',
-      bio: 'Direta, intensa e sem enrolação. Gosto de atitude e química à primeira vista. Me manda um brinde no radar!',
-      passions: ['💋 Noite', '🎧 Eletrônica', '🍸 Gin', '💃 Dança'],
+      bio: 'Trabalho com moda, vivo viajando. Nada de joguinhos, apenas boas energias e encontros leves.',
+      passions: ['👗 Moda', '🏝️ Praia', '🍕 Pizza', '✈️ Viagens'],
       isOnline: true,
       following: true,
       cheersSent: false,
       postsCount: 22,
       photos: [
-        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=500&auto=format&fit=crop&q=80'
+        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80'
       ]
     },
     {
       id: 'usr_4',
-      name: 'Gabriel Siqueira',
-      username: 'gabi_siqueira',
-      age: 26,
-      distance: 480,
-      location: 'Vila Madalena • 480m',
-      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80',
+      name: 'Felipe Soares',
+      username: 'felipe.soares',
+      age: 27,
+      distance: 100,
+      location: 'No mezanino • 100m',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
       intent: 'Companhia',
       vibe: '🍻 Com a galera',
-      bio: 'Novo na cidade! Querendo companhia para explorar bares secretos, exposições e shows de jazz.',
+      bio: 'Novo na cidade! Querendo companhia para explorar bares secretos, festivais e curtir uma boa resenha.',
       passions: ['🎷 Jazz', '🎨 Arte', '🍺 Cerveja Artesanal', '📚 Livros'],
       isOnline: true,
       following: false,
       cheersSent: false,
       postsCount: 6,
       photos: [
-        'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80'
+        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80'
       ]
     },
     {
       id: 'usr_5',
-      name: 'Isabela Fontes',
-      username: 'isafontes',
-      age: 25,
-      distance: 850,
-      location: 'Pinheiros • 850m',
-      avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80',
+      name: 'Juliana Lima',
+      username: 'ju.lima',
+      age: 23,
+      distance: 125,
+      location: 'No camarote • 125m',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80',
       intent: 'Casual',
       vibe: '🍹 No balcão do bar',
-      bio: 'Trabalho com moda, vivo viajando. Nada de joguinhos, apenas boas energias e encontros leves.',
-      passions: ['👗 Moda', '🏝️ Praia', '🍕 Pizza', '✈️ Viagens'],
+      bio: 'Médica veterinária, amo a noite paulistana e drinks autorais. Vem de brinde!',
+      passions: ['🍸 Gin', '💃 Dança', '🐕 Pets', '🏖️ Praia'],
       isOnline: true,
       following: false,
       cheersSent: false,
       postsCount: 31,
       photos: [
-        'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=500&auto=format&fit=crop&q=80'
+        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=80'
       ]
     },
     {
@@ -122,11 +119,11 @@
       age: 29,
       distance: 1450,
       location: 'Jardins • 1.4 km',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80',
+      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=500&auto=format&fit=crop&q=80',
       intent: 'Relacionamento Sério',
       vibe: '🎧 Na pista de dança',
-      bio: 'Médico veterinário. Pai de 2 cachorros. Busco uma conexão sincera com quem valoriza parceria e carinho.',
-      passions: ['🐕 Pets', '🌿 Natureza', '🍳 Culinária', '🎬 Séries'],
+      bio: 'Empreendedor, focado e apaixonado por esportes e viagens.',
+      passions: ['🏋️ Fitness', '🌿 Natureza', '🍳 Culinária', '🎬 Séries'],
       isOnline: true,
       following: false,
       cheersSent: false,
@@ -891,26 +888,26 @@
 
     if (filtered.length === 0) {
       container.innerHTML = `
-        <div style="text-align: center; padding: 16px 4px; color: var(--text-dim);">
-          <div style="font-size: 20px; margin-bottom: 2px;">📡</div>
-          <span style="color: #fff; font-size: 10.5px; font-weight: 700; display: block;">Ninguém</span>
-          <p style="font-size: 8.5px; margin: 2px 0 0;">Aumente o raio</p>
+        <div style="text-align: center; padding: 14px 2px; color: var(--text-dim);">
+          <div style="font-size: 18px; margin-bottom: 2px;">📡</div>
+          <span style="color: #fff; font-size: 10px; font-weight: 700; display: block;">Ninguém</span>
+          <p style="font-size: 8px; margin: 2px 0 0;">Aumente o raio</p>
         </div>
       `;
       return;
     }
 
-    // Show up to 5 profiles vertically on the right column
+    // Show up to 5 profiles vertically on the right column (STRICTLY IDENTICAL TO MOCKUP)
     container.innerHTML = filtered.slice(0, 5).map(u => {
       const firstName = (u.name || 'Usuário').split(' ')[0];
       return `
-        <div class="online-user-item" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
-          <div class="online-avatar-wrap">
-            <img src="${u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" alt="${firstName}" class="online-avatar-img" />
-            <span class="online-green-dot"></span>
+        <div class="mockup-online-user-card" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
+          <div class="mockup-online-avatar-wrap">
+            <img src="${u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" alt="${firstName}" class="mockup-online-avatar-img" />
+            <span class="mockup-online-green-dot"></span>
           </div>
-          <span class="online-user-name">${firstName}, ${u.age || 24}</span>
-          <span class="online-status-tag">ON LINE</span>
+          <span class="mockup-online-name">${firstName}, ${u.age || 24}</span>
+          <span class="mockup-online-badge">ON LINE</span>
         </div>
       `;
     }).join('');
