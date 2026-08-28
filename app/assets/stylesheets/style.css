@@ -1198,16 +1198,14 @@ html, body {
 
 /* 3. ONLINE PROFILES PANEL */
 .online-profiles-panel {
-  background: linear-gradient(145deg, rgba(48, 15, 74, 0.75) 0%, rgba(20, 6, 33, 0.85) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 60, 150, 0.32);
-  border-radius: 22px;
-  padding: 16px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 42, 122, 0.12);
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  width: 100%;
 }
 
 .online-profiles-title {
@@ -2406,33 +2404,47 @@ html, body {
   flex-direction: column;
   width: 100%;
   height: 100%;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box;
 }
 
 .online-profiles-header {
   padding: 0 0 8px;
+  margin: 0;
+  width: 100%;
 }
 
 .online-profiles-title {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   color: #ffffff;
   margin: 0;
   text-align: center;
   letter-spacing: 0.2px;
+  width: 100%;
 }
 
 .online-profiles-vertical-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
   flex: 1;
 }
 
 .mockup-online-user-card {
+  width: 100%;
   background: rgba(22, 12, 36, 0.75);
   border: 1px solid rgba(255, 60, 150, 0.18);
   border-radius: 18px;
-  padding: 9px 4px 7px;
+  padding: 10px 4px 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2440,6 +2452,8 @@ html, body {
   gap: 3px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   cursor: pointer;
+  box-sizing: border-box;
+  margin: 0;
   transition: all 0.2s ease;
 }
 
@@ -2502,6 +2516,7 @@ html, body {
   border-radius: 14px;
   padding: 8px 6px;
   width: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2926,126 +2941,7 @@ html, body {
   padding: 0;
 }
 
-/* ==========================================================================
-   3. RIGHT COLUMN: "PERFIS ON LINE" VERTICAL STACK
-   ========================================================================== */
-.online-profiles-panel {
-  background: linear-gradient(145deg, rgba(48, 15, 74, 0.75) 0%, rgba(20, 6, 33, 0.85) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 60, 150, 0.32);
-  border-radius: 20px;
-  padding: 12px 8px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 42, 122, 0.12);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-  box-sizing: border-box;
-}
 
-.online-profiles-title {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #ffffff;
-  text-align: center;
-  margin: 0;
-}
-
-.online-profiles-vertical-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-}
-
-.online-user-item {
-  background: rgba(30, 9, 48, 0.65);
-  border: 1px solid rgba(255, 60, 150, 0.22);
-  border-radius: 12px;
-  padding: 6px 4px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 3px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.online-user-item:hover {
-  transform: translateY(-2px);
-  border-color: var(--primary-pink);
-  box-shadow: 0 4px 14px rgba(255, 42, 122, 0.3);
-}
-
-.online-avatar-wrap {
-  position: relative;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 60, 150, 0.4);
-  overflow: visible;
-}
-
-.online-avatar-img {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.online-green-dot {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #22c55e;
-  border: 1.5px solid #0d0517;
-  box-shadow: 0 0 6px #22c55e;
-}
-
-.online-user-name {
-  font-size: 10.5px;
-  font-weight: 700;
-  color: #ffffff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 68px;
-}
-
-.online-status-tag {
-  font-size: 8px;
-  font-weight: 800;
-  color: #22c55e;
-  letter-spacing: 0.4px;
-}
-
-.btn-view-all-profiles {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 10px;
-  padding: 6px 4px;
-  color: #ffffff;
-  font-family: var(--font-ui);
-  font-size: 10.5px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: auto;
-}
-
-.btn-view-all-profiles:hover {
-  background: rgba(255, 42, 122, 0.22);
-  border-color: var(--primary-pink);
-}
 
 /* ==========================================================================
    4. LOUNGE VIP & MÍDIAS EXCLUSIVAS (TAB 'FEED' / 'LOUNGE')
