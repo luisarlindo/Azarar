@@ -2191,59 +2191,93 @@ html, body {
 }
 
 /* ==========================================================================
-   DASHBOARD / INÍCIO LAYOUT (MATCHING REFERENCE MOCKUP)
+   DASHBOARD / INÍCIO LAYOUT (EXACT MOCKUP 2-COLUMN GRID)
    ========================================================================== */
-.dashboard-grid-layout {
+.mockup-2col-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 10px;
+  width: 100%;
+  align-items: start;
+}
+
+.mockup-left-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
+  min-width: 0;
 }
 
-.dashboard-main-col {
+.mockup-right-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
   width: 100%;
+  min-width: 0;
+  height: 100%;
 }
 
-/* 1. USER PROFILE HERO CARD */
-.hero-profile-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: linear-gradient(145deg, rgba(48, 15, 74, 0.75) 0%, rgba(20, 6, 33, 0.85) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 60, 150, 0.32);
-  border-radius: 20px;
-  padding: 12px 14px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 42, 122, 0.12);
-}
-
-.hero-profile-avatar-wrap {
+/* 1. USER PROFILE HERO CARD (SINGLE BLOCK WITH PHOTO AS FULL BACKGROUND) */
+.hero-profile-card-cover {
   position: relative;
-  width: 90px;
-  height: 110px;
-  border-radius: 16px;
+  width: 100%;
+  min-height: 250px;
+  border-radius: 20px;
   overflow: hidden;
-  flex-shrink: 0;
   border: 1.5px solid rgba(255, 60, 150, 0.4);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(255, 42, 122, 0.15);
+  background-color: #0e0517;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.hero-profile-avatar {
+.hero-profile-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
+  z-index: 1;
 }
 
-.hero-profile-info {
+/* Transparent gradient at top -> almost black / charcoal at bottom where texts are */
+.hero-profile-gradient-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 4, 18, 0.05) 0%,
+    rgba(14, 5, 24, 0.25) 30%,
+    rgba(16, 5, 26, 0.78) 60%,
+    rgba(10, 3, 16, 0.96) 88%,
+    rgba(8, 2, 14, 1) 100%
+  );
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-profile-inner-content {
+  position: relative;
+  z-index: 3;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  flex: 1;
-  min-width: 0;
+  justify-content: space-between;
+  min-height: 250px;
+  height: 100%;
+  padding: 12px 10px;
+  box-sizing: border-box;
+}
+
+.hero-profile-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .badge-verified-shield {
@@ -2259,6 +2293,12 @@ html, body {
   border-radius: 6px;
   letter-spacing: 0.5px;
   width: fit-content;
+}
+
+.hero-profile-bottom-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .hero-name-row {
@@ -2298,8 +2338,8 @@ html, body {
   display: flex;
   align-items: center;
   gap: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 3px 6px;
   border-radius: 8px;
   font-size: 10px;
@@ -2335,17 +2375,6 @@ html, body {
 .btn-hero-edit-profile:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(255, 42, 122, 0.6);
-}
-
-/* ==========================================================================
-   2. SIDE-BY-SIDE LAYOUT: RADAR (LEFT ~62%) + PERFIS ON LINE (RIGHT ~38%)
-   ========================================================================== */
-.radar-and-profiles-row {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  width: 100%;
-  align-items: stretch;
 }
 
 .radar-col-left {
