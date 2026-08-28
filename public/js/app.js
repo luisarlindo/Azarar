@@ -471,6 +471,19 @@
       if (el && currentUser.avatar) el.src = currentUser.avatar;
     });
 
+    // Populate User Hero Profile Card (Matching Mockup)
+    const heroAvatar = document.getElementById('heroProfileAvatar');
+    const heroName = document.getElementById('heroProfileName');
+    const heroLoc = document.getElementById('heroProfileLocation');
+    const heroIntent = document.getElementById('heroProfileIntent');
+    const heroBio = document.getElementById('heroProfileBio');
+
+    if (heroAvatar && currentUser.avatar) heroAvatar.src = currentUser.avatar;
+    if (heroName) heroName.textContent = `${currentUser.name || 'Lucas'}, ${currentUser.age || 28}`;
+    if (heroLoc) heroLoc.textContent = currentUser.location || 'São Paulo, SP';
+    if (heroIntent) heroIntent.innerHTML = `Em busca de <strong>${currentUser.intent || 'conexões reais'}</strong>`;
+    if (heroBio) heroBio.textContent = currentUser.bio || 'Apaixonado por viagens e música 🎸';
+
     const nameEl = document.getElementById('profFullName');
     if (nameEl) nameEl.textContent = currentUser.name || 'Seu Nome';
 
@@ -517,22 +530,72 @@
     if (navigator.vibrate) navigator.vibrate(10);
     currentActiveTab = tabId;
 
-    document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.tab-page').forEach(page => {
+      page.classList.remove('active');
+      page.style.display = 'none';
+    });
     document.querySelectorAll('.nav-tab-item').forEach(btn => btn.classList.remove('active'));
 
     const activePage = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
     const activeNav = document.getElementById(`navTab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
 
-    if (activePage) activePage.classList.add('active');
+    if (activePage) {
+      activePage.classList.add('active');
+      activePage.style.display = 'flex';
+    }
     if (activeNav) activeNav.classList.add('active');
 
     if (tabId === 'radar') renderRadarUsers();
     if (tabId === 'feed') renderFeedPosts();
+    if (tabId === 'likes') renderLikesTab();
     if (tabId === 'messages') renderDirectConversations();
     if (tabId === 'profile') {
       updateVerificationUI();
       renderProfilePhotoGrid();
     }
+  }
+
+  function renderLikesTab() {
+    const container = document.getElementById('likesGridContainer');
+    if (!container) return;
+    const users = Storage.getUsers();
+    container.innerHTML = users.slice(0, 6).map(u => `
+      <div class="conversation-item" onclick="window.azararApp.openDirectChat('${u.id}')" style="margin-bottom: 8px;">
+        <div class="conv-avatar-wrap">
+          <img src="${u.avatar}" alt="${u.name}" class="conv-avatar" />
+          <span class="conv-online-dot"></span>
+        </div>
+        <div class="conv-details">
+          <div class="conv-top-row">
+            <h4 class="conv-name">${u.name}</h4>
+            <span class="conv-time">🥂 Brinde</span>
+          </div>
+          <p class="conv-last-msg">Enviou um brinde para você! Toque para brindar de volta.</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function centerGPSLocation() {
+    if (navigator.vibrate) navigator.vibrate(20);
+    showToast('📍 Localização GPS centralizada com sucesso!');
+    initGPSLocation();
+  }
+
+  function recalibrateRadar() {
+    if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
+    showToast('🎯 Radar recalibrado e perfis atualizados!');
+    renderRadarUsers();
+  }
+
+  function toggleSideMenu() {
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast('✨ Menu AZARAR');
+  }
+
+  function toggleRadarFilterModal() {
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast('🎚️ Ajuste o raio de busca pelo slider abaixo do radar');
   }
 
   function getIntentIcon(intent) {
@@ -634,11 +697,52 @@
     return `${meters} metros`;
   }
 
+  // Exact math requested by user for concentric distance rings:
+  // - Outer circle = max selected distance (e.g. 1km, 500m, 5m)
+  // - Inner circle = 5m (or 0m if max is 5m)
+  // - Middle circle = exactly halfway between min and max
+  function calculateRadarDistanceLabels(meters) {
+    const max = parseInt(meters, 10) || 1000;
+    let min, mid;
+
+    if (max <= 5) {
+      min = 0;
+      mid = 2.5;
+    } else {
+      min = 5;
+      mid = Math.round((max + min) / 2);
+      if (max === 1000) mid = 500;
+      if (max === 2000) mid = 1000;
+      if (max === 500) mid = 250;
+      if (max === 200) mid = 100;
+      if (max === 100) mid = 50;
+    }
+
+    function fmt(val) {
+      if (val >= 1000) {
+        const km = (val / 1000.0).toFixed(val % 1000 === 0 ? 0 : 1);
+        return `${km} km`;
+      }
+      return `${val} m`;
+    }
+
+    return {
+      outer: fmt(max),
+      middle: fmt(mid),
+      inner: fmt(min),
+      current: fmt(max)
+    };
+  }
+
   function updateSliderVisual(meters) {
     const slider = document.getElementById('rangeProximityRadius');
     const lblEl = document.getElementById('lblCurrentRadius');
+    const lblBig = document.getElementById('lblRadarDistanceValue');
+    const lblOuter = document.getElementById('lblRadarRingOuter');
+    const lblMiddle = document.getElementById('lblRadarRingMiddle');
+    const lblInner = document.getElementById('lblRadarRingInner');
     const muralLbl = document.getElementById('muralRadiusText');
-    const m = parseInt(meters, 10);
+    const m = parseInt(meters, 10) || 1000;
 
     if (slider) {
       slider.value = m;
@@ -648,9 +752,13 @@
       slider.style.setProperty('--slider-pct', `${pct}%`);
     }
 
-    const label = formatRadiusLabel(m);
-    if (lblEl) lblEl.textContent = label;
-    if (muralLbl) muralLbl.textContent = m >= 1000 ? `${(m / 1000.0).toFixed(1)} km` : `${m}m`;
+    const ringLabels = calculateRadarDistanceLabels(m);
+    if (lblOuter) lblOuter.textContent = ringLabels.outer;
+    if (lblMiddle) lblMiddle.textContent = ringLabels.middle;
+    if (lblInner) lblInner.textContent = ringLabels.inner;
+    if (lblBig) lblBig.textContent = ringLabels.current;
+    if (lblEl) lblEl.textContent = formatRadiusLabel(m);
+    if (muralLbl) muralLbl.textContent = ringLabels.current;
 
     document.querySelectorAll('.scale-point').forEach(pt => {
       const txt = pt.textContent.trim();
@@ -718,56 +826,30 @@
       return (u.distance || 0) <= currentRadius;
     });
 
-    document.getElementById('countOnlineUsers').textContent = filtered.length;
+    const countEl = document.getElementById('countOnlineUsers');
+    if (countEl) countEl.textContent = filtered.length;
 
     if (filtered.length === 0) {
       container.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 36px 16px; color: var(--text-dim);">
-          <div style="font-size: 34px; margin-bottom: 6px;">📡</div>
-          <h4 style="color: #fff; font-size: 15px; margin-bottom: 4px;">Ninguém neste raio</h4>
-          <p style="font-size: 12.5px;">Aumente o raio para 1 km ou 5 km para encontrar conexões online.</p>
+        <div style="grid-column: 1 / -1; text-align: center; padding: 24px 12px; color: var(--text-dim);">
+          <div style="font-size: 28px; margin-bottom: 4px;">📡</div>
+          <h4 style="color: #fff; font-size: 13.5px; margin-bottom: 2px;">Nenhum perfil neste raio</h4>
+          <p style="font-size: 11px;">Arraste o slider para aumentar o raio de busca.</p>
         </div>
       `;
       return;
     }
 
     container.innerHTML = filtered.map(u => {
-      const distLabel = u.distance >= 1000 ? `${(u.distance / 1000).toFixed(1)} km` : `${u.distance}m`;
-      const isFollowing = u.following || false;
-      const isCheersSent = u.cheersSent || false;
-
+      const firstName = (u.name || 'Usuário').split(' ')[0];
       return `
-        <div class="user-radar-card" data-userid="${u.id}">
-          <div class="card-img-wrap" onclick="window.azararApp.openDirectChat('${u.id}')">
-            <img src="${u.avatar}" alt="${u.name}" class="card-img" />
-            <div class="card-vibe-pill">${u.vibe || '🍹 No local'}</div>
-            <div class="card-distance-badge">
-              <span class="card-online-dot"></span>
-              <span>${distLabel}</span>
-            </div>
+        <div class="online-user-item" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
+          <div class="online-avatar-wrap">
+            <img src="${u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" alt="${firstName}" class="online-avatar-img" />
+            <span class="online-green-dot"></span>
           </div>
-          
-          <div class="card-body">
-            <div class="card-name-row">
-              <span class="card-user-name">${u.name.split(' ')[0]}</span>
-              <span class="card-user-age">${u.age}</span>
-            </div>
-
-            <div class="card-intent-badge ${getIntentClass(u.intent)}">
-              ${getIntentIcon(u.intent)} ${u.intent}
-            </div>
-
-            <p class="card-bio-snippet">${u.bio}</p>
-
-            <div class="card-actions-grid">
-              <button class="btn-card-action btn-card-cheers ${isCheersSent ? 'cheers-sent' : ''}" onclick="window.azararApp.sendCheers('${u.id}')">
-                ${isCheersSent ? '🥂 Brindado' : '🥂 Brindar'}
-              </button>
-              <button class="btn-card-action btn-card-chat" onclick="window.azararApp.openDirectChat('${u.id}')">
-                💬 Perfil
-              </button>
-            </div>
-          </div>
+          <span class="online-user-name">${firstName}, ${u.age || 24}</span>
+          <span class="online-status-tag">ON LINE</span>
         </div>
       `;
     }).join('');
@@ -2038,6 +2120,10 @@
     openEditProfileModal,
     closeEditProfileModal,
     openRadarPreview,
+    centerGPSLocation,
+    recalibrateRadar,
+    toggleSideMenu,
+    toggleRadarFilterModal,
     toast: showToast
   };
 

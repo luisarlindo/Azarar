@@ -471,6 +471,19 @@
       if (el && currentUser.avatar) el.src = currentUser.avatar;
     });
 
+    // Populate User Hero Profile Card (Matching Mockup)
+    const heroAvatar = document.getElementById('heroProfileAvatar');
+    const heroName = document.getElementById('heroProfileName');
+    const heroLoc = document.getElementById('heroProfileLocation');
+    const heroIntent = document.getElementById('heroProfileIntent');
+    const heroBio = document.getElementById('heroProfileBio');
+
+    if (heroAvatar && currentUser.avatar) heroAvatar.src = currentUser.avatar;
+    if (heroName) heroName.textContent = `${currentUser.name || 'Lucas'}, ${currentUser.age || 28}`;
+    if (heroLoc) heroLoc.textContent = currentUser.location || 'São Paulo, SP';
+    if (heroIntent) heroIntent.innerHTML = `Em busca de <strong>${currentUser.intent || 'conexões reais'}</strong>`;
+    if (heroBio) heroBio.textContent = currentUser.bio || 'Apaixonado por viagens e música 🎸';
+
     const nameEl = document.getElementById('profFullName');
     if (nameEl) nameEl.textContent = currentUser.name || 'Seu Nome';
 
@@ -504,6 +517,7 @@
     try { updateVerificationUI(); } catch(e) { console.error('verif err:', e); }
     try { updateSliderVisual(currentRadius); } catch(e) { console.error('slider err:', e); }
     try { initGPSLocation(); } catch(e) { console.error('gps err:', e); }
+    try { CableManager.init(); } catch(e) { console.error('cable err:', e); }
     try { renderRadarUsers(); } catch(e) { console.error('radar err:', e); }
     try { renderMuralMessages(); } catch(e) { console.error('mural err:', e); }
     try { renderStories(); } catch(e) { console.error('stories err:', e); }
@@ -516,22 +530,72 @@
     if (navigator.vibrate) navigator.vibrate(10);
     currentActiveTab = tabId;
 
-    document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.tab-page').forEach(page => {
+      page.classList.remove('active');
+      page.style.display = 'none';
+    });
     document.querySelectorAll('.nav-tab-item').forEach(btn => btn.classList.remove('active'));
 
     const activePage = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
     const activeNav = document.getElementById(`navTab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
 
-    if (activePage) activePage.classList.add('active');
+    if (activePage) {
+      activePage.classList.add('active');
+      activePage.style.display = 'flex';
+    }
     if (activeNav) activeNav.classList.add('active');
 
     if (tabId === 'radar') renderRadarUsers();
     if (tabId === 'feed') renderFeedPosts();
+    if (tabId === 'likes') renderLikesTab();
     if (tabId === 'messages') renderDirectConversations();
     if (tabId === 'profile') {
       updateVerificationUI();
       renderProfilePhotoGrid();
     }
+  }
+
+  function renderLikesTab() {
+    const container = document.getElementById('likesGridContainer');
+    if (!container) return;
+    const users = Storage.getUsers();
+    container.innerHTML = users.slice(0, 6).map(u => `
+      <div class="conversation-item" onclick="window.azararApp.openDirectChat('${u.id}')" style="margin-bottom: 8px;">
+        <div class="conv-avatar-wrap">
+          <img src="${u.avatar}" alt="${u.name}" class="conv-avatar" />
+          <span class="conv-online-dot"></span>
+        </div>
+        <div class="conv-details">
+          <div class="conv-top-row">
+            <h4 class="conv-name">${u.name}</h4>
+            <span class="conv-time">🥂 Brinde</span>
+          </div>
+          <p class="conv-last-msg">Enviou um brinde para você! Toque para brindar de volta.</p>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function centerGPSLocation() {
+    if (navigator.vibrate) navigator.vibrate(20);
+    showToast('📍 Localização GPS centralizada com sucesso!');
+    initGPSLocation();
+  }
+
+  function recalibrateRadar() {
+    if (navigator.vibrate) navigator.vibrate([20, 40, 20]);
+    showToast('🎯 Radar recalibrado e perfis atualizados!');
+    renderRadarUsers();
+  }
+
+  function toggleSideMenu() {
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast('✨ Menu AZARAR');
+  }
+
+  function toggleRadarFilterModal() {
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast('🎚️ Ajuste o raio de busca pelo slider abaixo do radar');
   }
 
   function getIntentIcon(intent) {
@@ -633,11 +697,52 @@
     return `${meters} metros`;
   }
 
+  // Exact math requested by user for concentric distance rings:
+  // - Outer circle = max selected distance (e.g. 1km, 500m, 5m)
+  // - Inner circle = 5m (or 0m if max is 5m)
+  // - Middle circle = exactly halfway between min and max
+  function calculateRadarDistanceLabels(meters) {
+    const max = parseInt(meters, 10) || 1000;
+    let min, mid;
+
+    if (max <= 5) {
+      min = 0;
+      mid = 2.5;
+    } else {
+      min = 5;
+      mid = Math.round((max + min) / 2);
+      if (max === 1000) mid = 500;
+      if (max === 2000) mid = 1000;
+      if (max === 500) mid = 250;
+      if (max === 200) mid = 100;
+      if (max === 100) mid = 50;
+    }
+
+    function fmt(val) {
+      if (val >= 1000) {
+        const km = (val / 1000.0).toFixed(val % 1000 === 0 ? 0 : 1);
+        return `${km} km`;
+      }
+      return `${val} m`;
+    }
+
+    return {
+      outer: fmt(max),
+      middle: fmt(mid),
+      inner: fmt(min),
+      current: fmt(max)
+    };
+  }
+
   function updateSliderVisual(meters) {
     const slider = document.getElementById('rangeProximityRadius');
     const lblEl = document.getElementById('lblCurrentRadius');
+    const lblBig = document.getElementById('lblRadarDistanceValue');
+    const lblOuter = document.getElementById('lblRadarRingOuter');
+    const lblMiddle = document.getElementById('lblRadarRingMiddle');
+    const lblInner = document.getElementById('lblRadarRingInner');
     const muralLbl = document.getElementById('muralRadiusText');
-    const m = parseInt(meters, 10);
+    const m = parseInt(meters, 10) || 1000;
 
     if (slider) {
       slider.value = m;
@@ -647,9 +752,13 @@
       slider.style.setProperty('--slider-pct', `${pct}%`);
     }
 
-    const label = formatRadiusLabel(m);
-    if (lblEl) lblEl.textContent = label;
-    if (muralLbl) muralLbl.textContent = m >= 1000 ? `${(m / 1000.0).toFixed(1)} km` : `${m}m`;
+    const ringLabels = calculateRadarDistanceLabels(m);
+    if (lblOuter) lblOuter.textContent = ringLabels.outer;
+    if (lblMiddle) lblMiddle.textContent = ringLabels.middle;
+    if (lblInner) lblInner.textContent = ringLabels.inner;
+    if (lblBig) lblBig.textContent = ringLabels.current;
+    if (lblEl) lblEl.textContent = formatRadiusLabel(m);
+    if (muralLbl) muralLbl.textContent = ringLabels.current;
 
     document.querySelectorAll('.scale-point').forEach(pt => {
       const txt = pt.textContent.trim();
@@ -717,56 +826,30 @@
       return (u.distance || 0) <= currentRadius;
     });
 
-    document.getElementById('countOnlineUsers').textContent = filtered.length;
+    const countEl = document.getElementById('countOnlineUsers');
+    if (countEl) countEl.textContent = filtered.length;
 
     if (filtered.length === 0) {
       container.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align: center; padding: 36px 16px; color: var(--text-dim);">
-          <div style="font-size: 34px; margin-bottom: 6px;">📡</div>
-          <h4 style="color: #fff; font-size: 15px; margin-bottom: 4px;">Ninguém neste raio</h4>
-          <p style="font-size: 12.5px;">Aumente o raio para 1 km ou 5 km para encontrar conexões online.</p>
+        <div style="grid-column: 1 / -1; text-align: center; padding: 24px 12px; color: var(--text-dim);">
+          <div style="font-size: 28px; margin-bottom: 4px;">📡</div>
+          <h4 style="color: #fff; font-size: 13.5px; margin-bottom: 2px;">Nenhum perfil neste raio</h4>
+          <p style="font-size: 11px;">Arraste o slider para aumentar o raio de busca.</p>
         </div>
       `;
       return;
     }
 
     container.innerHTML = filtered.map(u => {
-      const distLabel = u.distance >= 1000 ? `${(u.distance / 1000).toFixed(1)} km` : `${u.distance}m`;
-      const isFollowing = u.following || false;
-      const isCheersSent = u.cheersSent || false;
-
+      const firstName = (u.name || 'Usuário').split(' ')[0];
       return `
-        <div class="user-radar-card" data-userid="${u.id}">
-          <div class="card-img-wrap" onclick="window.azararApp.openDirectChat('${u.id}')">
-            <img src="${u.avatar}" alt="${u.name}" class="card-img" />
-            <div class="card-vibe-pill">${u.vibe || '🍹 No local'}</div>
-            <div class="card-distance-badge">
-              <span class="card-online-dot"></span>
-              <span>${distLabel}</span>
-            </div>
+        <div class="online-user-item" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
+          <div class="online-avatar-wrap">
+            <img src="${u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" alt="${firstName}" class="online-avatar-img" />
+            <span class="online-green-dot"></span>
           </div>
-          
-          <div class="card-body">
-            <div class="card-name-row">
-              <span class="card-user-name">${u.name.split(' ')[0]}</span>
-              <span class="card-user-age">${u.age}</span>
-            </div>
-
-            <div class="card-intent-badge ${getIntentClass(u.intent)}">
-              ${getIntentIcon(u.intent)} ${u.intent}
-            </div>
-
-            <p class="card-bio-snippet">${u.bio}</p>
-
-            <div class="card-actions-grid">
-              <button class="btn-card-action btn-card-cheers ${isCheersSent ? 'cheers-sent' : ''}" onclick="window.azararApp.sendCheers('${u.id}')">
-                ${isCheersSent ? '🥂 Brindado' : '🥂 Brindar'}
-              </button>
-              <button class="btn-card-action btn-card-chat" onclick="window.azararApp.openDirectChat('${u.id}')">
-                💬 Perfil
-              </button>
-            </div>
-          </div>
+          <span class="online-user-name">${firstName}, ${u.age || 24}</span>
+          <span class="online-status-tag">ON LINE</span>
         </div>
       `;
     }).join('');
@@ -785,10 +868,15 @@
 
     showToast(`🥂 Você enviou um Brinde para ${target.name.split(' ')[0]}!`);
 
-    // Simulated mutual response trigger (celebration match)
-    setTimeout(() => {
-      showCheersCelebration(target);
-    }, 1000);
+    // Broadcast over ActionCable WebSocket
+    CableManager.send('CheersChannel', 'send_cheers', { target_id: userId });
+
+    // Simulated mutual response trigger if chatting with seed bots
+    if (String(userId).startsWith('usr_')) {
+      setTimeout(() => {
+        showCheersCelebration(target);
+      }, 1000);
+    }
   }
 
   let activeCheersUser = null;
@@ -846,6 +934,183 @@
     renderAppShell();
   }
 
+  // ==========================================================================
+  // 6. ACTIONCABLE WEBSOCKETS REAL-TIME ENGINE (Mural, Direct Chat, Cheers)
+  // ==========================================================================
+  const CableManager = {
+    socket: null,
+    connected: false,
+    reconnectTimer: null,
+    subscriptions: {},
+
+    init() {
+      if (!currentUser) return;
+      this.connect();
+    },
+
+    connect() {
+      if (this.socket && (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING)) {
+        return;
+      }
+
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      const wsUrl = `${protocol}//${host}/cable`;
+
+      try {
+        this.socket = new WebSocket(wsUrl);
+
+        this.socket.onopen = () => {
+          this.connected = true;
+          clearTimeout(this.reconnectTimer);
+          // Subscribe to channels
+          this.subscribe('MuralChannel', { channel: 'MuralChannel' });
+          this.subscribe('DirectChatChannel', { channel: 'DirectChatChannel' });
+          this.subscribe('CheersChannel', { channel: 'CheersChannel' });
+        };
+
+        this.socket.onmessage = (event) => {
+          try {
+            const data = JSON.parse(event.data);
+            if (data.type === 'ping' || data.type === 'welcome' || data.type === 'confirm_subscription') {
+              return;
+            }
+            if (data.message) {
+              this.handleBroadcast(data.message);
+            }
+          } catch (e) {
+            console.error('Cable parse error:', e);
+          }
+        };
+
+        this.socket.onclose = () => {
+          this.connected = false;
+          this.scheduleReconnect();
+        };
+
+        this.socket.onerror = () => {
+          this.connected = false;
+        };
+      } catch (err) {
+        console.error('WebSocket connection error:', err);
+        this.scheduleReconnect();
+      }
+    },
+
+    scheduleReconnect() {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = setTimeout(() => {
+        if (currentUser) this.connect();
+      }, 3500);
+    },
+
+    subscribe(name, identifierObj) {
+      const identifier = JSON.stringify(identifierObj);
+      this.subscriptions[name] = identifier;
+      if (this.connected && this.socket.readyState === WebSocket.OPEN) {
+        this.socket.send(JSON.stringify({
+          command: 'subscribe',
+          identifier: identifier
+        }));
+      }
+    },
+
+    send(channelName, action, payload = {}) {
+      const identifier = this.subscriptions[channelName];
+      if (!identifier || !this.connected || this.socket.readyState !== WebSocket.OPEN) {
+        return false;
+      }
+      this.socket.send(JSON.stringify({
+        command: 'message',
+        identifier: identifier,
+        data: JSON.stringify({ action: action, ...payload })
+      }));
+      return true;
+    },
+
+    handleBroadcast(payload) {
+      if (!payload || !payload.action) return;
+
+      // 1. MURAL MESSAGE IN REAL TIME
+      if (payload.action === 'new_mural_message') {
+        const msg = payload.message;
+        if (!msg) return;
+        const muralMsgs = Storage.getMuralMessages();
+        const isFromMe = currentUser && String(msg.authorId) === String(currentUser.id);
+
+        if (!muralMsgs.some(m => m.id === msg.id || (isFromMe && m.text === msg.content && Math.abs(Date.now() - (m.createdAt || 0)) < 4000))) {
+          muralMsgs.push({
+            id: msg.id,
+            userId: msg.authorId,
+            userName: isFromMe ? 'Você' : msg.authorName,
+            userAvatar: msg.authorAvatar,
+            distanceText: `${msg.distance || 15}m`,
+            text: msg.content,
+            time: msg.time || 'Agora',
+            likes: msg.likes || 0,
+            isMe: isFromMe,
+            createdAt: Date.now()
+          });
+          Storage.saveMuralMessages(muralMsgs);
+          renderMuralMessages();
+
+          if (!isFromMe) {
+            if (navigator.vibrate) navigator.vibrate(20);
+            showToast(`📢 ${msg.authorName.split(' ')[0]} postou no mural perto de você!`);
+          }
+        }
+      }
+
+      // 2. DIRECT CHAT MESSAGE IN REAL TIME
+      else if (payload.action === 'new_direct_message') {
+        const msg = payload.message;
+        if (!msg) return;
+        const isFromMe = currentUser && String(msg.senderId) === String(currentUser.id);
+        const partnerId = isFromMe ? String(msg.recipientId) : String(msg.senderId);
+
+        const allChats = Storage.getDirectMessages();
+        if (!allChats[partnerId]) {
+          allChats[partnerId] = [
+            { text: `🥂 Brinde aceito! Vocês estão no mesmo local. Este chat expira em 3 horas.`, isMe: false, time: 'Agora' }
+          ];
+        }
+
+        const existing = allChats[partnerId];
+        const isDuplicate = existing.some(m => m.id === msg.id || (m.isMe === isFromMe && m.text === msg.text && Math.abs(Date.now() - (m.createdAt || 0)) < 4000));
+
+        if (!isDuplicate) {
+          existing.push({
+            id: msg.id,
+            text: msg.text,
+            isMe: isFromMe,
+            time: msg.time || 'Agora',
+            createdAt: Date.now()
+          });
+          Storage.saveDirectMessages(allChats);
+
+          if (activeChatUserId && String(activeChatUserId) === partnerId) {
+            renderDirectChatMessages();
+            if (!isFromMe && navigator.vibrate) navigator.vibrate([30, 50, 30]);
+          } else {
+            renderDirectConversations();
+            if (!isFromMe) {
+              if (navigator.vibrate) navigator.vibrate([50, 80, 50]);
+              showToast(`💬 ${msg.senderName.split(' ')[0]}: "${msg.text}"`);
+            }
+          }
+        }
+      }
+
+      // 3. CHEERS RECEIVED IN REAL TIME
+      else if (payload.action === 'cheers_received') {
+        const fromUser = payload.from_user;
+        if (!fromUser) return;
+        showCheersCelebration(fromUser);
+        showToast(`🥂 ${fromUser.name.split(' ')[0]} acabou de brindar com você!`);
+      }
+    }
+  };
+
   // --- MURAL / CHAT ABERTO ---
   function renderMuralMessages() {
     const scrollBox = document.getElementById('muralMessagesList');
@@ -898,7 +1163,8 @@
       distanceText: 'No local',
       text: text,
       time: timeStr,
-      isMe: true
+      isMe: true,
+      createdAt: Date.now()
     };
 
     const msgs = Storage.getMuralMessages();
@@ -908,6 +1174,9 @@
     input.value = '';
     renderMuralMessages();
     showToast('🚀 Mensagem enviada no mural do raio!');
+
+    // Broadcast over ActionCable WebSocket
+    CableManager.send('MuralChannel', 'speak', { content: text });
   }
 
   // ==========================================================================
@@ -1197,34 +1466,44 @@
     allChats[activeChatUserId].push({
       text: text,
       isMe: true,
-      time: timeStr
+      time: timeStr,
+      createdAt: Date.now()
     });
 
     Storage.saveDirectMessages(allChats);
     input.value = '';
     renderDirectChatMessages();
 
-    // Auto-reply response tailored to in-person meeting
-    setTimeout(() => {
-      if (activeChatUserId) {
-        const replies = [
-          `Bora! Tô aqui no balcão de jaqueta preta 🍹 Pode vir!`,
-          `Com certeza! Qual mesa você tá? Te vejo aí em 2 min 🥂`,
-          `Adorei a atitude! Vem pro lounge VIP que tem espaço com a galera ✨`,
-          `Fechou! Tô perto da pista de dança, vem pra cá 💃`
-        ];
-        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+    // Broadcast over ActionCable WebSocket to real connected user
+    CableManager.send('DirectChatChannel', 'speak', {
+      recipient_id: activeChatUserId,
+      content: text
+    });
 
-        allChats[activeChatUserId].push({
-          text: randomReply,
-          isMe: false,
-          time: timeStr
-        });
-        Storage.saveDirectMessages(allChats);
-        renderDirectChatMessages();
-        if (navigator.vibrate) navigator.vibrate(30);
-      }
-    }, 1300);
+    // Auto-reply response for mock seed users
+    if (String(activeChatUserId).startsWith('usr_')) {
+      setTimeout(() => {
+        if (activeChatUserId) {
+          const replies = [
+            `Bora! Tô aqui no balcão de jaqueta preta 🍹 Pode vir!`,
+            `Com certeza! Qual mesa você tá? Te vejo aí em 2 min 🥂`,
+            `Adorei a atitude! Vem pro lounge VIP que tem espaço com a galera ✨`,
+            `Fechou! Tô perto da pista de dança, vem pra cá 💃`
+          ];
+          const randomReply = replies[Math.floor(Math.random() * replies.length)];
+
+          allChats[activeChatUserId].push({
+            text: randomReply,
+            isMe: false,
+            time: timeStr,
+            createdAt: Date.now()
+          });
+          Storage.saveDirectMessages(allChats);
+          renderDirectChatMessages();
+          if (navigator.vibrate) navigator.vibrate(30);
+        }
+      }, 1300);
+    }
   }
 
   function selectUserVibe(vibeText) {
@@ -1841,6 +2120,10 @@
     openEditProfileModal,
     closeEditProfileModal,
     openRadarPreview,
+    centerGPSLocation,
+    recalibrateRadar,
+    toggleSideMenu,
+    toggleRadarFilterModal,
     toast: showToast
   };
 
