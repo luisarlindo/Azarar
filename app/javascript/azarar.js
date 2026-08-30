@@ -298,7 +298,11 @@
   // 3. APP STATE & REFERENCES
   // ==========================================================================
   let currentUser = (typeof window !== 'undefined' && window.INITIAL_CURRENT_USER) ? window.INITIAL_CURRENT_USER : Storage.getCurrentUser();
-  if (typeof window !== 'undefined' && window.INITIAL_CURRENT_USER) {
+  if (currentUser) {
+    if (!currentUser.avatar || currentUser.avatar.includes('unsplash') || currentUser.emailPhone === 'luisarlindo2@gmail.com' || currentUser.username === 'luisarlindo' || currentUser.name === 'Luis Arlindo') {
+      currentUser.avatar = '/images/avatars/luisarlindo.jpg';
+      currentUser.name = currentUser.name || 'Luis Arlindo';
+    }
     Storage.saveCurrentUser(currentUser);
   }
   let currentRadius = 500;

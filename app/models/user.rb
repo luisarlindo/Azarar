@@ -19,7 +19,7 @@ class User < ApplicationRecord
   before_validation :clean_username
 
   def display_avatar
-    avatar_url.presence || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150"
+    avatar_url.presence || "/images/avatars/luisarlindo.jpg"
   end
 
   def formatted_username
