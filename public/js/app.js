@@ -224,7 +224,33 @@
     },
     getCurrentUser() {
       const data = localStorage.getItem('azarar_current_user');
-      return data ? JSON.parse(data) : null;
+      if (data) {
+        try {
+          const u = JSON.parse(data);
+          if (u) {
+            if (!u.avatar || u.avatar.includes('unsplash') || u.emailPhone === 'luisarlindo2@gmail.com' || u.username === 'luisarlindo') {
+              u.avatar = '/images/avatars/luisarlindo.jpg';
+              u.name = u.name || 'Luis Arlindo';
+            }
+            return u;
+          }
+        } catch(e) {}
+      }
+      return {
+        id: 'usr_luis',
+        name: 'Luis Arlindo',
+        username: 'luisarlindo',
+        emailPhone: 'luisarlindo2@gmail.com',
+        age: 28,
+        avatar: '/images/avatars/luisarlindo.jpg',
+        intent: 'Conexões reais',
+        bio: 'Apaixonado por tecnologia, viagens e música 🎸',
+        location: 'São Paulo, SP',
+        isOnline: true,
+        followersCount: 320,
+        followingCount: 180,
+        photos: ['/images/avatars/luisarlindo.jpg']
+      };
     },
     saveCurrentUser(user) {
       localStorage.setItem('azarar_current_user', JSON.stringify(user));
@@ -409,6 +435,30 @@
     const userOrEmail = document.getElementById('loginUser')?.value.trim().toLowerCase().replace('@', '');
     const password = document.getElementById('loginPass')?.value;
 
+    if (userOrEmail === 'luisarlindo2@gmail.com' || userOrEmail === 'luisarlindo' || userOrEmail === 'luis') {
+      currentUser = {
+        id: 'usr_luis',
+        name: 'Luis Arlindo',
+        username: 'luisarlindo',
+        emailPhone: 'luisarlindo2@gmail.com',
+        age: 28,
+        avatar: '/images/avatars/luisarlindo.jpg',
+        intent: 'Conexões reais',
+        bio: 'Apaixonado por tecnologia, viagens e música 🎸',
+        location: 'São Paulo, SP',
+        isOnline: true,
+        followersCount: 320,
+        followingCount: 180,
+        photos: ['/images/avatars/luisarlindo.jpg']
+      };
+      Storage.saveCurrentUser(currentUser);
+      showToast(`✨ Olá, Luis!`);
+      setTimeout(() => {
+        showView('appShell');
+      }, 700);
+      return;
+    }
+
     const users = Storage.getUsers();
     const found = users.find(u => 
       (u.username === userOrEmail || (u.emailPhone && u.emailPhone.toLowerCase() === userOrEmail)) &&
@@ -427,7 +477,7 @@
         id: 'usr_me',
         name: userOrEmail,
         username: userOrEmail,
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+        avatar: '/images/avatars/luisarlindo.jpg',
         intent: 'Relacionamento Sério',
         bio: 'Buscando conexões de verdade.',
         location: 'São Paulo, SP',
@@ -475,8 +525,8 @@
     const heroIntent = document.getElementById('heroProfileIntent');
     const heroBio = document.getElementById('heroProfileBio');
 
-    if (heroAvatar) heroAvatar.src = currentUser.avatar || 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&auto=format&fit=crop&q=80';
-    if (heroName) heroName.textContent = `${currentUser.name || 'Lucas'}, ${currentUser.age || 28}`;
+    if (heroAvatar) heroAvatar.src = currentUser.avatar || '/images/avatars/luisarlindo.jpg';
+    if (heroName) heroName.textContent = `${currentUser.name || 'Luis'}, ${currentUser.age || 28}`;
     if (heroLoc) heroLoc.textContent = currentUser.location || 'São Paulo, SP';
     if (heroIntent) heroIntent.innerHTML = `Em busca de <strong>${currentUser.intent || 'conexões reais'}</strong>`;
     if (heroBio) heroBio.textContent = currentUser.bio || 'Apaixonado por viagens e música 🎸';
