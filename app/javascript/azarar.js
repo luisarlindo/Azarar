@@ -957,6 +957,7 @@
 
   function setProximityStep(stepIndex) {
     const idx = parseInt(stepIndex, 10);
+    if (isNaN(idx) || idx < 0 || idx >= RADAR_STEPS.length) return;
     const slider = document.getElementById('rangeProximityRadius');
     if (slider) slider.value = idx;
     onRadiusStepChange(idx);
@@ -2380,6 +2381,17 @@
     }
     animateParticles();
   }
+
+  // Delegated click handler for distance chips
+  document.addEventListener('click', (e) => {
+    const chip = e.target.closest('.distance-chip');
+    if (chip) {
+      const step = chip.getAttribute('data-step');
+      if (step !== null && step !== undefined) {
+        setProximityStep(parseInt(step, 10));
+      }
+    }
+  });
 
   // If already logged in, enter shell directly
   if (currentUser) {
