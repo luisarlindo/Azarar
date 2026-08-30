@@ -2987,7 +2987,6 @@ html, body {
   cursor: pointer;
   margin: 4px 0 0;
   padding: 0;
-  transition: background 0.1s ease;
 }
 
 .proximity-range-slider::-webkit-slider-thumb {
@@ -3084,18 +3083,114 @@ html, body {
   border-style: solid;
 }
 
-.distance-chip.is-locked {
-  opacity: 0.7;
-  border: 1px dashed rgba(245, 158, 11, 0.4);
-  background: rgba(245, 158, 11, 0.04);
+/* Bronze Chip (15km) */
+.distance-chip.vip-chip.bronze {
+  border: 1px dashed rgba(205, 127, 50, 0.45);
+  background: rgba(205, 127, 50, 0.06);
+  color: #d1a075;
 }
 
-.distance-chip.is-locked:hover {
-  opacity: 1;
+.distance-chip.vip-chip.bronze:hover,
+.distance-chip.vip-chip.bronze.is-locked:hover {
+  border-color: #cd7f32;
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.28) 0%, rgba(138, 79, 21, 0.28) 100%);
+  color: #f6c8a2;
+  box-shadow: 0 0 12px rgba(205, 127, 50, 0.5);
+  transform: translateY(-1px);
+}
+
+.distance-chip.vip-chip.bronze.active-chip {
+  background: linear-gradient(135deg, #cd7f32 0%, #8a4f15 100%);
+  border: 1px solid #e29b63;
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(205, 127, 50, 0.7);
+}
+
+/* Prata Chip (30km) */
+.distance-chip.vip-chip.prata {
+  border: 1px dashed rgba(203, 213, 225, 0.45);
+  background: rgba(203, 213, 225, 0.06);
+  color: #cbd5e1;
+}
+
+.distance-chip.vip-chip.prata:hover,
+.distance-chip.vip-chip.prata.is-locked:hover {
+  border-color: #e2e8f0;
+  background: linear-gradient(135deg, rgba(226, 232, 240, 0.28) 0%, rgba(148, 163, 184, 0.28) 100%);
+  color: #ffffff;
+  box-shadow: 0 0 14px rgba(226, 232, 240, 0.6);
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.distance-chip.vip-chip.prata.active-chip {
+  background: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
+  border: 1px solid #f1f5f9;
+  color: #0f172a;
+  font-weight: 800;
+  box-shadow: 0 0 14px rgba(226, 232, 240, 0.8);
+}
+
+/* Ouro Chip (50km) */
+.distance-chip.vip-chip.ouro {
+  border: 1px dashed rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.06);
+  color: #fbbf24;
+}
+
+.distance-chip.vip-chip.ouro:hover,
+.distance-chip.vip-chip.ouro.is-locked:hover {
   border-color: #f59e0b;
-  background: rgba(245, 158, 11, 0.14);
-  color: #fcd34d;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.28) 0%, rgba(180, 83, 9, 0.28) 100%);
+  color: #fef08a;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.55);
+  transform: translateY(-1px);
+}
+
+.distance-chip.vip-chip.ouro.active-chip {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: 1px solid #fbbf24;
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.8);
+}
+
+/* Platina Chip (100km) with High-End Diamond Shimmer */
+.distance-chip.vip-chip.platina {
+  border: 1px dashed rgba(56, 189, 248, 0.55);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+  color: #7dd3fc;
+  position: relative;
+  overflow: hidden;
+}
+
+.distance-chip.vip-chip.platina:hover,
+.distance-chip.vip-chip.platina.is-locked:hover {
+  border-color: #38bdf8;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.35) 0%, rgba(168, 85, 247, 0.35) 50%, rgba(255, 255, 255, 0.3) 100%);
+  color: #ffffff;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.8), 0 0 8px rgba(168, 85, 247, 0.6);
+  text-shadow: 0 0 8px #38bdf8, 0 0 12px #ffffff;
+  animation: platinaShimmerPulse 1.8s infinite ease-in-out;
+}
+
+.distance-chip.vip-chip.platina.active-chip {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.9), 0 0 10px rgba(192, 132, 252, 0.7);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+@keyframes platinaShimmerPulse {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.7), 0 0 6px rgba(168, 85, 247, 0.4);
+    transform: translateY(-1px) scale(1);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(56, 189, 248, 1), 0 0 12px rgba(224, 231, 255, 0.85);
+    transform: translateY(-1px) scale(1.03);
+  }
 }
 
 .chip-vip-tag {
