@@ -791,9 +791,9 @@
   }
 
   // ==========================================================================
-  // 6. RADAR: DISCRETE SYNCHRONIZED STEPS & SMART ROTATION (15s on move)
+  // 6. RADAR: CONTINUOUS PRECISION DISTANCE SELECTOR (5m - 100km)
   // ==========================================================================
-  const RADAR_STEPS = [500, 1000, 2000, 5000, 15000, 30000, 50000, 100000];
+  const RADAR_STEPS = [5, 1000, 2000, 5000, 15000, 30000, 50000, 100000];
   const PLAN_LIMITS = {
     free: 5000,
     bronze: 15000,
@@ -856,13 +856,60 @@
     }, 25000);
   }
 
+  function sliderValueToMeters(val) {
+    const v = Math.max(0, Math.min(1000, parseFloat(val) || 0));
+    if (v <= 0) return 5;
+    if (v <= 400) {
+      // 0 to 400 maps smoothly from 5m to 1000m (all meters from 5 to 999m)
+      const m = 5 + (v / 400) * 995;
+      return Math.min(1000, Math.max(5, Math.round(m)));
+    }
+    if (v <= 650) {
+      // 400 to 650 maps from 1000m to 5000m in steps of 100m (1.0km, 1.1km, 1.2km... 5.0km)
+      const raw = 1000 + ((v - 400) / 250) * 4000;
+      return Math.min(5000, Math.max(1000, Math.round(raw / 100) * 100));
+    }
+    if (v <= 770) {
+      // 650 to 770 maps from 5000m to 15000m (Bronze) in steps of 500m
+      const raw = 5000 + ((v - 650) / 120) * 10000;
+      return Math.min(15000, Math.max(5000, Math.round(raw / 500) * 500));
+    }
+    if (v <= 870) {
+      // 770 to 870 maps from 15000m to 30000m (Prata) in steps of 1000m
+      const raw = 15000 + ((v - 770) / 100) * 15000;
+      return Math.min(30000, Math.max(15000, Math.round(raw / 1000) * 1000));
+    }
+    if (v <= 940) {
+      // 870 to 940 maps from 30000m to 50000m (Ouro) in steps of 2000m
+      const raw = 30000 + ((v - 870) / 70) * 20000;
+      return Math.min(50000, Math.max(30000, Math.round(raw / 2000) * 2000));
+    }
+    // 940 to 1000 maps from 50000m to 100000m (Platina) in steps of 5000m
+    const raw = 50000 + ((v - 940) / 60) * 50000;
+    return Math.min(100000, Math.max(50000, Math.round(raw / 5000) * 5000));
+  }
+
+  function metersToSliderValue(meters) {
+    const m = Math.max(5, Math.min(100000, parseInt(meters, 10) || 5000));
+    if (m <= 5) return 0;
+    if (m <= 1000) return ((m - 5) / 995) * 400;
+    if (m <= 5000) return 400 + ((m - 1000) / 4000) * 250;
+    if (m <= 15000) return 650 + ((m - 5000) / 10000) * 120;
+    if (m <= 30000) return 770 + ((m - 15000) / 15000) * 100;
+    if (m <= 50000) return 870 + ((m - 30000) / 20000) * 70;
+    return 940 + ((m - 50000) / 50000) * 60;
+  }
+
   function formatRadiusLabel(val) {
-    const meters = parseInt(val, 10);
-    if (meters >= 1000) {
-      const km = (meters / 1000.0).toFixed(meters % 1000 === 0 ? 0 : 1);
+    const meters = Math.round(Number(val)) || 5;
+    if (meters < 1000) {
+      return `${meters}m`;
+    }
+    const km = meters / 1000.0;
+    if (meters % 1000 === 0) {
       return `${km} km`;
     }
-    return `${meters}m`;
+    return `${km.toFixed(1)} km`;
   }
 
   function updateDiscreteSliderVisual(meters) {
@@ -872,17 +919,16 @@
     const muralLbl = document.getElementById('muralRadiusText');
     const lockMarker = document.getElementById('sliderLockMarker');
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
-    const maxAllowedIdx = RADAR_STEPS.indexOf(maxAllowed);
 
     const rawM = parseInt(meters, 10) || 5000;
     const m = Math.min(rawM, maxAllowed);
-    const idx = RADAR_STEPS.indexOf(m) >= 0 ? RADAR_STEPS.indexOf(m) : 0;
+    const sliderVal = metersToSliderValue(m);
+    const sliderPct = (sliderVal / 1000) * 100;
 
     if (slider) {
-      slider.value = idx;
-      const pct = (idx / (RADAR_STEPS.length - 1)) * 100;
-      slider.style.setProperty('--slider-pct', `${pct}%`);
-      slider.style.background = `linear-gradient(90deg, #ff1a72 0%, #ff2b88 ${pct}%, rgba(255, 255, 255, 0.12) ${pct}%, rgba(255, 255, 255, 0.12) 100%)`;
+      slider.value = Math.round(sliderVal);
+      slider.style.setProperty('--slider-pct', `${sliderPct}%`);
+      slider.style.background = `linear-gradient(90deg, #ff1a72 0%, #ff2b88 ${sliderPct}%, rgba(255, 255, 255, 0.12) ${sliderPct}%, rgba(255, 255, 255, 0.12) 100%)`;
     }
 
     // Dynamic Position of Physical Lock Marker on Track
@@ -893,12 +939,13 @@
         lockTag.textContent = 'MAX';
       }
 
-      if (maxAllowedIdx >= 0 && maxAllowedIdx < RADAR_STEPS.length - 1) {
-        const lockPct = (maxAllowedIdx / (RADAR_STEPS.length - 1)) * 100;
+      if (maxAllowed < 100000) {
+        const maxVal = metersToSliderValue(maxAllowed);
+        const lockPct = (maxVal / 1000) * 100;
         lockMarker.style.left = `${lockPct}%`;
         lockMarker.title = `Limite Máximo do Plano ${PLAN_NAMES[currentVipPlan]} (${formatRadiusLabel(maxAllowed)}) - Toque para liberar até 100km`;
 
-        if (idx === maxAllowedIdx) {
+        if (m >= maxAllowed) {
           lockMarker.classList.add('is-visible');
         } else {
           lockMarker.classList.remove('is-visible');
@@ -934,11 +981,10 @@
 
     // Update distance chips active & locked states
     document.querySelectorAll('.distance-chip').forEach(chip => {
-      const step = parseInt(chip.getAttribute('data-step'), 10);
-      const chipMeters = RADAR_STEPS[step] || 5000;
+      const chipMeters = parseInt(chip.getAttribute('data-meters') || chip.getAttribute('data-step'), 10);
 
       // Active state
-      if (step === idx) {
+      if (Math.abs(chipMeters - m) < (m >= 1000 ? 50 : 2)) {
         chip.classList.add('active-chip');
       } else {
         chip.classList.remove('active-chip');
@@ -965,59 +1011,65 @@
 
   function stepRadarDistance(delta) {
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
-    const currentIdx = RADAR_STEPS.indexOf(currentRadius) >= 0 ? RADAR_STEPS.indexOf(currentRadius) : 3;
-    const targetIdx = currentIdx + delta;
+    let nextMeters = currentRadius;
 
-    if (targetIdx >= RADAR_STEPS.length || RADAR_STEPS[targetIdx] > maxAllowed) {
-      if (delta > 0) {
-        triggerLockFeedback(RADAR_STEPS[Math.min(RADAR_STEPS.length - 1, targetIdx)]);
-      }
+    if (delta > 0) {
+      if (currentRadius < 50) nextMeters = Math.min(50, currentRadius + 10);
+      else if (currentRadius < 1000) nextMeters = Math.min(1000, currentRadius + 50);
+      else if (currentRadius < 5000) nextMeters = Math.min(5000, currentRadius + 100);
+      else if (currentRadius < 15000) nextMeters = Math.min(15000, currentRadius + 500);
+      else if (currentRadius < 50000) nextMeters = Math.min(50000, currentRadius + 1000);
+      else nextMeters = Math.min(100000, currentRadius + 5000);
+    } else {
+      if (currentRadius > 50000) nextMeters = Math.max(50000, currentRadius - 5000);
+      else if (currentRadius > 15000) nextMeters = Math.max(15000, currentRadius - 1000);
+      else if (currentRadius > 5000) nextMeters = Math.max(5000, currentRadius - 500);
+      else if (currentRadius > 1000) nextMeters = Math.max(1000, currentRadius - 100);
+      else if (currentRadius > 50) nextMeters = Math.max(50, currentRadius - 50);
+      else nextMeters = Math.max(5, currentRadius - 10);
+    }
+
+    if (nextMeters > maxAllowed) {
+      triggerLockFeedback(nextMeters);
       return;
     }
 
-    if (targetIdx >= 0) {
-      setProximityStep(targetIdx);
-    }
+    setProximityRadius(nextMeters);
   }
 
-  function onRadiusStepInput(stepIndex) {
-    const idx = parseInt(stepIndex, 10);
-    if (isNaN(idx) || idx < 0) return;
+  function onContinuousRadiusInput(val) {
+    const meters = sliderValueToMeters(val);
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
-    const maxAllowedIdx = RADAR_STEPS.indexOf(maxAllowed);
     const slider = document.getElementById('rangeProximityRadius');
 
-    if (idx > maxAllowedIdx) {
-      if (slider) slider.value = maxAllowedIdx;
+    if (meters > maxAllowed) {
+      if (slider) slider.value = Math.round(metersToSliderValue(maxAllowed));
+      currentRadius = maxAllowed;
       updateDiscreteSliderVisual(maxAllowed);
-      triggerLockFeedback(RADAR_STEPS[idx] || 15000);
+      triggerLockFeedback(meters);
       return;
     }
 
-    const meters = RADAR_STEPS[idx] || 5000;
     currentRadius = meters;
     updateDiscreteSliderVisual(meters);
     activateRadarSpin(15);
     renderRadarUsers();
   }
 
-  function onRadiusStepChange(stepIndex) {
-    const idx = parseInt(stepIndex, 10);
-    if (isNaN(idx) || idx < 0) return;
+  function onContinuousRadiusChange(val) {
+    const meters = sliderValueToMeters(val);
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
-    const maxAllowedIdx = RADAR_STEPS.indexOf(maxAllowed);
     const slider = document.getElementById('rangeProximityRadius');
 
-    if (idx > maxAllowedIdx) {
-      if (slider) slider.value = maxAllowedIdx;
+    if (meters > maxAllowed) {
+      if (slider) slider.value = Math.round(metersToSliderValue(maxAllowed));
       currentRadius = maxAllowed;
       updateDiscreteSliderVisual(maxAllowed);
       renderRadarUsers();
-      triggerLockFeedback(RADAR_STEPS[idx] || 15000);
+      triggerLockFeedback(meters);
       return;
     }
 
-    const meters = RADAR_STEPS[idx] || 5000;
     currentRadius = meters;
     updateDiscreteSliderVisual(currentRadius);
     activateRadarSpin(15);
@@ -1027,20 +1079,19 @@
     renderRadarUsers();
   }
 
+  function onRadiusStepInput(val) {
+    onContinuousRadiusInput(val);
+  }
+
+  function onRadiusStepChange(val) {
+    onContinuousRadiusChange(val);
+  }
+
   function setProximityStep(stepIndex) {
     const idx = parseInt(stepIndex, 10);
-    if (isNaN(idx) || idx < 0 || idx >= RADAR_STEPS.length) return;
+    if (isNaN(idx)) return;
     const meters = RADAR_STEPS[idx] || 5000;
-    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
-
-    if (meters > maxAllowed) {
-      triggerLockFeedback(meters);
-      return;
-    }
-
-    const slider = document.getElementById('rangeProximityRadius');
-    if (slider) slider.value = idx;
-    onRadiusStepChange(idx);
+    setProximityRadius(meters);
   }
 
   function updateSliderVisual(meters) {
@@ -1048,15 +1099,21 @@
   }
 
   function setProximityRadius(radiusMeters) {
-    const m = parseInt(radiusMeters, 10);
-    const idx = RADAR_STEPS.indexOf(m);
-    if (idx >= 0) {
-      setProximityStep(idx);
-    } else {
-      currentRadius = m;
-      updateDiscreteSliderVisual(currentRadius);
-      renderRadarUsers();
+    const meters = Math.max(5, parseInt(radiusMeters, 10) || 5000);
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
+
+    if (meters > maxAllowed) {
+      triggerLockFeedback(meters);
+      return;
     }
+
+    currentRadius = meters;
+    updateDiscreteSliderVisual(currentRadius);
+    activateRadarSpin(15);
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast(`📡 Raio atualizado para ${formatRadiusLabel(currentRadius)}`);
+    renderRadarUsers();
+    syncLocationWithServer();
   }
 
   function renderRadarUsers() {
@@ -2478,8 +2535,11 @@
   document.addEventListener('click', (e) => {
     const chip = e.target.closest('.distance-chip');
     if (chip) {
+      const meters = chip.getAttribute('data-meters');
       const step = chip.getAttribute('data-step');
-      if (step !== null && step !== undefined) {
+      if (meters !== null && meters !== undefined) {
+        setProximityRadius(parseInt(meters, 10));
+      } else if (step !== null && step !== undefined) {
         setProximityStep(parseInt(step, 10));
       }
       return;
@@ -2514,10 +2574,10 @@
   const proximitySlider = document.getElementById('rangeProximityRadius');
   if (proximitySlider) {
     proximitySlider.addEventListener('input', (e) => {
-      onRadiusStepInput(e.target.value);
+      onContinuousRadiusInput(e.target.value);
     });
     proximitySlider.addEventListener('change', (e) => {
-      onRadiusStepChange(e.target.value);
+      onContinuousRadiusChange(e.target.value);
     });
   }
 
@@ -2539,6 +2599,8 @@
     setProximityRadius,
     setProximityStep,
     stepRadarDistance,
+    onContinuousRadiusInput,
+    onContinuousRadiusChange,
     onRadiusStepInput,
     onRadiusStepChange,
     onRadiusSliderInput,

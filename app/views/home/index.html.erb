@@ -478,38 +478,38 @@
                         id="rangeProximityRadius"
                         class="proximity-range-slider"
                         min="0"
-                        max="7"
+                        max="1000"
                         step="1"
-                        value="3"
-                        oninput="window.azararApp.onRadiusStepInput(this.value)"
-                        onchange="window.azararApp.onRadiusStepChange(this.value)"
+                        value="650"
+                        oninput="window.azararApp.onContinuousRadiusInput(this.value)"
+                        onchange="window.azararApp.onContinuousRadiusChange(this.value)"
                         aria-label="Ajustar Raio de Busca"
                       />
                       <div class="slider-minmax-labels">
-                        <span>500m</span>
+                        <span>5m</span>
                         <span>100km</span>
                       </div>
                     </div>
 
                     <!-- Touch-Friendly Distance Chips Grid -->
                     <div class="radar-distance-chips-grid">
-                      <button type="button" class="distance-chip" data-step="0" onclick="window.azararApp.setProximityStep(0)">500m</button>
-                      <button type="button" class="distance-chip" data-step="1" onclick="window.azararApp.setProximityStep(1)">1km</button>
-                      <button type="button" class="distance-chip" data-step="2" onclick="window.azararApp.setProximityStep(2)">2km</button>
-                      <button type="button" class="distance-chip active-chip" data-step="3" onclick="window.azararApp.setProximityStep(3)">5km</button>
-                      <button type="button" class="distance-chip vip-chip bronze" data-step="4" onclick="window.azararApp.setProximityStep(4)">
+                      <button type="button" class="distance-chip" data-meters="5" onclick="window.azararApp.setProximityRadius(5)">5m</button>
+                      <button type="button" class="distance-chip" data-meters="1000" onclick="window.azararApp.setProximityRadius(1000)">1km</button>
+                      <button type="button" class="distance-chip" data-meters="2000" onclick="window.azararApp.setProximityRadius(2000)">2km</button>
+                      <button type="button" class="distance-chip active-chip" data-meters="5000" onclick="window.azararApp.setProximityRadius(5000)">5km</button>
+                      <button type="button" class="distance-chip vip-chip bronze" data-meters="15000" onclick="window.azararApp.setProximityRadius(15000)">
                         <span>15km</span>
                         <span class="chip-vip-tag">🥉</span>
                       </button>
-                      <button type="button" class="distance-chip vip-chip prata" data-step="5" onclick="window.azararApp.setProximityStep(5)">
+                      <button type="button" class="distance-chip vip-chip prata" data-meters="30000" onclick="window.azararApp.setProximityRadius(30000)">
                         <span>30km</span>
                         <span class="chip-vip-tag">🥈</span>
                       </button>
-                      <button type="button" class="distance-chip vip-chip ouro" data-step="6" onclick="window.azararApp.setProximityStep(6)">
+                      <button type="button" class="distance-chip vip-chip ouro" data-meters="50000" onclick="window.azararApp.setProximityRadius(50000)">
                         <span>50km</span>
                         <span class="chip-vip-tag">🥇</span>
                       </button>
-                      <button type="button" class="distance-chip vip-chip platina" data-step="7" onclick="window.azararApp.setProximityStep(7)">
+                      <button type="button" class="distance-chip vip-chip platina" data-meters="100000" onclick="window.azararApp.setProximityRadius(100000)">
                         <span>100km</span>
                         <span class="chip-vip-tag">👑</span>
                       </button>
