@@ -463,8 +463,15 @@
                   <div class="radar-slider-container">
                     <!-- Glowing Interactive Slider with Physical Plan Lock -->
                     <div class="discrete-slider-wrapper">
-                      <div class="slider-lock-marker" id="sliderLockMarker" style="left: 42.9%;" onclick="window.azararApp.openVipPlansModal()" title="Limite do Plano Grátis (5km) - Toque para liberar até 100km">
-                        <span class="slider-lock-icon">🔒</span>
+                      <div class="slider-lock-marker" id="sliderLockMarker" style="left: 42.9%;" title="Limite do Plano Atual (5km) - Toque para liberar até 100km">
+                        <div class="slider-lock-pill">
+                          <svg class="slider-lock-svg" viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="11" width="16" height="11" rx="2.5" ry="2.5"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                          </svg>
+                          <span class="slider-lock-tag">VIP</span>
+                        </div>
+                        <div class="slider-lock-pin-line"></div>
                       </div>
                       <input
                         type="range"
