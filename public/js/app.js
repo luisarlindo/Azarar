@@ -305,7 +305,7 @@
     }
     Storage.saveCurrentUser(currentUser);
   }
-  let currentRadius = 500;
+  let currentRadius = 5000;
   let isOnlineNow = currentUser ? (currentUser.isOnline ?? true) : true;
   let currentActiveTab = 'radar';
   let activeChatUserId = null;
@@ -745,14 +745,22 @@
   // ==========================================================================
   // 6. RADAR: DISCRETE SYNCHRONIZED STEPS & SMART ROTATION (15s on move)
   // ==========================================================================
-  const RADAR_STEPS = [5, 50, 150, 250, 500, 1000, 2000];
+  const RADAR_STEPS = [500, 1000, 2000, 5000, 15000, 30000, 50000, 100000];
   const PLAN_LIMITS = {
-    free: 150,
-    prata: 500,
-    ouro: 1000,
-    platina: 2000
+    free: 5000,
+    bronze: 15000,
+    prata: 30000,
+    ouro: 50000,
+    platina: 100000
   };
-  let currentVipPlan = 'free'; // 'free', 'prata', 'ouro', 'platina'
+  const PLAN_NAMES = {
+    free: 'Grátis',
+    bronze: 'Bronze',
+    prata: 'Prata',
+    ouro: 'Ouro VIP',
+    platina: 'Platina Black'
+  };
+  let currentVipPlan = 'free'; // 'free', 'bronze', 'prata', 'ouro', 'platina'
   let radarSpinTimeout = null;
   let radarIdleInterval = null;
 
@@ -789,58 +797,17 @@
     const meters = parseInt(val, 10);
     if (meters >= 1000) {
       const km = (meters / 1000.0).toFixed(meters % 1000 === 0 ? 0 : 1);
-      return `${km} km (${meters}m)`;
+      return `${km} km`;
     }
-    return `${meters} metros`;
-  }
-
-  // Exact math requested by user for concentric distance rings:
-  // - Outer circle = max selected distance (e.g. 1km, 500m, 150m, 5m)
-  // - Inner circle = 5m (or 0m if max is 5m)
-  // - Middle circle = exactly halfway between min and max
-  function calculateRadarDistanceLabels(meters) {
-    const max = parseInt(meters, 10) || 150;
-    let min, mid;
-
-    if (max <= 5) {
-      min = 0;
-      mid = 2.5;
-    } else {
-      min = 5;
-      mid = Math.round((max + min) / 2);
-      if (max === 1000) mid = 500;
-      if (max === 2000) mid = 1000;
-      if (max === 500) mid = 250;
-      if (max === 250) mid = 125;
-      if (max === 150) mid = 75;
-      if (max === 50) mid = 25;
-    }
-
-    function fmt(val) {
-      if (val >= 1000) {
-        const km = (val / 1000.0).toFixed(val % 1000 === 0 ? 0 : 1);
-        return `${km} km`;
-      }
-      return `${val} m`;
-    }
-
-    return {
-      outer: fmt(max),
-      middle: fmt(mid),
-      inner: fmt(min),
-      current: fmt(max)
-    };
+    return `${meters}m`;
   }
 
   function updateDiscreteSliderVisual(meters) {
     const slider = document.getElementById('rangeProximityRadius');
-    const lblOuter = document.getElementById('lblRadarRingOuter');
-    const lblMiddle = document.getElementById('lblRadarRingMiddle');
-    const lblInner = document.getElementById('lblRadarRingInner');
     const lblBig = document.getElementById('lblRadarDistanceValue');
     const muralLbl = document.getElementById('muralRadiusText');
-    const m = parseInt(meters, 10) || 150;
-    const idx = RADAR_STEPS.indexOf(m) >= 0 ? RADAR_STEPS.indexOf(m) : 2;
+    const m = parseInt(meters, 10) || 5000;
+    const idx = RADAR_STEPS.indexOf(m) >= 0 ? RADAR_STEPS.indexOf(m) : 3;
 
     if (slider) {
       slider.value = idx;
@@ -848,12 +815,9 @@
       slider.style.setProperty('--slider-pct', `${pct}%`);
     }
 
-    const ringLabels = calculateRadarDistanceLabels(m);
-    if (lblOuter) lblOuter.textContent = ringLabels.outer;
-    if (lblMiddle) lblMiddle.textContent = ringLabels.middle;
-    if (lblInner) lblInner.textContent = ringLabels.inner;
-    if (lblBig) lblBig.textContent = ringLabels.current;
-    if (muralLbl) muralLbl.textContent = ringLabels.current;
+    const formatted = formatRadiusLabel(m);
+    if (lblBig) lblBig.textContent = formatted;
+    if (muralLbl) muralLbl.textContent = formatted;
 
     document.querySelectorAll('.discrete-tick').forEach((pt, i) => {
       if (i === idx) {
@@ -866,10 +830,10 @@
 
   function onRadiusStepInput(stepIndex) {
     const idx = parseInt(stepIndex, 10);
-    const meters = RADAR_STEPS[idx] || 150;
-    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 150;
+    const meters = RADAR_STEPS[idx] || 5000;
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
 
-    // Smoothly update the visual labels and concentric rings while sliding
+    // Smoothly update the visual labels while sliding
     updateDiscreteSliderVisual(meters);
     activateRadarSpin(15);
 
@@ -881,14 +845,14 @@
 
   function onRadiusStepChange(stepIndex) {
     const idx = parseInt(stepIndex, 10);
-    const meters = RADAR_STEPS[idx] || 150;
-    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 150;
+    const meters = RADAR_STEPS[idx] || 5000;
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
 
     if (meters > maxAllowed) {
       // Revert slider position smoothly and present VIP plans
       const allowedIdx = RADAR_STEPS.indexOf(maxAllowed);
       const slider = document.getElementById('rangeProximityRadius');
-      if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 2;
+      if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 3;
       currentRadius = maxAllowed;
       updateDiscreteSliderVisual(maxAllowed);
       renderRadarUsers();
@@ -1072,18 +1036,18 @@
 
   function subscribeToPlan(tierKey, tierName, price) {
     currentVipPlan = tierKey;
-    const newMax = PLAN_LIMITS[tierKey] || 150;
+    const newMax = PLAN_LIMITS[tierKey] || 5000;
     
     // Automatically jump to the new plan's max radius so the user sees the immediate benefit!
     currentRadius = newMax;
 
     // Update notice tag on home screen
-    const limitTag = document.querySelector('.free-limit-tag');
+    const limitTag = document.getElementById('lblPlanNotice') || document.querySelector('.free-limit-tag');
     if (limitTag) {
       if (tierKey === 'free') {
-        limitTag.textContent = 'Plano Grátis: até 150m';
+        limitTag.textContent = 'Plano Grátis: até 5km';
       } else {
-        limitTag.innerHTML = `⭐ <strong>${tierName}</strong>: até ${newMax >= 1000 ? (newMax/1000)+'km' : newMax+'m'}`;
+        limitTag.innerHTML = `⭐ <strong>${tierName}</strong>: até ${formatRadiusLabel(newMax)}`;
       }
     }
 

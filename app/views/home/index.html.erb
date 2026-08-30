@@ -392,6 +392,7 @@
                   </div>
 
                   <!-- RADAR DISPLAY VISUALIZER -->
+                  <!-- RADAR DISPLAY VISUALIZER -->
                   <div class="radar-visualizer-container">
                     <div class="radar-scope-circle">
                       <div class="radar-grid-axis-h"></div>
@@ -403,19 +404,13 @@
                       <div class="radar-sweep-beam is-spinning" id="radarSweepBeam"></div>
 
                       <!-- Outer Distance Ring (100% size) -->
-                      <div class="radar-ring radar-ring-outer">
-                        <span class="radar-dist-tag" id="lblRadarRingOuter">150 m</span>
-                      </div>
+                      <div class="radar-ring radar-ring-outer"></div>
 
                       <!-- Middle Distance Ring (60% size) -->
-                      <div class="radar-ring radar-ring-middle">
-                        <span class="radar-dist-tag" id="lblRadarRingMiddle">75 m</span>
-                      </div>
+                      <div class="radar-ring radar-ring-middle"></div>
 
                       <!-- Inner Distance Ring (30% size) -->
-                      <div class="radar-ring radar-ring-inner">
-                        <span class="radar-dist-tag" id="lblRadarRingInner">5 m</span>
-                      </div>
+                      <div class="radar-ring radar-ring-inner"></div>
 
                       <!-- Center Pulsing Heart (User's location) -->
                       <div class="radar-center-point">
@@ -434,7 +429,7 @@
                     </button>
 
                     <div class="radar-distance-readout">
-                      <span class="radar-distance-big" id="lblRadarDistanceValue">150 m</span>
+                      <span class="radar-distance-big" id="lblRadarDistanceValue">5 km</span>
                       <span class="radar-distance-caption">RAIO DE BUSCA</span>
                     </div>
 
@@ -451,25 +446,26 @@
                         id="rangeProximityRadius"
                         class="proximity-range-slider"
                         min="0"
-                        max="6"
+                        max="7"
                         step="1"
-                        value="2"
+                        value="3"
                         oninput="window.azararApp.onRadiusStepInput(this.value)"
                         onchange="window.azararApp.onRadiusStepChange(this.value)"
                       />
                       <div class="discrete-scale-ticks">
-                        <span class="discrete-tick" style="left: 0%;" onclick="window.azararApp.setProximityStep(0)">5m</span>
-                        <span class="discrete-tick" style="left: 16.6%;" onclick="window.azararApp.setProximityStep(1)">50m</span>
-                        <span class="discrete-tick active-tick" style="left: 33.3%;" onclick="window.azararApp.setProximityStep(2)">150m</span>
-                        <span class="discrete-tick" style="left: 50.0%;" onclick="window.azararApp.setProximityStep(3)">250m</span>
-                        <span class="discrete-tick" style="left: 66.6%;" onclick="window.azararApp.setProximityStep(4)">500m</span>
-                        <span class="discrete-tick" style="left: 83.3%;" onclick="window.azararApp.setProximityStep(5)">1 km</span>
-                        <span class="discrete-tick" style="left: 100%;" onclick="window.azararApp.setProximityStep(6)">2 km</span>
+                        <span class="discrete-tick" style="left: 0%;" onclick="window.azararApp.setProximityStep(0)">500m</span>
+                        <span class="discrete-tick" style="left: 14.3%;" onclick="window.azararApp.setProximityStep(1)">1km</span>
+                        <span class="discrete-tick" style="left: 28.6%;" onclick="window.azararApp.setProximityStep(2)">2km</span>
+                        <span class="discrete-tick active-tick" style="left: 42.9%;" onclick="window.azararApp.setProximityStep(3)">5km</span>
+                        <span class="discrete-tick" style="left: 57.1%;" onclick="window.azararApp.setProximityStep(4)">15km</span>
+                        <span class="discrete-tick" style="left: 71.4%;" onclick="window.azararApp.setProximityStep(5)">30km</span>
+                        <span class="discrete-tick" style="left: 85.7%;" onclick="window.azararApp.setProximityStep(6)">50km</span>
+                        <span class="discrete-tick" style="left: 100%;" onclick="window.azararApp.setProximityStep(7)">100km</span>
                       </div>
                     </div>
                     <div class="free-tier-notice-row">
-                      <span class="free-limit-tag">Plano Grátis: até 150m</span>
-                      <button type="button" class="link-upgrade-inline" onclick="window.azararApp.openVipPlansModal()">Liberar até 2km ⭐</button>
+                      <span class="free-limit-tag" id="lblPlanNotice">Plano Grátis: até 5km</span>
+                      <button type="button" class="link-upgrade-inline" onclick="window.azararApp.openVipPlansModal()">Ver Planos até 100km ⭐</button>
                     </div>
                   </div>
                 </div>
@@ -1021,33 +1017,54 @@
               <span class="plan-badge-current" id="badgePlanFree">Plano Atual</span>
             </div>
             <ul class="plan-features">
-              <li>✅ Radar limitado a <strong>150 metros</strong></li>
-              <li>✅ 3 Brindes 🥂 por dia</li>
+              <li>✅ Radar regional até <strong>5 km</strong></li>
+              <li>✅ 5 Brindes 🥂 diários</li>
               <li>✅ Chat efêmero de 3 horas</li>
             </ul>
           </div>
 
-          <!-- PLANO 2: PRATA -->
+          <!-- PLANO 2: BRONZE -->
+          <div class="vip-plan-card" id="planCardBronze" onclick="window.azararApp.selectVipPlan('bronze')">
+            <div class="plan-card-header">
+              <div>
+                <h4 class="plan-name bronze-glow">🥉 Bronze</h4>
+                <span class="plan-price">R$ 9,90 <small>/mês</small></span>
+              </div>
+              <span class="plan-badge-bronze">Básico</span>
+            </div>
+            <ul class="plan-features">
+              <li>🚀 Radar estendido até <strong>15 km</strong></li>
+              <li>🥂 15 Brindes diários</li>
+              <li>🛡️ Selo Bronze no Perfil</li>
+              <li>💬 Chat estendido de 6 horas</li>
+            </ul>
+            <button type="button" class="btn-upgrade-tier btn-tier-bronze" onclick="event.stopPropagation(); window.azararApp.subscribeToPlan('bronze', 'Plano Bronze', 9.90)">
+              Assinar Bronze (R$ 9,90)
+            </button>
+          </div>
+
+          <!-- PLANO 3: PRATA -->
           <div class="vip-plan-card" id="planCardPrata" onclick="window.azararApp.selectVipPlan('prata')">
             <div class="plan-card-header">
               <div>
                 <h4 class="plan-name silver-glow">🥈 Prata</h4>
                 <span class="plan-price">R$ 19,90 <small>/mês</small></span>
               </div>
-              <span class="plan-badge-tier">Básico Plus</span>
+              <span class="plan-badge-tier">Plus</span>
             </div>
             <ul class="plan-features">
-              <li>🚀 Radar expandido até <strong>500 metros</strong></li>
-              <li>🥂 15 Brindes diários</li>
-              <li>👻 Modo Fantasma (Navegação Invisível)</li>
+              <li>🚀 Radar metropolitano até <strong>30 km</strong></li>
+              <li>🥂 30 Brindes diários</li>
+              <li>👻 <strong>Modo Fantasma</strong> (Navegação Invisível)</li>
               <li>🛡️ Selo Prata no Perfil</li>
+              <li>💬 Chat estendido de 12 horas</li>
             </ul>
             <button type="button" class="btn-upgrade-tier btn-tier-prata" onclick="event.stopPropagation(); window.azararApp.subscribeToPlan('prata', 'Plano Prata', 19.90)">
               Assinar Prata (R$ 19,90)
             </button>
           </div>
 
-          <!-- PLANO 3: OURO (DESTAQUE) -->
+          <!-- PLANO 4: OURO (DESTAQUE) -->
           <div class="vip-plan-card featured-gold-card" id="planCardOuro" onclick="window.azararApp.selectVipPlan('ouro')">
             <div class="popular-ribbon">⭐ MAIS ESCOLHIDO</div>
             <div class="plan-card-header">
@@ -1058,18 +1075,19 @@
               <span class="plan-badge-gold">Recomendado</span>
             </div>
             <ul class="plan-features">
-              <li>🎯 Radar até <strong>1.000 metros (1 km)</strong></li>
+              <li>🎯 Radar amplo até <strong>50 km</strong></li>
               <li>🥂 <strong>Brindes Ilimitados</strong></li>
-              <li>👀 Ver quem te curtiu antes de responder</li>
-              <li>🔓 Acesso e desbloqueio livre no <strong>Lounge VIP</strong></li>
+              <li>👀 <strong>Ver quem te curtiu</strong> antes do match</li>
+              <li>🔓 Acesso livre ao <strong>Lounge VIP</strong></li>
               <li>⭐ Selo Ouro VIP no Perfil</li>
+              <li>💬 Chat de 24 horas</li>
             </ul>
             <button type="button" class="btn-upgrade-tier btn-tier-ouro" onclick="event.stopPropagation(); window.azararApp.subscribeToPlan('ouro', 'Plano Ouro VIP', 39.90)">
               Assinar Ouro VIP (R$ 39,90)
             </button>
           </div>
 
-          <!-- PLANO 4: PLATINA -->
+          <!-- PLANO 5: PLATINA BLACK -->
           <div class="vip-plan-card platinum-glow-card" id="planCardPlatina" onclick="window.azararApp.selectVipPlan('platina')">
             <div class="plan-card-header">
               <div>
@@ -1079,9 +1097,9 @@
               <span class="plan-badge-plat">VIP Máximo</span>
             </div>
             <ul class="plan-features">
-              <li>🌍 Radar até <strong>2.000 metros (2 km) / Ilimitado</strong></li>
-              <li>⚡ <strong>1 Flash Boost semanal grátis</strong> (topo da balada por 1h)</li>
-              <li>⏳ <strong>Chat sem expiração</strong> (conversas permanentes)</li>
+              <li>🌍 Radar de alcance máximo até <strong>100 km</strong></li>
+              <li>⚡ <strong>1 Flash Boost semanal grátis</strong> (topo da noite por 1h)</li>
+              <li>⏳ <strong>Conversas Permanentes</strong> (Chat sem expiração)</li>
               <li>💎 Selo Platina Diamante & Verificação Prioritária</li>
               <li>↩️ Desfazer brindes enviados por engano</li>
             </ul>

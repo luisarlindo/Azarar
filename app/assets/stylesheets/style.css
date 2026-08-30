@@ -2657,13 +2657,13 @@ html, body {
   color: #ffffff;
 }
 
-/* Radar Scope Display Compact */
+/* Radar Scope Display (Enlarged to fill full block width) */
 .radar-visualizer-container {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-width: 210px;
-  margin: 2px auto 4px;
+  max-width: 320px;
+  margin: 4px auto 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2675,11 +2675,11 @@ html, body {
   height: 100%;
   border-radius: 50%;
   background: 
-    radial-gradient(circle at 50% 50%, rgba(255, 42, 122, 0.14) 0%, rgba(20, 6, 32, 0.6) 70%, rgba(10, 3, 18, 0.95) 100%),
-    radial-gradient(rgba(255, 42, 122, 0.1) 1px, transparent 1px);
+    radial-gradient(circle at 50% 50%, rgba(255, 42, 122, 0.16) 0%, rgba(20, 6, 32, 0.65) 70%, rgba(10, 3, 18, 0.95) 100%),
+    radial-gradient(rgba(255, 42, 122, 0.12) 1px, transparent 1px);
   background-size: 100% 100%, 14px 14px;
-  border: 1.5px solid rgba(255, 60, 150, 0.5);
-  box-shadow: 0 0 24px rgba(255, 42, 122, 0.25), inset 0 0 16px rgba(255, 42, 122, 0.15);
+  border: 1.8px solid rgba(255, 60, 150, 0.55);
+  box-shadow: 0 0 28px rgba(255, 42, 122, 0.3), inset 0 0 20px rgba(255, 42, 122, 0.2);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -2778,18 +2778,7 @@ html, body {
 }
 
 .radar-dist-tag {
-  position: absolute;
-  bottom: -8px;
-  background: rgba(18, 5, 28, 0.94);
-  border: 1px solid rgba(255, 60, 150, 0.45);
-  border-radius: 6px;
-  padding: 0px 5px;
-  font-size: 8.5px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.2px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-  white-space: nowrap;
+  display: none !important;
 }
 
 /* Center Point (User Heart) */
@@ -3209,6 +3198,10 @@ html, body {
   color: #e2e8f0;
 }
 
+.bronze-glow {
+  color: #f97316;
+}
+
 .plan-price {
   font-size: 16px;
   font-weight: 800;
@@ -3236,6 +3229,16 @@ html, body {
   color: #ffffff;
   font-size: 9px;
   font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.plan-badge-bronze {
+  background: rgba(249, 115, 22, 0.2);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+  color: #fb923c;
+  font-size: 9px;
+  font-weight: 800;
   padding: 2px 7px;
   border-radius: 6px;
 }
@@ -3284,6 +3287,12 @@ html, body {
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-ui);
+}
+
+.btn-tier-bronze {
+  background: linear-gradient(90deg, #ea580c 0%, #f97316 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);
 }
 
 .btn-tier-prata {
