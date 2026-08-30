@@ -231,6 +231,9 @@
             if (!u.avatar || u.avatar.includes('unsplash') || u.emailPhone === 'luisarlindo2@gmail.com' || u.username === 'luisarlindo') {
               u.avatar = '/images/avatars/luisarlindo.jpg';
               u.name = u.name || 'Luis Arlindo';
+              if (!u.location || u.location.includes('São Paulo')) {
+                u.location = 'Sousa, PB';
+              }
             }
             return u;
           }
@@ -245,7 +248,7 @@
         avatar: '/images/avatars/luisarlindo.jpg',
         intent: 'Conexões reais',
         bio: 'Apaixonado por tecnologia, viagens e música 🎸',
-        location: 'São Paulo, SP',
+        location: 'Sousa, PB',
         isOnline: true,
         followersCount: 320,
         followingCount: 180,
@@ -449,7 +452,7 @@
         avatar: '/images/avatars/luisarlindo.jpg',
         intent: 'Conexões reais',
         bio: 'Apaixonado por tecnologia, viagens e música 🎸',
-        location: 'São Paulo, SP',
+        location: 'Sousa, PB',
         isOnline: true,
         followersCount: 320,
         followingCount: 180,
@@ -484,7 +487,7 @@
         avatar: '/images/avatars/luisarlindo.jpg',
         intent: 'Relacionamento Sério',
         bio: 'Buscando conexões de verdade.',
-        location: 'São Paulo, SP',
+        location: 'Sousa, PB',
         isOnline: true,
         photos: []
       };
@@ -531,7 +534,7 @@
 
     if (heroAvatar) heroAvatar.src = currentUser.avatar || '/images/avatars/luisarlindo.jpg';
     if (heroName) heroName.textContent = `${currentUser.name || 'Luis'}, ${currentUser.age || 28}`;
-    if (heroLoc) heroLoc.textContent = currentUser.location || 'São Paulo, SP';
+    if (heroLoc) heroLoc.textContent = currentUser.location || 'Sousa, PB';
     if (heroIntent) heroIntent.innerHTML = `Em busca de <strong>${currentUser.intent || 'conexões reais'}</strong>`;
     if (heroBio) heroBio.textContent = currentUser.bio || 'Apaixonado por viagens e música 🎸';
 
@@ -545,7 +548,7 @@
     if (bioEl) bioEl.textContent = currentUser.bio || 'Adicione sua biografia...';
 
     const locEl = document.getElementById('profLocation');
-    if (locEl) locEl.textContent = `${currentUser.location || 'São Paulo, SP'} • No seu raio agora`;
+    if (locEl) locEl.textContent = `${currentUser.location || 'Sousa, PB'} • No seu raio agora`;
     
     const intentBadge = document.getElementById('profIntentBadge');
     if (intentBadge) {
@@ -707,8 +710,48 @@
   // ==========================================================================
   let userCoordinates = null;
 
+  function applyLocation(locString) {
+    if (!locString) return;
+    if (currentUser) {
+      currentUser.location = locString;
+      Storage.saveCurrentUser(currentUser);
+    }
+    const heroLoc = document.getElementById('heroProfileLocation');
+    if (heroLoc) heroLoc.textContent = locString;
+    const profLoc = document.getElementById('profLocation');
+    if (profLoc) profLoc.textContent = `${locString} • No seu raio agora`;
+  }
+
+  function reverseGeocode(lat, lon) {
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`)
+      .then(res => res.json())
+      .then(data => {
+        const addr = data.address || {};
+        const city = addr.city || addr.town || addr.municipality || addr.village || addr.county || 'Sousa';
+        const state = addr.state_code || (addr.state ? (addr.state === 'Paraíba' ? 'PB' : addr.state.substring(0, 2).toUpperCase()) : 'PB');
+        const loc = `${city}, ${state}`;
+        applyLocation(loc);
+      })
+      .catch(() => {});
+  }
+
+  function fetchIPLocation() {
+    fetch('https://ipapi.co/json/')
+      .then(r => r.json())
+      .then(data => {
+        if (data && data.city && data.region_code) {
+          const loc = `${data.city}, ${data.region_code}`;
+          applyLocation(loc);
+        }
+      })
+      .catch(() => {});
+  }
+
   function initGPSLocation() {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      fetchIPLocation();
+      return;
+    }
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -717,10 +760,12 @@
           longitude: pos.coords.longitude,
           accuracy: pos.coords.accuracy
         };
+        reverseGeocode(pos.coords.latitude, pos.coords.longitude);
         syncLocationWithServer();
       },
       (err) => {
         console.info('GPS fallback mode active:', err.message);
+        fetchIPLocation();
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
     );
