@@ -2382,7 +2382,7 @@
     animateParticles();
   }
 
-  // Delegated click handler for distance chips
+  // Delegated click handler for distance chips and modal close buttons
   document.addEventListener('click', (e) => {
     const chip = e.target.closest('.distance-chip');
     if (chip) {
@@ -2390,6 +2390,31 @@
       if (step !== null && step !== undefined) {
         setProximityStep(parseInt(step, 10));
       }
+      return;
+    }
+
+    const closeBtn = e.target.closest('.modal-close-btn');
+    if (closeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const modal = closeBtn.closest('.app-modal');
+      if (modal) {
+        modal.classList.remove('active');
+      }
+      return;
+    }
+
+    if (e.target.classList.contains('modal-backdrop')) {
+      const modal = e.target.closest('.app-modal');
+      if (modal) {
+        modal.classList.remove('active');
+      }
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.app-modal.active').forEach(m => m.classList.remove('active'));
     }
   });
 
