@@ -850,6 +850,7 @@
   function updateDiscreteSliderVisual(meters) {
     const slider = document.getElementById('rangeProximityRadius');
     const lblBig = document.getElementById('lblRadarDistanceValue');
+    const lblBadge = document.getElementById('lblRadarPlanBadge');
     const muralLbl = document.getElementById('muralRadiusText');
     const m = parseInt(meters, 10) || 5000;
     const idx = RADAR_STEPS.indexOf(m) >= 0 ? RADAR_STEPS.indexOf(m) : 3;
@@ -864,6 +865,37 @@
     if (lblBig) lblBig.textContent = formatted;
     if (muralLbl) muralLbl.textContent = formatted;
 
+    // Update Plan Badge in readout
+    if (lblBadge) {
+      if (m <= 5000) {
+        lblBadge.textContent = 'Grátis';
+        lblBadge.style.color = '#ff5294';
+      } else if (m <= 15000) {
+        lblBadge.textContent = 'Bronze 🥉';
+        lblBadge.style.color = '#cd7f32';
+      } else if (m <= 30000) {
+        lblBadge.textContent = 'Prata 🥈';
+        lblBadge.style.color = '#c0c0c0';
+      } else if (m <= 50000) {
+        lblBadge.textContent = 'Ouro 🥇';
+        lblBadge.style.color = '#fbbf24';
+      } else {
+        lblBadge.textContent = 'Platina 👑';
+        lblBadge.style.color = '#38bdf8';
+      }
+    }
+
+    // Update distance chips active states
+    document.querySelectorAll('.distance-chip').forEach(chip => {
+      const step = parseInt(chip.getAttribute('data-step'), 10);
+      if (step === idx) {
+        chip.classList.add('active-chip');
+      } else {
+        chip.classList.remove('active-chip');
+      }
+    });
+
+    // Update old discrete-tick if any exists
     document.querySelectorAll('.discrete-tick').forEach((pt, i) => {
       if (i === idx) {
         pt.classList.add('active-tick');
@@ -871,6 +903,14 @@
         pt.classList.remove('active-tick');
       }
     });
+  }
+
+  function stepRadarDistance(delta) {
+    const currentIdx = RADAR_STEPS.indexOf(currentRadius) >= 0 ? RADAR_STEPS.indexOf(currentRadius) : 3;
+    const targetIdx = Math.max(0, Math.min(RADAR_STEPS.length - 1, currentIdx + delta));
+    if (targetIdx !== currentIdx) {
+      setProximityStep(targetIdx);
+    }
   }
 
   function onRadiusStepInput(stepIndex) {
@@ -2358,6 +2398,7 @@
     switchProfileTab,
     setProximityRadius,
     setProximityStep,
+    stepRadarDistance,
     onRadiusStepInput,
     onRadiusStepChange,
     onRadiusSliderInput,

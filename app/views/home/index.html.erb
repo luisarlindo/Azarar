@@ -426,22 +426,37 @@
 
                   <!-- RADAR FOOTER CONTROLS -->
                   <div class="radar-controls-footer">
-                    <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.centerGPSLocation()" aria-label="Minha Localização GPS">
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                    <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.centerGPSLocation()" aria-label="Minha Localização GPS" title="Recentralizar GPS">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
                     </button>
 
-                    <div class="radar-distance-readout">
-                      <span class="radar-distance-big" id="lblRadarDistanceValue">5 km</span>
-                      <span class="radar-distance-caption">RAIO DE BUSCA</span>
+                    <!-- Interactive Stepper + Big Distance Display -->
+                    <div class="radar-distance-readout-wrap">
+                      <button type="button" class="radar-stepper-btn" onclick="window.azararApp.stepRadarDistance(-1)" aria-label="Diminuir Raio" title="Diminuir Raio">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      </button>
+                      
+                      <div class="radar-distance-readout">
+                        <div class="radar-distance-value-row">
+                          <span class="radar-distance-big" id="lblRadarDistanceValue">5 km</span>
+                          <span class="radar-plan-badge-pill" id="lblRadarPlanBadge">Grátis</span>
+                        </div>
+                        <span class="radar-distance-caption">RAIO DE BUSCA</span>
+                      </div>
+
+                      <button type="button" class="radar-stepper-btn" onclick="window.azararApp.stepRadarDistance(1)" aria-label="Aumentar Raio" title="Aumentar Raio">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      </button>
                     </div>
 
-                    <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.recalibrateRadar()" aria-label="Recalibrar Radar">
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
+                    <button type="button" class="radar-ctrl-icon-btn" onclick="window.azararApp.recalibrateRadar()" aria-label="Recalibrar Radar" title="Recalibrar Varredura">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="6" x2="12" y2="2"></line><line x1="12" y1="22" x2="12" y2="18"></line></svg>
                     </button>
                   </div>
 
-                  <!-- Perfectly Synchronized Discrete Range Slider Bar -->
+                  <!-- MODERN NEON DISTANCE SELECTOR -->
                   <div class="radar-slider-container">
+                    <!-- Glowing Interactive Slider -->
                     <div class="discrete-slider-wrapper">
                       <input
                         type="range"
@@ -453,18 +468,39 @@
                         value="3"
                         oninput="window.azararApp.onRadiusStepInput(this.value)"
                         onchange="window.azararApp.onRadiusStepChange(this.value)"
+                        aria-label="Ajustar Raio de Busca"
                       />
-                      <div class="discrete-scale-ticks">
-                        <span class="discrete-tick" style="left: 0%;" onclick="window.azararApp.setProximityStep(0)">500m</span>
-                        <span class="discrete-tick" style="left: 14.3%;" onclick="window.azararApp.setProximityStep(1)">1km</span>
-                        <span class="discrete-tick" style="left: 28.6%;" onclick="window.azararApp.setProximityStep(2)">2km</span>
-                        <span class="discrete-tick active-tick" style="left: 42.9%;" onclick="window.azararApp.setProximityStep(3)">5km</span>
-                        <span class="discrete-tick" style="left: 57.1%;" onclick="window.azararApp.setProximityStep(4)">15km</span>
-                        <span class="discrete-tick" style="left: 71.4%;" onclick="window.azararApp.setProximityStep(5)">30km</span>
-                        <span class="discrete-tick" style="left: 85.7%;" onclick="window.azararApp.setProximityStep(6)">50km</span>
-                        <span class="discrete-tick" style="left: 100%;" onclick="window.azararApp.setProximityStep(7)">100km</span>
+                      <div class="slider-minmax-labels">
+                        <span>500m</span>
+                        <span>100km</span>
                       </div>
                     </div>
+
+                    <!-- Touch-Friendly Distance Chips Grid -->
+                    <div class="radar-distance-chips-grid">
+                      <button type="button" class="distance-chip" data-step="0" onclick="window.azararApp.setProximityStep(0)">500m</button>
+                      <button type="button" class="distance-chip" data-step="1" onclick="window.azararApp.setProximityStep(1)">1km</button>
+                      <button type="button" class="distance-chip" data-step="2" onclick="window.azararApp.setProximityStep(2)">2km</button>
+                      <button type="button" class="distance-chip active-chip" data-step="3" onclick="window.azararApp.setProximityStep(3)">5km</button>
+                      <button type="button" class="distance-chip vip-chip bronze" data-step="4" onclick="window.azararApp.setProximityStep(4)">
+                        <span>15km</span>
+                        <span class="chip-vip-tag">🥉</span>
+                      </button>
+                      <button type="button" class="distance-chip vip-chip prata" data-step="5" onclick="window.azararApp.setProximityStep(5)">
+                        <span>30km</span>
+                        <span class="chip-vip-tag">🥈</span>
+                      </button>
+                      <button type="button" class="distance-chip vip-chip ouro" data-step="6" onclick="window.azararApp.setProximityStep(6)">
+                        <span>50km</span>
+                        <span class="chip-vip-tag">🥇</span>
+                      </button>
+                      <button type="button" class="distance-chip vip-chip platina" data-step="7" onclick="window.azararApp.setProximityStep(7)">
+                        <span>100km</span>
+                        <span class="chip-vip-tag">👑</span>
+                      </button>
+                    </div>
+
+                    <!-- Free/VIP Tier Notice Row -->
                     <div class="free-tier-notice-row">
                       <span class="free-limit-tag" id="lblPlanNotice">Plano Grátis: até 5km</span>
                       <button type="button" class="link-upgrade-inline" onclick="window.azararApp.openVipPlansModal()">Ver Planos até 100km ⭐</button>
