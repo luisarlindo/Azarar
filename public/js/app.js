@@ -847,31 +847,8 @@
     return `${meters}m`;
   }
 
-  function formatRingLabel(val) {
-    if (val >= 1000) {
-      const km = (val / 1000.0).toFixed(val % 1000 === 0 ? 0 : 1);
-      return `${km} km`;
-    }
-    return `${val} m`;
-  }
-
-  function calculateRadarDistanceLabels(meters) {
-    const max = parseInt(meters, 10) || 5000;
-    const outer = max;
-    const middle = Math.round(max / 2);
-    const inner = Math.round(max / 4);
-    return {
-      outer: formatRingLabel(outer),
-      middle: formatRingLabel(middle),
-      inner: formatRingLabel(inner)
-    };
-  }
-
   function updateDiscreteSliderVisual(meters) {
     const slider = document.getElementById('rangeProximityRadius');
-    const lblOuter = document.getElementById('lblRadarRingOuter');
-    const lblMiddle = document.getElementById('lblRadarRingMiddle');
-    const lblInner = document.getElementById('lblRadarRingInner');
     const lblBig = document.getElementById('lblRadarDistanceValue');
     const muralLbl = document.getElementById('muralRadiusText');
     const m = parseInt(meters, 10) || 5000;
@@ -886,11 +863,6 @@
     const formatted = formatRadiusLabel(m);
     if (lblBig) lblBig.textContent = formatted;
     if (muralLbl) muralLbl.textContent = formatted;
-
-    const ringLabels = calculateRadarDistanceLabels(m);
-    if (lblOuter) lblOuter.textContent = ringLabels.outer;
-    if (lblMiddle) lblMiddle.textContent = ringLabels.middle;
-    if (lblInner) lblInner.textContent = ringLabels.inner;
 
     document.querySelectorAll('.discrete-tick').forEach((pt, i) => {
       if (i === idx) {
@@ -987,7 +959,6 @@
           <p style="font-size: 8px; margin: 2px 0 0;">Aumente o raio</p>
         </div>
       `;
-      renderRadarDots([]);
       return;
     }
 
@@ -1002,41 +973,6 @@
           </div>
           <span class="mockup-online-name">${firstName}, ${u.age || 24}</span>
           <span class="mockup-online-badge">ON LINE</span>
-        </div>
-      `;
-    }).join('');
-
-    // Also render avatar dots on the radar scope
-    renderRadarDots(filtered);
-  }
-
-  // Render user avatar pins scattered on the radar scope circle
-  function renderRadarDots(users) {
-    const dotsContainer = document.getElementById('radarDotsContainer');
-    if (!dotsContainer) return;
-
-    if (!users || users.length === 0) {
-      dotsContainer.innerHTML = '';
-      return;
-    }
-
-    // Predefined positions for up to 6 dots (% of radar diameter, avoiding center)
-    const positions = [
-      { x: 25, y: 22 },
-      { x: 72, y: 28 },
-      { x: 18, y: 62 },
-      { x: 78, y: 58 },
-      { x: 35, y: 78 },
-      { x: 62, y: 72 }
-    ];
-
-    dotsContainer.innerHTML = users.slice(0, 6).map((u, i) => {
-      const pos = positions[i] || { x: 50 + (Math.random() * 30 - 15), y: 50 + (Math.random() * 30 - 15) };
-      const avatar = u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80';
-      return `
-        <div class="radar-user-dot" style="left: ${pos.x}%; top: ${pos.y}%;" onclick="window.azararApp.openDirectChat('${u.id}')" title="${u.name || 'Usuário'}">
-          <svg class="radar-dot-pin" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-          <img src="${avatar}" alt="${(u.name || 'Usuário').split(' ')[0]}" class="radar-dot-avatar" />
         </div>
       `;
     }).join('');
