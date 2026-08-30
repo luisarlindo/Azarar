@@ -235,6 +235,7 @@
                 u.location = 'Sousa, PB';
               }
             }
+            u.plan = u.plan || 'free';
             return u;
           }
         } catch(e) {}
@@ -250,6 +251,7 @@
         bio: 'Apaixonado por tecnologia, viagens e música 🎸',
         location: 'Sousa, PB',
         isOnline: true,
+        plan: 'free',
         followersCount: 320,
         followingCount: 180,
         photos: ['/images/avatars/luisarlindo.jpg']
@@ -306,6 +308,7 @@
       currentUser.avatar = '/images/avatars/luisarlindo.jpg';
       currentUser.name = currentUser.name || 'Luis Arlindo';
     }
+    currentUser.plan = currentUser.plan || 'free';
     Storage.saveCurrentUser(currentUser);
   }
   let currentRadius = 5000;
@@ -805,9 +808,23 @@
     ouro: 'Ouro VIP',
     platina: 'Platina Black'
   };
-  let currentVipPlan = 'free'; // 'free', 'bronze', 'prata', 'ouro', 'platina'
+  let currentVipPlan = (currentUser && currentUser.plan) ? currentUser.plan : 'free';
   let radarSpinTimeout = null;
   let radarIdleInterval = null;
+
+  function triggerLockFeedback(targetMeters) {
+    const lockMarker = document.getElementById('sliderLockMarker');
+    if (lockMarker) {
+      lockMarker.classList.remove('shake-lock');
+      void lockMarker.offsetWidth;
+      lockMarker.classList.add('shake-lock');
+    }
+    if (navigator.vibrate) navigator.vibrate([40, 60, 40]);
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
+    const reqMeters = targetMeters || maxAllowed;
+    showToast(`🔒 Raio de ${formatRadiusLabel(reqMeters)} disponível nos Planos VIP!`);
+    openVipPlansModal();
+  }
 
   function activateRadarSpin(seconds = 15) {
     const beam = document.getElementById('radarSweepBeam');
@@ -852,13 +869,29 @@
     const lblBig = document.getElementById('lblRadarDistanceValue');
     const lblBadge = document.getElementById('lblRadarPlanBadge');
     const muralLbl = document.getElementById('muralRadiusText');
-    const m = parseInt(meters, 10) || 5000;
+    const lockMarker = document.getElementById('sliderLockMarker');
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
+    const maxAllowedIdx = RADAR_STEPS.indexOf(maxAllowed);
+
+    const m = Math.min(parseInt(meters, 10) || 5000, maxAllowed);
     const idx = RADAR_STEPS.indexOf(m) >= 0 ? RADAR_STEPS.indexOf(m) : 3;
 
     if (slider) {
       slider.value = idx;
       const pct = (idx / (RADAR_STEPS.length - 1)) * 100;
       slider.style.setProperty('--slider-pct', `${pct}%`);
+    }
+
+    // Dynamic Position of Physical Lock Marker on Track
+    if (lockMarker) {
+      if (maxAllowedIdx >= 0 && maxAllowedIdx < RADAR_STEPS.length - 1) {
+        const lockPct = (maxAllowedIdx / (RADAR_STEPS.length - 1)) * 100;
+        lockMarker.style.display = 'flex';
+        lockMarker.style.left = `${lockPct}%`;
+        lockMarker.title = `Limite do Plano ${PLAN_NAMES[currentVipPlan]} (${formatRadiusLabel(maxAllowed)}) - Toque para liberar até 100km`;
+      } else {
+        lockMarker.style.display = 'none';
+      }
     }
 
     const formatted = formatRadiusLabel(m);
@@ -885,30 +918,50 @@
       }
     }
 
-    // Update distance chips active states
+    // Update distance chips active & locked states
     document.querySelectorAll('.distance-chip').forEach(chip => {
       const step = parseInt(chip.getAttribute('data-step'), 10);
+      const chipMeters = RADAR_STEPS[step] || 5000;
+
+      // Active state
       if (step === idx) {
         chip.classList.add('active-chip');
       } else {
         chip.classList.remove('active-chip');
       }
-    });
 
-    // Update old discrete-tick if any exists
-    document.querySelectorAll('.discrete-tick').forEach((pt, i) => {
-      if (i === idx) {
-        pt.classList.add('active-tick');
+      // Locked state if beyond current plan limit
+      if (chipMeters > maxAllowed) {
+        chip.classList.add('is-locked');
       } else {
-        pt.classList.remove('active-tick');
+        chip.classList.remove('is-locked');
       }
     });
+
+    // Update plan notice row
+    const limitTag = document.getElementById('lblPlanNotice') || document.querySelector('.free-limit-tag');
+    if (limitTag) {
+      if (currentVipPlan === 'free') {
+        limitTag.textContent = 'Plano Grátis: até 5km';
+      } else {
+        limitTag.innerHTML = `⭐ <strong>${PLAN_NAMES[currentVipPlan]}</strong>: até ${formatRadiusLabel(maxAllowed)}`;
+      }
+    }
   }
 
   function stepRadarDistance(delta) {
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
     const currentIdx = RADAR_STEPS.indexOf(currentRadius) >= 0 ? RADAR_STEPS.indexOf(currentRadius) : 3;
-    const targetIdx = Math.max(0, Math.min(RADAR_STEPS.length - 1, currentIdx + delta));
-    if (targetIdx !== currentIdx) {
+    const targetIdx = currentIdx + delta;
+
+    if (targetIdx >= RADAR_STEPS.length || RADAR_STEPS[targetIdx] > maxAllowed) {
+      if (delta > 0) {
+        triggerLockFeedback(RADAR_STEPS[Math.min(RADAR_STEPS.length - 1, targetIdx)]);
+      }
+      return;
+    }
+
+    if (targetIdx >= 0) {
       setProximityStep(targetIdx);
     }
   }
@@ -917,15 +970,20 @@
     const idx = parseInt(stepIndex, 10);
     const meters = RADAR_STEPS[idx] || 5000;
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
+    const slider = document.getElementById('rangeProximityRadius');
 
-    // Smoothly update the visual labels while sliding
+    if (meters > maxAllowed) {
+      const allowedIdx = RADAR_STEPS.indexOf(maxAllowed);
+      if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 3;
+      updateDiscreteSliderVisual(maxAllowed);
+      triggerLockFeedback(meters);
+      return;
+    }
+
+    currentRadius = meters;
     updateDiscreteSliderVisual(meters);
     activateRadarSpin(15);
-
-    if (meters <= maxAllowed) {
-      currentRadius = meters;
-      renderRadarUsers();
-    }
+    renderRadarUsers();
   }
 
   function onRadiusStepChange(stepIndex) {
@@ -934,15 +992,13 @@
     const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
 
     if (meters > maxAllowed) {
-      // Revert slider position smoothly and present VIP plans
       const allowedIdx = RADAR_STEPS.indexOf(maxAllowed);
       const slider = document.getElementById('rangeProximityRadius');
       if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 3;
       currentRadius = maxAllowed;
       updateDiscreteSliderVisual(maxAllowed);
       renderRadarUsers();
-      openVipPlansModal();
-      showToast(`🔒 Raio de ${formatRadiusLabel(meters)} disponível nos Planos VIP!`);
+      triggerLockFeedback(meters);
       return;
     }
 
@@ -958,6 +1014,14 @@
   function setProximityStep(stepIndex) {
     const idx = parseInt(stepIndex, 10);
     if (isNaN(idx) || idx < 0 || idx >= RADAR_STEPS.length) return;
+    const meters = RADAR_STEPS[idx] || 5000;
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
+
+    if (meters > maxAllowed) {
+      triggerLockFeedback(meters);
+      return;
+    }
+
     const slider = document.getElementById('rangeProximityRadius');
     if (slider) slider.value = idx;
     onRadiusStepChange(idx);
@@ -1127,15 +1191,27 @@
     // Automatically jump to the new plan's max radius so the user sees the immediate benefit!
     currentRadius = newMax;
 
-    // Update notice tag on home screen
-    const limitTag = document.getElementById('lblPlanNotice') || document.querySelector('.free-limit-tag');
-    if (limitTag) {
-      if (tierKey === 'free') {
-        limitTag.textContent = 'Plano Grátis: até 5km';
-      } else {
-        limitTag.innerHTML = `⭐ <strong>${tierName}</strong>: até ${formatRadiusLabel(newMax)}`;
-      }
+    if (currentUser) {
+      currentUser.plan = tierKey;
+      currentUser.planName = tierName;
+      currentUser.maxRadius = newMax;
+      Storage.saveCurrentUser(currentUser);
     }
+
+    // Persist subscription in Rails backend database
+    fetch('/api/v1/update_plan', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+      },
+      body: JSON.stringify({ plan_tier: tierKey, payment_method: 'manual' })
+    }).then(res => res.json()).then(data => {
+      if (data && data.success && data.plan) {
+        currentVipPlan = data.plan;
+        updateDiscreteSliderVisual(currentRadius);
+      }
+    }).catch(() => {});
 
     closeVipPlansModal();
     updateDiscreteSliderVisual(currentRadius);

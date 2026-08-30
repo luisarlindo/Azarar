@@ -11,7 +11,12 @@
     bio: current_user.bio,
     intent: current_user.intentions || "Relacionamento Sério",
     vibe: current_user.vibe || "🍹 No balcão do bar",
-    isOnline: current_user.online_now
+    isOnline: current_user.online_now,
+    plan: current_user.current_plan,
+    planName: current_user.plan_name,
+    planBadge: current_user.plan_badge,
+    maxRadius: current_user.max_radar_distance,
+    planExpiresAt: current_user.plan_expires_at&.iso8601
   }.to_json.html_safe : "null" %>;
 </script>
 
@@ -456,8 +461,11 @@
 
                   <!-- MODERN NEON DISTANCE SELECTOR -->
                   <div class="radar-slider-container">
-                    <!-- Glowing Interactive Slider -->
+                    <!-- Glowing Interactive Slider with Physical Plan Lock -->
                     <div class="discrete-slider-wrapper">
+                      <div class="slider-lock-marker" id="sliderLockMarker" style="left: 42.9%;" onclick="window.azararApp.openVipPlansModal()" title="Limite do Plano Grátis (5km) - Toque para liberar até 100km">
+                        <span class="slider-lock-icon">🔒</span>
+                      </div>
                       <input
                         type="range"
                         id="rangeProximityRadius"

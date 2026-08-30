@@ -2932,6 +2932,51 @@ html, body {
   gap: 4px;
 }
 
+/* Physical Plan Lock on Slider Track */
+.slider-lock-marker {
+  position: absolute;
+  top: -8px;
+  transform: translateX(-50%);
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease;
+}
+
+.slider-lock-marker:hover {
+  transform: translateX(-50%) scale(1.18);
+}
+
+.slider-lock-icon {
+  font-size: 11px;
+  background: rgba(20, 6, 32, 0.95);
+  border: 1.5px solid #f59e0b;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.8), 0 2px 6px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  line-height: 1;
+}
+
+.slider-lock-marker.shake-lock {
+  animation: lockShakeAnim 0.4s ease-in-out;
+}
+
+@keyframes lockShakeAnim {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  20% { transform: translateX(-60%) rotate(-12deg); }
+  40% { transform: translateX(-40%) rotate(12deg); }
+  60% { transform: translateX(-55%) rotate(-8deg); }
+  80% { transform: translateX(-45%) rotate(8deg); }
+}
+
 .proximity-range-slider {
   -webkit-appearance: none;
   width: 100%;
@@ -3037,6 +3082,20 @@ html, body {
 
 .distance-chip.vip-chip.active-chip {
   border-style: solid;
+}
+
+.distance-chip.is-locked {
+  opacity: 0.7;
+  border: 1px dashed rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.distance-chip.is-locked:hover {
+  opacity: 1;
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.14);
+  color: #fcd34d;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
 .chip-vip-tag {

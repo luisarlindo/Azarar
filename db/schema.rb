@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_26_060704) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_30_120000) do
   create_table "direct_messages", force: :cascade do |t|
     t.text "content", null: false
     t.datetime "created_at", null: false
@@ -53,6 +53,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_26_060704) do
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.string "gateway_transaction_id"
+    t.text "metadata"
+    t.string "payment_method", default: "manual"
+    t.string "plan_tier", default: "free", null: false
+    t.integer "price_cents", default: 0, null: false
+    t.datetime "starts_at"
+    t.string "status", default: "active", null: false
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.index ["gateway_transaction_id"], name: "index_subscriptions_on_gateway_transaction_id"
+    t.index ["user_id", "status"], name: "index_subscriptions_on_user_id_and_status"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "avatar_url"
     t.text "bio"
@@ -67,6 +84,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_26_060704) do
     t.string "name", null: false
     t.boolean "online_now", default: false, null: false
     t.string "password_digest", null: false
+    t.string "plan", default: "free", null: false
+    t.datetime "plan_expires_at"
     t.integer "radius_meters", default: 500, null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false
@@ -74,6 +93,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_26_060704) do
     t.datetime "verified_at"
     t.string "vibe", default: "🍹 No balcão do bar"
     t.index ["email_or_phone"], name: "index_users_on_email_or_phone", unique: true
+    t.index ["plan"], name: "index_users_on_plan"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
@@ -83,4 +103,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_26_060704) do
   add_foreign_key "likes", "users"
   add_foreign_key "mural_messages", "users"
   add_foreign_key "posts", "users"
+  add_foreign_key "subscriptions", "users"
 end

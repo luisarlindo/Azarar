@@ -24,6 +24,8 @@ Rails.application.routes.draw do
 
   resource :face_verification, only: [:create, :destroy]
 
+  resources :subscriptions, only: [:index, :create]
+
   namespace :api do
     namespace :v1 do
       post "verify_face", to: "/face_verifications#create"
@@ -31,6 +33,8 @@ Rails.application.routes.draw do
       post "face_login", to: "/sessions#face_login"
       post "update_location", to: "/locations#update"
       post "update_radius", to: "/locations#update_radius"
+      post "update_plan", to: "/subscriptions#create"
+      get "subscriptions", to: "/subscriptions#index"
       get "nearby_users", to: "/locations#nearby"
     end
   end
