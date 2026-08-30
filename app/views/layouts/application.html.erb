@@ -17,6 +17,10 @@
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/css/style.css?v=<%= Time.current.to_i %>" />
+
+  <!-- Leaflet.js (Map Radar) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 <body style="margin: 0 !important; padding: 0 !important; background-color: #07030e; overflow: hidden; height: 100dvh; width: 100vw;">
   <%= yield %>

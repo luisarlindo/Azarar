@@ -394,34 +394,36 @@
                     </button>
                   </div>
 
-                  <!-- RADAR DISPLAY VISUALIZER -->
+                  <!-- RADAR MAP VISUALIZER -->
                   <div class="radar-visualizer-container">
                     <div class="radar-scope-circle">
+                      <!-- Leaflet Map Background -->
+                      <div id="radarMapContainer" class="radar-map-bg"></div>
+
+                      <!-- Neon overlay on top of map -->
+                      <div class="radar-neon-overlay"></div>
+
+                      <!-- Grid axes -->
                       <div class="radar-grid-axis-h"></div>
                       <div class="radar-grid-axis-v"></div>
-                      <div class="radar-grid-axis-d1"></div>
-                      <div class="radar-grid-axis-d2"></div>
 
                       <!-- Smart 360-degree rotating pink sweep beam -->
                       <div class="radar-sweep-beam is-spinning" id="radarSweepBeam"></div>
 
-                      <!-- Outer Distance Ring (100% size) -->
+                      <!-- Outer Distance Ring -->
                       <div class="radar-ring radar-ring-outer">
                         <span class="radar-dist-tag" id="lblRadarRingOuter">1 km</span>
                       </div>
 
-                      <!-- Middle Distance Ring (60% size) -->
+                      <!-- Middle Distance Ring -->
                       <div class="radar-ring radar-ring-middle">
                         <span class="radar-dist-tag" id="lblRadarRingMiddle">500 m</span>
                       </div>
 
-                      <!-- Inner Distance Ring (30% size) -->
+                      <!-- Inner Distance Ring -->
                       <div class="radar-ring radar-ring-inner">
                         <span class="radar-dist-tag" id="lblRadarRingInner">250 m</span>
                       </div>
-
-                      <!-- User avatar dots on radar -->
-                      <div class="radar-dots-container" id="radarDotsContainer"></div>
 
                       <!-- Center Pulsing Heart (User's location) -->
                       <div class="radar-center-point">

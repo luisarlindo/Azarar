@@ -602,6 +602,7 @@
     if (tabId === 'radar') {
       activateRadarSpin(15);
       renderRadarUsers();
+      if (radarMap) setTimeout(() => radarMap.invalidateSize(), 200);
     }
     if (tabId === 'feed') renderLoungeVipMoments();
     if (tabId === 'likes') renderLikesTab();
@@ -631,12 +632,6 @@
         </div>
       </div>
     `).join('');
-  }
-
-  function centerGPSLocation() {
-    if (navigator.vibrate) navigator.vibrate(20);
-    showToast('📍 Localização GPS centralizada com sucesso!');
-    initGPSLocation();
   }
 
   function recalibrateRadar() {
@@ -742,9 +737,17 @@
         if (data && data.city && data.region_code) {
           const loc = `${data.city}, ${data.region_code}`;
           applyLocation(loc);
+          if (data.latitude && data.longitude && !userCoordinates) {
+            userCoordinates = { latitude: data.latitude, longitude: data.longitude };
+            initRadarMap();
+            updateRadarMapView();
+            renderRadarUsers();
+          }
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        initRadarMap();
+      });
   }
 
   function initGPSLocation() {
@@ -762,6 +765,9 @@
         };
         reverseGeocode(pos.coords.latitude, pos.coords.longitude);
         syncLocationWithServer();
+        initRadarMap();
+        updateRadarMapView();
+        renderRadarUsers();
       },
       (err) => {
         console.info('GPS fallback mode active:', err.message);
@@ -785,6 +791,143 @@
         radius_meters: currentRadius
       })
     }).catch(() => {});
+  }
+
+  // ==========================================================================
+  // 5B. RADAR MAP (Leaflet.js with Dark Tiles + Neon Overlay)
+  // ==========================================================================
+  let radarMap = null;
+  let radarMapMarkers = [];
+  let radarMapInitialized = false;
+
+  // Default coordinates: Sousa, PB
+  const DEFAULT_LAT = -6.7566;
+  const DEFAULT_LON = -38.2283;
+
+  function getRadarZoom(radiusMeters) {
+    if (radiusMeters <= 500) return 16;
+    if (radiusMeters <= 1000) return 15;
+    if (radiusMeters <= 2000) return 14;
+    if (radiusMeters <= 5000) return 13;
+    if (radiusMeters <= 15000) return 12;
+    if (radiusMeters <= 30000) return 11;
+    if (radiusMeters <= 50000) return 10;
+    return 9;
+  }
+
+  function initRadarMap() {
+    if (radarMapInitialized) return;
+    const container = document.getElementById('radarMapContainer');
+    if (!container || typeof L === 'undefined') return;
+
+    const lat = userCoordinates ? userCoordinates.latitude : DEFAULT_LAT;
+    const lon = userCoordinates ? userCoordinates.longitude : DEFAULT_LON;
+    const zoom = getRadarZoom(currentRadius);
+
+    radarMap = L.map(container, {
+      center: [lat, lon],
+      zoom: zoom,
+      zoomControl: false,
+      attributionControl: false,
+      dragging: false,
+      touchZoom: false,
+      doubleClickZoom: false,
+      scrollWheelZoom: false,
+      boxZoom: false,
+      keyboard: false,
+      tap: false
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(radarMap);
+
+    radarMapInitialized = true;
+
+    // Force a size recalculation after init
+    setTimeout(() => {
+      if (radarMap) radarMap.invalidateSize();
+    }, 300);
+  }
+
+  function updateRadarMapView() {
+    if (!radarMap) return;
+    const lat = userCoordinates ? userCoordinates.latitude : DEFAULT_LAT;
+    const lon = userCoordinates ? userCoordinates.longitude : DEFAULT_LON;
+    const zoom = getRadarZoom(currentRadius);
+    radarMap.setView([lat, lon], zoom, { animate: true });
+  }
+
+  function centerGPSLocation() {
+    if (radarMap && userCoordinates) {
+      radarMap.setView([userCoordinates.latitude, userCoordinates.longitude], getRadarZoom(currentRadius), { animate: true });
+      activateRadarSpin(15);
+      showToast('📍 Mapa centralizado na sua localização!');
+    } else {
+      showToast('📍 Buscando sua localização GPS...');
+      initGPSLocation();
+    }
+  }
+
+  function renderRadarMapMarkers(users) {
+    if (!radarMap) return;
+
+    // Clear existing markers
+    radarMapMarkers.forEach(m => radarMap.removeLayer(m));
+    radarMapMarkers = [];
+
+    if (!users || users.length === 0) return;
+
+    const centerLat = userCoordinates ? userCoordinates.latitude : DEFAULT_LAT;
+    const centerLon = userCoordinates ? userCoordinates.longitude : DEFAULT_LON;
+
+    users.slice(0, 8).forEach((u, i) => {
+      // Generate approximate position within the radius (privacy: ~100m randomization)
+      const angle = (i / Math.min(users.length, 8)) * 2 * Math.PI + (i * 0.7);
+      const distRatio = 0.25 + (((i * 37 + 13) % 17) / 17) * 0.6;
+      const distMeters = (u.distance || currentRadius * 0.5) * distRatio;
+      const latOffset = (distMeters / 111320) * Math.cos(angle);
+      const lonOffset = (distMeters / (111320 * Math.cos(centerLat * Math.PI / 180))) * Math.sin(angle);
+
+      const markerLat = centerLat + latOffset;
+      const markerLon = centerLon + lonOffset;
+
+      const firstName = (u.name || 'Usuário').split(' ')[0];
+      const avatar = u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80';
+      const dist = u.distance || Math.round(distMeters);
+      const distLabel = dist >= 1000 ? `${(dist / 1000).toFixed(1)} km` : `${dist}m`;
+
+      const icon = L.divIcon({
+        className: 'radar-leaflet-marker',
+        html: `<img src="${avatar}" class="radar-leaflet-avatar" alt="${firstName}" /><div class="radar-leaflet-pin"></div>`,
+        iconSize: [36, 44],
+        iconAnchor: [18, 44],
+        popupAnchor: [0, -46]
+      });
+
+      const marker = L.marker([markerLat, markerLon], { icon: icon }).addTo(radarMap);
+
+      const popupContent = `
+        <div class="radar-popup-card">
+          <img src="${avatar}" class="radar-popup-avatar" alt="${firstName}" />
+          <h4 class="radar-popup-name">${firstName}, ${u.age || 24}</h4>
+          <span class="radar-popup-distance">📍 a ${distLabel} de você</span>
+          <div class="radar-popup-actions">
+            <button class="radar-popup-btn radar-popup-btn-chat" onclick="window.azararApp.openDirectChat('${u.id}')">💬 Conversar</button>
+            <button class="radar-popup-btn radar-popup-btn-toast" onclick="window.azararApp.sendCheers('${u.id}')">🥂 Brindar</button>
+          </div>
+        </div>
+      `;
+
+      marker.bindPopup(popupContent, {
+        className: 'radar-popup',
+        maxWidth: 180,
+        closeButton: true
+      });
+
+      radarMapMarkers.push(marker);
+    });
   }
 
   // ==========================================================================
@@ -912,6 +1055,7 @@
 
     if (meters <= maxAllowed) {
       currentRadius = meters;
+      updateRadarMapView();
       renderRadarUsers();
     }
   }
@@ -928,6 +1072,7 @@
       if (slider) slider.value = allowedIdx >= 0 ? allowedIdx : 3;
       currentRadius = maxAllowed;
       updateDiscreteSliderVisual(maxAllowed);
+      updateRadarMapView();
       renderRadarUsers();
       openVipPlansModal();
       showToast(`🔒 Raio de ${formatRadiusLabel(meters)} disponível nos Planos VIP!`);
@@ -936,6 +1081,7 @@
 
     currentRadius = meters;
     updateDiscreteSliderVisual(currentRadius);
+    updateRadarMapView();
     activateRadarSpin(15);
     if (navigator.vibrate) navigator.vibrate(15);
     showToast(`📡 Raio atualizado para ${formatRadiusLabel(currentRadius)}`);
@@ -962,6 +1108,7 @@
     } else {
       currentRadius = m;
       updateDiscreteSliderVisual(currentRadius);
+      updateRadarMapView();
       renderRadarUsers();
     }
   }
@@ -969,6 +1116,8 @@
   function renderRadarUsers() {
     const container = document.getElementById('nearbyUsersList');
     if (!container) return;
+
+    initRadarMap();
 
     const users = Storage.getUsers();
     const filtered = users.filter(u => {
@@ -987,7 +1136,7 @@
           <p style="font-size: 8px; margin: 2px 0 0;">Aumente o raio</p>
         </div>
       `;
-      renderRadarDots([]);
+      renderRadarMapMarkers([]);
       return;
     }
 
@@ -1006,8 +1155,8 @@
       `;
     }).join('');
 
-    // Also render avatar dots on the radar scope
-    renderRadarDots(filtered);
+    // Render interactive markers on real Leaflet map
+    renderRadarMapMarkers(filtered);
   }
 
   // Render user avatar pins scattered on the radar scope circle
