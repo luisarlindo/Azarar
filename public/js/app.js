@@ -815,6 +815,7 @@
   function triggerLockFeedback(targetMeters) {
     const lockMarker = document.getElementById('sliderLockMarker');
     if (lockMarker) {
+      lockMarker.classList.add('is-visible');
       lockMarker.classList.remove('shake-lock');
       void lockMarker.offsetWidth;
       lockMarker.classList.add('shake-lock');
@@ -884,15 +885,26 @@
       slider.style.background = `linear-gradient(90deg, #ff1a72 0%, #ff2b88 ${pct}%, rgba(255, 255, 255, 0.12) ${pct}%, rgba(255, 255, 255, 0.12) 100%)`;
     }
 
-    // Dynamic Position of Physical Lock Marker on Track (Stays fixed at plan limit boundary)
+    // Dynamic Position of Physical Lock Marker on Track
+    // Appears ONLY when reaching the maximum allowed distance of the plan (e.g. 5km for Free)
     if (lockMarker) {
+      const lockTag = lockMarker.querySelector('.slider-lock-tag');
+      if (lockTag) {
+        lockTag.textContent = 'MAX';
+      }
+
       if (maxAllowedIdx >= 0 && maxAllowedIdx < RADAR_STEPS.length - 1) {
         const lockPct = (maxAllowedIdx / (RADAR_STEPS.length - 1)) * 100;
-        lockMarker.style.display = 'flex';
         lockMarker.style.left = `${lockPct}%`;
-        lockMarker.title = `Limite do Plano ${PLAN_NAMES[currentVipPlan]} (${formatRadiusLabel(maxAllowed)}) - Toque para liberar até 100km`;
+        lockMarker.title = `Limite Máximo do Plano ${PLAN_NAMES[currentVipPlan]} (${formatRadiusLabel(maxAllowed)}) - Toque para liberar até 100km`;
+
+        if (idx === maxAllowedIdx) {
+          lockMarker.classList.add('is-visible');
+        } else {
+          lockMarker.classList.remove('is-visible');
+        }
       } else {
-        lockMarker.style.display = 'none';
+        lockMarker.classList.remove('is-visible');
       }
     }
 
