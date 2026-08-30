@@ -1014,8 +1014,13 @@
     let nextMeters = currentRadius;
 
     if (delta > 0) {
-      if (currentRadius < 50) nextMeters = Math.min(50, currentRadius + 10);
-      else if (currentRadius < 1000) nextMeters = Math.min(1000, currentRadius + 50);
+      if (currentRadius >= maxAllowed) {
+        triggerLockFeedback(maxAllowed + 500);
+        return;
+      }
+      if (currentRadius < 50) nextMeters = Math.min(50, currentRadius + 5);
+      else if (currentRadius < 500) nextMeters = Math.min(500, currentRadius + 50);
+      else if (currentRadius < 1000) nextMeters = Math.min(1000, currentRadius + 100);
       else if (currentRadius < 5000) nextMeters = Math.min(5000, currentRadius + 100);
       else if (currentRadius < 15000) nextMeters = Math.min(15000, currentRadius + 500);
       else if (currentRadius < 50000) nextMeters = Math.min(50000, currentRadius + 1000);
@@ -1025,8 +1030,9 @@
       else if (currentRadius > 15000) nextMeters = Math.max(15000, currentRadius - 1000);
       else if (currentRadius > 5000) nextMeters = Math.max(5000, currentRadius - 500);
       else if (currentRadius > 1000) nextMeters = Math.max(1000, currentRadius - 100);
+      else if (currentRadius > 500) nextMeters = Math.max(500, currentRadius - 100);
       else if (currentRadius > 50) nextMeters = Math.max(50, currentRadius - 50);
-      else nextMeters = Math.max(5, currentRadius - 10);
+      else nextMeters = Math.max(5, currentRadius - 5);
     }
 
     if (nextMeters > maxAllowed) {
@@ -2531,8 +2537,18 @@
     animateParticles();
   }
 
-  // Delegated click handler for distance chips and modal close buttons
+  // Delegated click handler for distance chips, steppers, and modal close buttons
   document.addEventListener('click', (e) => {
+    const stepperBtn = e.target.closest('.radar-stepper-btn');
+    if (stepperBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const dirAttr = stepperBtn.getAttribute('data-step-dir');
+      const dir = dirAttr !== null ? parseInt(dirAttr, 10) : (stepperBtn.classList.contains('step-down') ? -1 : 1);
+      stepRadarDistance(dir);
+      return;
+    }
+
     const chip = e.target.closest('.distance-chip');
     if (chip) {
       const meters = chip.getAttribute('data-meters');

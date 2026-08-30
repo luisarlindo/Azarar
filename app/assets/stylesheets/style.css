@@ -2851,28 +2851,38 @@ html, body {
 }
 
 .radar-stepper-btn {
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  background: rgba(255, 60, 150, 0.15);
-  border: 1px solid rgba(255, 60, 150, 0.35);
-  color: #ff5294;
+  background: rgba(255, 60, 150, 0.16);
+  border: 1.5px solid rgba(255, 60, 150, 0.4);
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.18s ease;
+  pointer-events: auto;
+  transition: all 0.15s ease;
   flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  user-select: none;
+}
+
+.radar-stepper-btn svg {
+  pointer-events: none;
+  display: block;
 }
 
 .radar-stepper-btn:hover {
-  background: rgba(255, 60, 150, 0.3);
-  color: #ffffff;
-  transform: scale(1.1);
+  background: rgba(255, 42, 122, 0.4);
+  border-color: var(--primary-pink);
+  transform: scale(1.12);
+  box-shadow: 0 0 12px rgba(255, 42, 122, 0.7);
 }
 
 .radar-stepper-btn:active {
-  transform: scale(0.92);
+  transform: scale(0.9);
+  background: rgba(255, 42, 122, 0.7);
 }
 
 .radar-distance-readout {
