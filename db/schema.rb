@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_30_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_31_050000) do
+  create_table "checkins", force: :cascade do |t|
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "expires_at"
+    t.datetime "updated_at", null: false
+    t.integer "user_id", null: false
+    t.integer "venue_id", null: false
+    t.index ["user_id", "active"], name: "index_checkins_on_user_id_and_active"
+    t.index ["user_id"], name: "index_checkins_on_user_id"
+    t.index ["venue_id", "active"], name: "index_checkins_on_venue_id_and_active"
+    t.index ["venue_id"], name: "index_checkins_on_venue_id"
+  end
+
   create_table "direct_messages", force: :cascade do |t|
     t.text "content", null: false
     t.datetime "created_at", null: false
@@ -75,6 +88,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_30_120000) do
     t.text "bio"
     t.date "birthdate"
     t.datetime "created_at", null: false
+    t.integer "current_venue_id"
     t.string "email_or_phone", null: false
     t.text "face_scan_data"
     t.float "face_similarity_score"
@@ -92,11 +106,45 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_30_120000) do
     t.boolean "verified", default: false, null: false
     t.datetime "verified_at"
     t.string "vibe", default: "🍹 No balcão do bar"
+    t.index ["current_venue_id"], name: "index_users_on_current_venue_id"
     t.index ["email_or_phone"], name: "index_users_on_email_or_phone", unique: true
     t.index ["plan"], name: "index_users_on_plan"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "venues", force: :cascade do |t|
+    t.string "address"
+    t.string "category", default: "bar", null: false
+    t.integer "checkins_count", default: 0, null: false
+    t.string "city", default: "João Pessoa"
+    t.string "cover_image_url"
+    t.datetime "created_at", null: false
+    t.text "description"
+    t.text "gallery_images"
+    t.string "instagram"
+    t.boolean "is_partner", default: false, null: false
+    t.float "latitude"
+    t.string "logo_url"
+    t.float "longitude"
+    t.string "name", null: false
+    t.string "neighborhood"
+    t.string "opening_hours"
+    t.string "partner_tier", default: "organic", null: false
+    t.text "perk_description"
+    t.string "perk_title"
+    t.string "phone"
+    t.string "slug", null: false
+    t.string "state", default: "PB"
+    t.datetime "updated_at", null: false
+    t.datetime "verified_at"
+    t.string "vibe"
+    t.index ["is_partner", "partner_tier"], name: "index_venues_on_is_partner_and_partner_tier"
+    t.index ["latitude", "longitude"], name: "index_venues_on_latitude_and_longitude"
+    t.index ["slug"], name: "index_venues_on_slug", unique: true
+  end
+
+  add_foreign_key "checkins", "users"
+  add_foreign_key "checkins", "venues"
   add_foreign_key "direct_messages", "users", column: "recipient_id"
   add_foreign_key "direct_messages", "users", column: "sender_id"
   add_foreign_key "likes", "posts"

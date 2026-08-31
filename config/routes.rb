@@ -25,6 +25,11 @@ Rails.application.routes.draw do
   resource :face_verification, only: [:create, :destroy]
 
   resources :subscriptions, only: [:index, :create]
+  resources :venues, only: [:index, :show] do
+    member do
+      post :checkin
+    end
+  end
 
   namespace :api do
     namespace :v1 do
@@ -36,6 +41,9 @@ Rails.application.routes.draw do
       post "update_plan", to: "/subscriptions#create"
       get "subscriptions", to: "/subscriptions#index"
       get "nearby_users", to: "/locations#nearby"
+      get "venues", to: "/venues#index"
+      get "venues/:id", to: "/venues#show"
+      post "venues/:id/checkin", to: "/venues#checkin"
     end
   end
 end

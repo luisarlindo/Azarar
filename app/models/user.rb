@@ -9,6 +9,9 @@ class User < ApplicationRecord
   has_many :received_messages, class_name: "DirectMessage", foreign_key: :recipient_id, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_one :active_subscription, -> { where(status: "active").where("expires_at IS NULL OR expires_at > ?", Time.current).order(created_at: :desc) }, class_name: "Subscription"
+  belongs_to :current_venue, class_name: "Venue", optional: true
+  has_many :checkins, dependent: :destroy
+  has_many :visited_venues, through: :checkins, source: :venue
 
   PLANS = {
     "free" => { name: "Grátis", max_radius_meters: 5_000, price_cents: 0, badge: "Grátis" },

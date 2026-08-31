@@ -399,6 +399,30 @@
                     </button>
                   </div>
 
+                  <!-- RADAR SEARCH FILTER PILLS -->
+                  <div class="radar-filter-pill-bar" id="radarFilterPillBar">
+                    <button type="button" class="radar-filter-pill active" data-filter="all" onclick="window.azararApp.setRadarFilter('all')">
+                      <span class="pill-icon">✨</span>
+                      <span class="pill-label">Todos</span>
+                    </button>
+                    <button type="button" class="radar-filter-pill" data-filter="venues" onclick="window.azararApp.setRadarFilter('venues')">
+                      <span class="pill-icon">📍</span>
+                      <span class="pill-label">Locais & Points</span>
+                    </button>
+                    <button type="button" class="radar-filter-pill" data-filter="people" onclick="window.azararApp.setRadarFilter('people')">
+                      <span class="pill-icon">👥</span>
+                      <span class="pill-label">Pessoas</span>
+                    </button>
+                    <button type="button" class="radar-filter-pill" data-filter="bar" onclick="window.azararApp.setRadarFilter('bar')">
+                      <span class="pill-icon">🍸</span>
+                      <span class="pill-label">Bares</span>
+                    </button>
+                    <button type="button" class="radar-filter-pill" data-filter="beach" onclick="window.azararApp.setRadarFilter('beach')">
+                      <span class="pill-icon">🏖️</span>
+                      <span class="pill-label">Praia & Orla</span>
+                    </button>
+                  </div>
+
                   <!-- RADAR DISPLAY VISUALIZER -->
                   <div class="radar-visualizer-container">
                     <div class="radar-scope-circle">
@@ -418,6 +442,9 @@
 
                       <!-- Inner Distance Ring (30% size) -->
                       <div class="radar-ring radar-ring-inner"></div>
+
+                      <!-- Dynamic Venue Pins Layer (Hotspots & B2B Partners) -->
+                      <div class="radar-venue-pins-layer" id="radarVenuePinsContainer"></div>
 
                       <!-- Center Pulsing Heart (User's location) -->
                       <div class="radar-center-point">
@@ -1192,6 +1219,26 @@
           <button type="button" class="btn-primary btn-activate-boost" onclick="window.azararApp.activateFlashBoost()">
             🚀 Ativar Flash Boost Agora
           </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: DETALHES DO LOCAL & POINT (B2B & ORGÂNICO) -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalVenueDetails" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeVenueDetailsModal()"></div>
+      <div class="modal-card-sheet venue-details-sheet">
+        <div class="modal-header venue-sheet-header">
+          <div class="venue-header-badge-wrap" id="venueHeaderBadgeWrap">
+            <!-- Dynamically populated (e.g. ⭐ PARCEIRO OFICIAL AZARAR) -->
+          </div>
+          <button class="modal-close-btn" onclick="window.azararApp.closeVenueDetailsModal()">✕</button>
+        </div>
+
+        <!-- Venue Modal Scroll Body -->
+        <div class="venue-modal-scroll-body" id="venueModalScrollBody">
+          <!-- Dynamically populated via renderVenueModalContent(venue) -->
         </div>
       </div>
     </div>
