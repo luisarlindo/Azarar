@@ -4800,7 +4800,7 @@ html, body {
 }
 
 /* ==========================================================================
-   DYNAMIC VENUE PINS (HOTSPOTS & B2B SPONSORS ON RADAR)
+   DYNAMIC VENUE PINS (ANTI-COLLISION & TOUCH FRIENDLY ON RADAR)
    ========================================================================== */
 .radar-venue-pins-layer {
   position: absolute;
@@ -4809,7 +4809,7 @@ html, body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 5;
+  z-index: 25;
 }
 
 .radar-venue-pin {
@@ -4820,76 +4820,261 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 6;
+  z-index: 26;
+  user-select: none;
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .radar-venue-pin:hover {
-  transform: translate(-50%, -50%) scale(1.18);
-  z-index: 10;
+  transform: translate(-50%, -50%) scale(1.22);
+  z-index: 35;
 }
 
-.venue-pin-badge {
+.venue-pin-circle {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 0.2px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-  white-space: nowrap;
+  justify-content: center;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+.venue-pin-icon {
+  font-size: 15px;
+  line-height: 1;
+  display: block;
 }
 
 /* Gold Partner VIP Pin (e.g. Bar do Cuscuz) */
-.radar-venue-pin.is-gold-partner .venue-pin-badge {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.95) 0%, rgba(217, 119, 6, 0.95) 100%);
-  border: 1.5px solid #fde047;
-  color: #1a0b02;
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.85), 0 2px 8px rgba(0,0,0,0.5);
+.radar-venue-pin.is-gold-partner .venue-pin-circle {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  border: 1.8px solid #fde047;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.85), 0 2px 8px rgba(0, 0, 0, 0.5);
   animation: goldPinPulse 2.2s infinite ease-in-out;
 }
 
-.radar-venue-pin.is-gold-partner .venue-pin-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #fde047;
-  box-shadow: 0 0 8px #fde047;
-  margin-top: 2px;
+.radar-venue-pin.is-gold-partner .venue-pin-name-tag {
+  color: #fde047;
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.9), 0 1px 3px rgba(0, 0, 0, 0.9);
 }
 
 @keyframes goldPinPulse {
-  0%, 100% { box-shadow: 0 0 12px rgba(245, 158, 11, 0.6), 0 2px 8px rgba(0,0,0,0.5); }
-  50% { box-shadow: 0 0 24px rgba(245, 158, 11, 1), 0 0 8px #ffffff; }
+  0%, 100% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.6), 0 2px 6px rgba(0,0,0,0.5); }
+  50% { box-shadow: 0 0 22px rgba(245, 158, 11, 1), 0 0 8px #ffffff; }
 }
 
-/* Organic Venue Pin (e.g. Dona Branca, Posto Select, etc.) */
-.radar-venue-pin.is-organic .venue-pin-badge {
-  background: rgba(22, 10, 34, 0.88);
-  border: 1.2px solid rgba(255, 255, 255, 0.35);
+/* Organic Venue Pin (e.g. Dona Branca, Posto Select, Feirinha, Orla) */
+.radar-venue-pin.is-organic .venue-pin-circle {
+  background: rgba(22, 7, 34, 0.88);
+  border: 1.5px solid rgba(255, 60, 150, 0.6);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 8px rgba(255, 42, 122, 0.3);
+}
+
+.venue-pin-bubble-count {
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  background: #ff2a7a;
   color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-.radar-venue-pin.is-organic .venue-pin-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--primary-pink);
-  box-shadow: 0 0 6px var(--primary-pink);
-  margin-top: 2px;
-}
-
-.venue-pin-count-tag {
-  background: rgba(0, 0, 0, 0.35);
+  font-size: 8px;
+  font-weight: 900;
   padding: 1px 4px;
-  border-radius: 6px;
+  border-radius: 999px;
+  border: 1px solid #ffffff;
+  box-shadow: 0 0 6px rgba(255, 42, 122, 0.8);
+  line-height: 1.1;
+  min-width: 15px;
+  text-align: center;
+}
+
+.radar-venue-pin.is-gold-partner .venue-pin-bubble-count {
+  background: #1e1b4b;
+  color: #fde047;
+  border-color: #fde047;
+  box-shadow: 0 0 6px rgba(253, 224, 71, 0.8);
+}
+
+.venue-pin-name-tag {
   font-size: 8.5px;
-  margin-left: 2px;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  max-width: 72px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+  background: rgba(10, 3, 18, 0.75);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+/* ==========================================================================
+   RADAR FILTERS MODAL (SETTINGS & ADVANCED CATEGORIES)
+   ========================================================================== */
+.radar-filters-sheet {
+  max-width: 440px;
+}
+
+.radar-filters-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 6px 0 12px;
+}
+
+.filter-section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--primary-pink);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-options-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.filter-options-grid.three-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.filter-select-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-select-btn .f-icon {
+  font-size: 16px;
+}
+
+.filter-select-btn:hover {
+  background: rgba(255, 42, 122, 0.15);
+  border-color: rgba(255, 42, 122, 0.4);
+  color: #ffffff;
+}
+
+.filter-select-btn.active {
+  background: linear-gradient(135deg, rgba(255, 42, 122, 0.3) 0%, rgba(255, 90, 160, 0.2) 100%);
+  border-color: var(--primary-pink);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 42, 122, 0.4);
+}
+
+.filter-subcategories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px 12px;
+}
+
+.filter-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 12px;
+  color: #f1f5f9;
+  font-weight: 600;
+  transition: opacity 0.15s ease;
+}
+
+.filter-checkbox-item:hover {
+  opacity: 0.9;
+}
+
+.filter-checkbox-item input[type="checkbox"] {
+  display: none;
+}
+
+.chk-box-custom {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.filter-checkbox-item input[type="checkbox"]:checked + .chk-box-custom {
+  background: var(--primary-pink);
+  border-color: var(--primary-pink);
+  box-shadow: 0 0 8px rgba(255, 42, 122, 0.6);
+}
+
+.filter-checkbox-item input[type="checkbox"]:checked + .chk-box-custom::after {
+  content: '✓';
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.filter-vibe-btn {
+  padding: 8px 6px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-vibe-btn:hover {
+  background: rgba(255, 42, 122, 0.15);
+  color: #ffffff;
+}
+
+.filter-vibe-btn.active {
+  background: rgba(255, 42, 122, 0.3);
+  border-color: var(--primary-pink);
+  color: #ffffff;
+}
+
+.btn-apply-filters {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  margin-top: 6px;
 }
 
 /* ==========================================================================

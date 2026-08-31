@@ -1245,8 +1245,18 @@
     }
   ];
 
+  const VENUE_SECTORS = {
+    'bar-do-cuscuz': { angle: 38, baseDistPct: 0.58 },
+    'dona-branca': { angle: 135, baseDistPct: 0.74 },
+    'orla-cabo-branco': { angle: 220, baseDistPct: 0.48 },
+    'posto-select-beira-rio': { angle: 300, baseDistPct: 0.66 },
+    'feirinha-de-tambau': { angle: 358, baseDistPct: 0.36 }
+  };
+
   let currentRadarFilter = 'all';
   let cachedVenues = [...INITIAL_VENUES];
+  let selectedVenueCategories = ['bar', 'beach', 'convenience', 'nightclub', 'restaurant'];
+  let selectedVibeFilter = 'all';
 
   function setRadarFilter(filterType) {
     currentRadarFilter = filterType || 'all';
@@ -1260,6 +1270,64 @@
 
     renderRadarUsers();
     renderVenuePins();
+  }
+
+  function openRadarFiltersModal() {
+    const modal = document.getElementById('modalRadarFilters');
+    if (modal) {
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function closeRadarFiltersModal() {
+    const modal = document.getElementById('modalRadarFilters');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function selectRadarDisplayType(type) {
+    currentRadarFilter = type || 'all';
+    document.querySelectorAll('.filter-select-btn').forEach(btn => {
+      if (btn.getAttribute('data-filter-type') === currentRadarFilter) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    document.querySelectorAll('.radar-filter-pill').forEach(btn => {
+      if (btn.getAttribute('data-filter') === currentRadarFilter) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  function onVenueCategoryToggle() {
+    const checked = Array.from(document.querySelectorAll('.venue-cat-chk:checked')).map(el => el.value);
+    selectedVenueCategories = checked;
+  }
+
+  function selectVibeFilter(vibe) {
+    selectedVibeFilter = vibe || 'all';
+    document.querySelectorAll('.filter-vibe-btn').forEach(btn => {
+      if (btn.getAttribute('data-vibe') === selectedVibeFilter) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  function applyRadarFilters() {
+    closeRadarFiltersModal();
+    renderRadarUsers();
+    renderVenuePins();
+    showToast('🎯 Filtros do Radar aplicados!');
   }
 
   function renderVenuePins() {
@@ -1276,6 +1344,8 @@
       venues = venues.filter(v => v.category === 'bar');
     } else if (currentRadarFilter === 'beach') {
       venues = venues.filter(v => v.category === 'beach');
+    } else if (selectedVenueCategories && selectedVenueCategories.length > 0) {
+      venues = venues.filter(v => selectedVenueCategories.includes(v.category));
     }
 
     // Filter within current radar radius
@@ -1286,30 +1356,29 @@
       return;
     }
 
-    // Render pins at realistic polar coordinates on the radar scope
+    // Anti-collision radial sector positioning
     container.innerHTML = filteredVenues.map((v, i) => {
       const isGold = v.is_partner && v.partner_tier === 'gold_partner';
-      // Deterministic angle and distance from center
-      const hash = (v.slug || v.name || '').split('').reduce((acc, c) => acc + c.charCodeAt(0), 0) + (i * 47);
-      const angle = (hash * 61) % 360;
+      const sector = VENUE_SECTORS[v.slug] || { angle: (i * 72) % 360, baseDistPct: 0.5 };
+      const angle = sector.angle;
+      
       const distRatio = Math.min(1, Math.max(0.25, (v.distance || 500) / Math.max(currentRadius, 10)));
-      const distPct = 28 + distRatio * 56; // between 28% and 84% from center
+      const distPct = 28 + distRatio * 52; // cleanly bounded between 28% and 80% from center
       
       const rad = (angle * Math.PI) / 180;
       const x = (50 + (distPct / 2) * Math.cos(rad)).toFixed(1);
       const y = (50 + (distPct / 2) * Math.sin(rad)).toFixed(1);
 
       const partnerClass = isGold ? 'is-gold-partner' : 'is-organic';
-      const iconPrefix = isGold ? '⭐' : (v.category === 'bar' ? '🍸' : (v.category === 'beach' ? '🏖️' : '📍'));
+      const iconPrefix = isGold ? '⭐' : (v.category === 'bar' ? '🍸' : (v.category === 'beach' ? '🏖️' : (v.category === 'convenience' ? '⛽' : '📍')));
 
       return `
-        <div class="radar-venue-pin ${partnerClass}" style="left: ${x}%; top: ${y}%;" onclick="window.azararApp.openVenueDetailsModal('${v.id}')" title="${v.name} (${formatRadiusLabel(v.distance || 0)})">
-          <div class="venue-pin-badge">
-            <span>${iconPrefix}</span>
-            <span>${v.name.split(' ')[0]}</span>
-            <span class="venue-pin-count-tag">${v.checkins_count || 12}</span>
+        <div class="radar-venue-pin ${partnerClass}" data-venue-id="${v.id}" style="left: ${x}%; top: ${y}%;" onclick="window.azararApp.openVenueDetailsModal('${v.id}')" title="${v.name} (${formatRadiusLabel(v.distance || 0)})">
+          <div class="venue-pin-circle">
+            <span class="venue-pin-icon">${iconPrefix}</span>
+            <span class="venue-pin-bubble-count">${v.checkins_count || 12}</span>
           </div>
-          <span class="venue-pin-dot"></span>
+          <span class="venue-pin-name-tag">${v.name.split(' (')[0]}</span>
         </div>
       `;
     }).join('');
@@ -1430,7 +1499,7 @@
   }
 
   function performVenueCheckin(venueId) {
-    const venue = cachedVenues.find(v => String(v.id) === String(venueId)) || cachedVenues[0];
+    const venue = cachedVenues.find(v => String(v.id) === String(venueId) || v.slug === String(venueId)) || cachedVenues[0];
     if (!venue) return;
 
     venue.checkins_count = (venue.checkins_count || 0) + 1;
@@ -2868,8 +2937,26 @@
     animateParticles();
   }
 
-  // Delegated click handler for distance chips, steppers, and modal close buttons
+  // Delegated click handler for distance chips, steppers, venue pins, filters, and modal close buttons
   document.addEventListener('click', (e) => {
+    const venuePin = e.target.closest('.radar-venue-pin');
+    if (venuePin) {
+      e.preventDefault();
+      e.stopPropagation();
+      const vId = venuePin.getAttribute('data-venue-id');
+      if (vId) openVenueDetailsModal(vId);
+      return;
+    }
+
+    const filterPill = e.target.closest('.radar-filter-pill');
+    if (filterPill) {
+      e.preventDefault();
+      e.stopPropagation();
+      const fType = filterPill.getAttribute('data-filter');
+      if (fType) setRadarFilter(fType);
+      return;
+    }
+
     const stepperBtn = e.target.closest('.radar-stepper-btn');
     if (stepperBtn) {
       e.preventDefault();
@@ -2899,6 +2986,7 @@
       const modal = closeBtn.closest('.app-modal');
       if (modal) {
         modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
       }
       return;
     }
@@ -2907,13 +2995,17 @@
       const modal = e.target.closest('.app-modal');
       if (modal) {
         modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
       }
     }
   });
 
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      document.querySelectorAll('.app-modal.active').forEach(m => m.classList.remove('active'));
+      document.querySelectorAll('.app-modal.active').forEach(m => {
+        m.classList.remove('active');
+        m.setAttribute('aria-hidden', 'true');
+      });
     }
   });
 
@@ -2995,6 +3087,12 @@
     centerGPSLocation,
     recalibrateRadar,
     setRadarFilter,
+    openRadarFiltersModal,
+    closeRadarFiltersModal,
+    selectRadarDisplayType,
+    onVenueCategoryToggle,
+    selectVibeFilter,
+    applyRadarFilters,
     openVenueDetailsModal,
     closeVenueDetailsModal,
     performVenueCheckin,

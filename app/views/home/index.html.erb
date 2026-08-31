@@ -391,10 +391,10 @@
                       </div>
                     </div>
 
-                    <button type="button" class="radar-filter-btn" onclick="window.azararApp.openVipPlansModal()" aria-label="Planos VIP &amp; Filtros" title="Ver Planos VIP">
+                    <button type="button" class="radar-filter-btn" onclick="window.azararApp.openRadarFiltersModal()" aria-label="Filtros e Configurações do Radar" title="Filtros e Configurações do Radar">
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                         <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06-.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                       </svg>
                     </button>
                   </div>
@@ -1218,6 +1218,87 @@
           </div>
           <button type="button" class="btn-primary btn-activate-boost" onclick="window.azararApp.activateFlashBoost()">
             🚀 Ativar Flash Boost Agora
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: FILTROS & CONFIGURAÇÕES DO RADAR     -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalRadarFilters" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeRadarFiltersModal()"></div>
+      <div class="modal-card-sheet radar-filters-sheet">
+        <div class="modal-header">
+          <h3 class="modal-title">⚙️ Filtros do Radar</h3>
+          <button class="modal-close-btn" onclick="window.azararApp.closeRadarFiltersModal()">✕</button>
+        </div>
+
+        <div class="radar-filters-body">
+          <!-- 1. O que exibir no Radar -->
+          <div class="filter-section-group">
+            <label class="filter-group-label">Exibir no Radar</label>
+            <div class="filter-options-grid three-cols">
+              <button type="button" class="filter-select-btn active" id="fBtnAll" onclick="window.azararApp.selectRadarDisplayType('all')">
+                <span class="f-icon">✨</span>
+                <span>Tudo</span>
+              </button>
+              <button type="button" class="filter-select-btn" id="fBtnVenues" onclick="window.azararApp.selectRadarDisplayType('venues')">
+                <span class="f-icon">📍</span>
+                <span>Locais</span>
+              </button>
+              <button type="button" class="filter-select-btn" id="fBtnPeople" onclick="window.azararApp.selectRadarDisplayType('people')">
+                <span class="f-icon">👥</span>
+                <span>Pessoas</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Sub-categorias de Locais & Points -->
+          <div class="filter-section-group" id="groupVenueSubCategories">
+            <label class="filter-group-label">Tipos de Estabelecimentos & Points</label>
+            <div class="filter-subcategories-list">
+              <label class="filter-checkbox-item">
+                <input type="checkbox" class="venue-cat-chk" value="bar" checked onchange="window.azararApp.onVenueCategoryToggle()" />
+                <span class="chk-box-custom"></span>
+                <span class="chk-label">🍸 Bares & Petiscos</span>
+              </label>
+              <label class="filter-checkbox-item">
+                <input type="checkbox" class="venue-cat-chk" value="beach" checked onchange="window.azararApp.onVenueCategoryToggle()" />
+                <span class="chk-box-custom"></span>
+                <span class="chk-label">🏖️ Praias, Orla & Quiosques</span>
+              </label>
+              <label class="filter-checkbox-item">
+                <input type="checkbox" class="venue-cat-chk" value="convenience" checked onchange="window.azararApp.onVenueCategoryToggle()" />
+                <span class="chk-box-custom"></span>
+                <span class="chk-label">⛽ Postos & Esquenta de Balada</span>
+              </label>
+              <label class="filter-checkbox-item">
+                <input type="checkbox" class="venue-cat-chk" value="nightclub" checked onchange="window.azararApp.onVenueCategoryToggle()" />
+                <span class="chk-box-custom"></span>
+                <span class="chk-label">🔥 Baladas, Lounges & Música ao Vivo</span>
+              </label>
+              <label class="filter-checkbox-item">
+                <input type="checkbox" class="venue-cat-chk" value="restaurant" checked onchange="window.azararApp.onVenueCategoryToggle()" />
+                <span class="chk-box-custom"></span>
+                <span class="chk-label">🍽️ Restaurantes & Gastronomia</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. Filtro de Vibes das Pessoas -->
+          <div class="filter-section-group" id="groupPeopleVibes">
+            <label class="filter-group-label">Filtrar Pessoas por Vibe</label>
+            <div class="filter-options-grid three-cols">
+              <button type="button" class="filter-vibe-btn active" data-vibe="all" onclick="window.azararApp.selectVibeFilter('all')">Todas</button>
+              <button type="button" class="filter-vibe-btn" data-vibe="romance" onclick="window.azararApp.selectVibeFilter('romance')">💖 Romance</button>
+              <button type="button" class="filter-vibe-btn" data-vibe="festa" onclick="window.azararApp.selectVibeFilter('festa')">🔥 Balada</button>
+            </div>
+          </div>
+
+          <!-- Botão Aplicar -->
+          <button type="button" class="btn-primary btn-apply-filters" onclick="window.azararApp.applyRadarFilters()">
+            Aplicar Filtros 🎯
           </button>
         </div>
       </div>
