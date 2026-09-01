@@ -6228,7 +6228,7 @@ html, body {
 
 .az-dashboard-grid {
   display: grid !important;
-  grid-template-columns: 0.85fr 1.65fr !important;
+  grid-template-columns: 0.99fr 1.6fr !important;
   gap: 8px !important;
   width: 100% !important;
   padding: 8px 8px 90px !important;
@@ -6239,7 +6239,7 @@ html, body {
 .az-col-left {
   display: flex !important;
   flex-direction: column !important;
-  gap: 7px !important;
+  gap: 8px !important;
   min-width: 0 !important;
   width: 100% !important;
 }
@@ -6285,7 +6285,7 @@ html, body {
 }
 
 .az-card-title-text {
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 800;
   color: #94a3b8;
   letter-spacing: 0.5px;
@@ -6294,24 +6294,24 @@ html, body {
 }
 
 .az-col-right .az-card-title-text {
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.6px;
 }
 
 /* ==========================================================================
-   LEFT COLUMN (PROPORTIONALLY REDUCED & COMPACT)
+   LEFT COLUMN (PROPORTION 0.99fr & ENHANCED FONTS)
    ========================================================================== */
 
 /* 1. Profile Card */
 .az-profile-card {
-  padding: 5px !important;
+  padding: 6px !important;
 }
 
 .az-profile-photo-wrap {
   position: relative;
   width: 100%;
-  height: 135px;
-  border-radius: 9px;
+  height: 150px;
+  border-radius: 10px;
   overflow: hidden;
   background: #0f172a;
 }
@@ -6326,10 +6326,10 @@ html, body {
 
 .az-btn-photo-edit {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: rgba(13, 20, 40, 0.75);
   backdrop-filter: blur(6px);
@@ -6350,37 +6350,37 @@ html, body {
 
 .az-verified-pill {
   position: absolute;
-  bottom: 5px;
-  left: 5px;
+  bottom: 6px;
+  left: 6px;
   display: inline-flex;
   align-items: center;
-  gap: 2.5px;
-  padding: 2px 5px;
+  gap: 3px;
+  padding: 2.5px 6px;
   border-radius: 999px;
   background: rgba(10, 25, 20, 0.88);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(34, 197, 94, 0.5);
   color: #22c55e;
-  font-size: 6.5px;
+  font-size: 7.5px;
   font-weight: 800;
-  letter-spacing: 0.2px;
+  letter-spacing: 0.3px;
 }
 
 .az-profile-info-body {
-  padding: 5px 2px 2px;
+  padding: 6px 2px 2px;
   display: flex;
   flex-direction: column;
-  gap: 1.5px;
+  gap: 2px;
 }
 
 .az-name-row {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
 }
 
 .az-profile-name {
-  font-size: 11.5px;
+  font-size: 13.5px;
   font-weight: 900;
   color: #ffffff;
   margin: 0;
@@ -6393,7 +6393,7 @@ html, body {
 }
 
 .az-profile-occupation {
-  font-size: 7.5px;
+  font-size: 9px;
   color: #94a3b8;
   white-space: nowrap;
   overflow: hidden;
@@ -6401,26 +6401,26 @@ html, body {
 }
 
 .az-profile-bio-quote {
-  font-size: 7px;
+  font-size: 8.5px;
   color: #cbd5e1;
-  line-height: 1.3;
+  line-height: 1.35;
   margin-top: 2px;
 }
 
 /* 2. Radar Card */
 .az-radar-card {
-  padding: 6px 5px !important;
+  padding: 7px 6px !important;
 }
 
 .az-radius-pill-badge {
   display: inline-flex;
   align-items: center;
-  padding: 2px 5px;
+  padding: 2.5px 6px;
   border-radius: 999px;
   background: rgba(139, 92, 246, 0.2);
   border: 1px solid rgba(139, 92, 246, 0.45);
   color: #c084fc;
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -6435,17 +6435,17 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3px 0;
+  padding: 4px 0;
 }
 
 .az-radar-scope-circle {
-  width: 110px;
-  height: 110px;
+  width: 124px;
+  height: 124px;
   border-radius: 50%;
   position: relative;
   background: radial-gradient(circle, rgba(16, 32, 68, 0.55) 0%, rgba(7, 12, 26, 0.98) 75%);
   border: 1px solid rgba(59, 130, 246, 0.35);
-  box-shadow: 0 0 14px rgba(59, 130, 246, 0.15), inset 0 0 14px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.15), inset 0 0 16px rgba(59, 130, 246, 0.1);
   overflow: hidden;
 }
 
@@ -6476,18 +6476,18 @@ html, body {
   border: 1px solid rgba(59, 130, 246, 0.22);
 }
 
-.az-ring-1 { width: 28px; height: 28px; }
-.az-ring-2 { width: 56px; height: 56px; }
-.az-ring-3 { width: 84px; height: 84px; }
-.az-ring-4 { width: 108px; height: 108px; }
+.az-ring-1 { width: 31px; height: 31px; }
+.az-ring-2 { width: 62px; height: 62px; }
+.az-ring-3 { width: 93px; height: 93px; }
+.az-ring-4 { width: 120px; height: 120px; }
 
 .az-radar-center-core {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6496,8 +6496,8 @@ html, body {
 
 .az-core-glow-pulse {
   position: absolute;
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: rgba(56, 189, 248, 0.4);
   animation: corePulse 2s infinite ease-out;
@@ -6509,11 +6509,11 @@ html, body {
 }
 
 .az-core-dot {
-  width: 5px;
-  height: 5px;
+  width: 5.5px;
+  height: 5.5px;
   border-radius: 50%;
   background: #38bdf8;
-  box-shadow: 0 0 6px #38bdf8;
+  box-shadow: 0 0 7px #38bdf8;
 }
 
 .az-radar-sweep-beam {
@@ -6535,21 +6535,21 @@ html, body {
 
 /* 3. Nearby List */
 .az-nearby-card {
-  padding: 6px 5px !important;
+  padding: 7px 6px !important;
 }
 
 .az-nearby-vertical-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
 }
 
 .az-nearby-row {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 5px;
-  border-radius: 7px;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 8px;
   background: rgba(16, 24, 48, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.04);
   cursor: pointer;
@@ -6563,8 +6563,8 @@ html, body {
 }
 
 .az-nearby-avatar-wrap {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   position: relative;
   flex-shrink: 0;
@@ -6582,8 +6582,8 @@ html, body {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #22c55e;
   border: 1px solid #0d1428;
@@ -6595,36 +6595,36 @@ html, body {
 }
 
 .az-nearby-name {
-  font-size: 8px;
+  font-size: 9.5px;
   font-weight: 800;
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 2.5px;
+  gap: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.az-status-dot.green { color: #22c55e; font-size: 5px; }
-.az-status-dot.pink { color: #ec4899; font-size: 5px; }
-.az-status-dot.cyan { color: #38bdf8; font-size: 5px; }
+.az-status-dot.green { color: #22c55e; font-size: 5.5px; }
+.az-status-dot.pink { color: #ec4899; font-size: 5.5px; }
+.az-status-dot.cyan { color: #38bdf8; font-size: 5.5px; }
 
 .az-status-text {
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 600;
   color: #94a3b8;
 }
 
 .az-nearby-dist {
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
   color: #64748b;
   flex-shrink: 0;
 }
 
 /* ==========================================================================
-   RIGHT COLUMN (ENLARGED & READABLE FONTS)
+   RIGHT COLUMN (ENLARGED & HIGH-LEGIBILITY FONTS)
    ========================================================================== */
 
 /* 4. Hero Banner */
@@ -6648,7 +6648,7 @@ html, body {
 }
 
 .az-banner-sublabel {
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 800;
   letter-spacing: 0.7px;
   color: #94a3b8;
@@ -6656,10 +6656,10 @@ html, body {
 }
 
 .az-banner-headline {
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 900;
   color: #ffffff;
-  line-height: 1.22;
+  line-height: 1.25;
   margin: 2px 0 3px;
 }
 
@@ -6670,9 +6670,9 @@ html, body {
 }
 
 .az-banner-desc {
-  font-size: 8.5px;
+  font-size: 9.5px;
   color: #94a3b8;
-  line-height: 1.35;
+  line-height: 1.4;
   margin-bottom: 6px;
 }
 
@@ -6681,12 +6681,12 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 999px;
   background: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #f43f5e 100%);
   border: none;
   color: #ffffff;
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 800;
   letter-spacing: 0.4px;
   cursor: pointer;
@@ -6700,8 +6700,8 @@ html, body {
 }
 
 .az-banner-art-wrap {
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -6727,7 +6727,7 @@ html, body {
 .az-heart-pedestal {
   position: absolute;
   bottom: 2px;
-  width: 36px;
+  width: 38px;
   height: 6px;
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(236, 72, 153, 0.6) 0%, transparent 70%);
@@ -6735,12 +6735,12 @@ html, body {
 
 /* 5. Stats 4-col Card */
 .az-dropdown-pill {
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 700;
   color: #94a3b8;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2.5px 7px;
+  padding: 3px 8px;
   border-radius: 6px;
   cursor: pointer;
 }
@@ -6755,7 +6755,7 @@ html, body {
   background: rgba(16, 24, 48, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  padding: 6px 3px;
+  padding: 7px 3px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6764,24 +6764,24 @@ html, body {
 }
 
 .az-stat-icon-wrap {
-  font-size: 13px;
+  font-size: 14px;
   margin-bottom: 1px;
 }
 
 .az-stat-number {
-  font-size: 12.5px;
+  font-size: 14px;
   font-weight: 900;
   color: #ffffff;
 }
 
 .az-stat-label {
-  font-size: 8px;
+  font-size: 9px;
   font-weight: 700;
   color: #94a3b8;
 }
 
 .az-stat-growth {
-  font-size: 7px;
+  font-size: 8px;
   font-weight: 700;
   color: #22c55e;
 }
@@ -6795,12 +6795,12 @@ html, body {
   display: inline-flex;
   align-items: center;
   gap: 3px;
-  padding: 2.5px 7px;
+  padding: 3px 8px;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #cbd5e1;
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -6822,14 +6822,14 @@ html, body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 7px;
+  padding: 6px 8px;
   border-radius: 8px;
   background: rgba(16, 24, 48, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .az-about-icon {
-  font-size: 13px;
+  font-size: 14px;
   flex-shrink: 0;
 }
 
@@ -6840,13 +6840,13 @@ html, body {
 }
 
 .az-about-k {
-  font-size: 7.5px;
+  font-size: 8.5px;
   font-weight: 600;
   color: #64748b;
 }
 
 .az-about-v {
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 800;
   color: #ffffff;
   white-space: nowrap;
@@ -6856,7 +6856,7 @@ html, body {
 
 /* 7. Interesses Card */
 .az-link-view-all {
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 700;
   color: #94a3b8;
   cursor: pointer;
@@ -6870,16 +6870,16 @@ html, body {
 .az-interests-pills-wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 5px;
 }
 
 .az-interest-pill {
-  padding: 3.5px 8px;
+  padding: 4.5px 10px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(59, 130, 246, 0.2);
   color: #cbd5e1;
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 700;
   transition: all 0.2s ease;
 }
@@ -6917,7 +6917,7 @@ html, body {
 }
 
 .az-premium-title-text {
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 900;
   color: #ffffff;
   letter-spacing: 0.5px;
@@ -6927,29 +6927,29 @@ html, body {
 .az-premium-perks-list {
   list-style: none;
   padding: 0;
-  margin: 2px 0 4px;
+  margin: 2px 0 5px;
   display: flex;
   flex-direction: column;
-  gap: 2.5px;
+  gap: 3px;
 }
 
 .az-premium-perks-list li {
-  font-size: 8px;
+  font-size: 9px;
   color: #cbd5e1;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   white-space: nowrap;
 }
 
 .az-btn-activate-premium {
   align-self: flex-start;
-  padding: 5px 12px;
+  padding: 6px 14px;
   border-radius: 999px;
   background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #8b5cf6 100%);
   border: none;
   color: #ffffff;
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 800;
   cursor: pointer;
   box-shadow: 0 2px 10px rgba(139, 92, 246, 0.45);
@@ -6962,8 +6962,8 @@ html, body {
 }
 
 .az-premium-art-wrap {
-  width: 58px;
-  height: 58px;
+  width: 62px;
+  height: 62px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -6989,7 +6989,7 @@ html, body {
 .az-crown-pedestal {
   position: absolute;
   bottom: 2px;
-  width: 40px;
+  width: 42px;
   height: 6px;
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
@@ -7005,7 +7005,7 @@ html, body {
 }
 
 .az-featured-item {
-  flex: 0 0 52px;
+  flex: 0 0 54px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7020,8 +7020,8 @@ html, body {
 }
 
 .az-featured-img-wrap {
-  width: 50px;
-  height: 62px;
+  width: 52px;
+  height: 64px;
   border-radius: 8px;
   position: relative;
   overflow: hidden;
@@ -7048,17 +7048,17 @@ html, body {
 }
 
 .az-featured-name {
-  font-size: 8.5px;
+  font-size: 9.5px;
   font-weight: 800;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 52px;
+  max-width: 54px;
 }
 
 .az-featured-status {
-  font-size: 7.5px;
+  font-size: 8.5px;
   font-weight: 700;
   color: #22c55e;
 }
