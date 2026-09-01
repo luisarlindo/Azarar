@@ -606,6 +606,7 @@
       activateRadarSpin(15);
       renderRadarUsers();
     }
+    if (tabId === 'venues') renderVenuesPage();
     if (tabId === 'feed') renderLoungeVipMoments();
     if (tabId === 'likes') renderLikesTab();
     if (tabId === 'messages') renderDirectConversations();
@@ -1112,7 +1113,6 @@
       triggerLockFeedback(meters);
       return;
     }
-
     currentRadius = meters;
     updateDiscreteSliderVisual(currentRadius);
     activateRadarSpin(15);
@@ -1122,31 +1122,29 @@
     syncLocationWithServer();
   }
 
-  // ==========================================================================
-  // 6.1 LOCAIS & POINTS (B2B SPONSORS & ORGANIC HUBS)
-  // ==========================================================================
   const INITIAL_VENUES = [
     {
       id: 1,
       name: "Bar do Cuscuz",
       slug: "bar-do-cuscuz",
+      rating: "4,8",
       category: "bar",
-      category_label: "Bar & Petiscos 🍸",
-      address: "Av. Cabo Branco, 3056",
-      neighborhood: "Cabo Branco",
+      category_label: "Bar, Petiscos & Música ao Vivo ⭐",
+      address: "R. dos Tabajaras, 439",
+      neighborhood: "Tambaú, João Pessoa - PB",
       city: "João Pessoa",
       state: "PB",
-      latitude: -7.1265,
-      longitude: -34.8235,
-      distance: 850,
+      latitude: -7.1190,
+      longitude: -34.8250,
+      distance: 600,
       is_partner: true,
       partner_tier: "gold_partner",
-      cover_image_url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
-      logo_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=200",
-      description: "O point mais famoso e vibrante da orla de João Pessoa! Gastronomia regional autêntica, chopp trincando, música ao vivo e o melhor clima para paquerar e fazer amigos.",
+      cover_image_url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1000",
+      description: "O point mais famoso e animado de João Pessoa, de frente para o mar de Tambaú. Música ao vivo todos os dias, chopp trincando, gastronomia regional premiada e a melhor paquera da cidade.",
       instagram: "@bardocuscuzjp",
-      phone: "(83) 3247-2020",
-      perk_title: "🍹 Caipirinha ou Chopp de Boas-Vindas",
+      phone: "(83) 3247-1010",
+      tags: ["🍸 Bar", "🍢 Petiscos", "🎵 Música ao vivo", "✨ Ambiente aconchegante"],
+      perk_title: "Drink ou Chopp de Boas-Vindas",
       perk_description: "Apresente o aplicativo Azarar VIP para o garçom e ganhe 1 Drink cortesia na compra de qualquer petisco!",
       opening_hours: "Terça a Domingo · 16h às 02h",
       vibe: "🔥 Forró, Sertanejo & Azaração na Orla",
@@ -1155,12 +1153,138 @@
     },
     {
       id: 2,
+      name: "Café São Bento",
+      slug: "cafe-sao-bento",
+      rating: "4,7",
+      category: "restaurant",
+      category_label: "Café, Bistrô & Charme ☕",
+      address: "R. Des. Souto Maior, 90",
+      neighborhood: "Centro, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1150,
+      longitude: -34.8850,
+      distance: 3500,
+      is_partner: false,
+      partner_tier: "organic",
+      cover_image_url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1000",
+      description: "Ambiente histórico e acolhedor no coração do Centro Histórico. Cafés especiais, tortas artesanais e música acústica para encontros inesquecíveis.",
+      instagram: "@cafesaobentojp",
+      tags: ["☕ Café", "🥐 Bistrô", "🎶 Música acústica", "🏛️ Histórico"],
+      opening_hours: "Segunda a Sábado · 09h às 20h",
+      vibe: "✨ Encontros românticos & conversas profundas",
+      checkins_count: 15,
+      verified: false
+    },
+    {
+      id: 3,
+      name: "Restaurante Sabor da Orla",
+      slug: "restaurante-sabor-da-orla",
+      rating: "4,6",
+      category: "restaurant",
+      category_label: "Frutos do Mar & Vista Mar 🍽️",
+      address: "Av. Cabo Branco, 2810",
+      neighborhood: "Cabo Branco, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1360,
+      longitude: -34.8220,
+      distance: 1400,
+      is_partner: false,
+      partner_tier: "organic",
+      cover_image_url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000",
+      description: "Gastronomia marítima refinada com vista deslumbrante para a praia de Cabo Branco. Carta de vinhos selecionados e clima perfeito para primeiros dates.",
+      instagram: "@sabordaorlajp",
+      tags: ["🍽️ Frutos do Mar", "🏖️ Vista mar", "🍷 Vinhos", "🕯️ Clima a dois"],
+      opening_hours: "Todos os dias · 11h às 23h",
+      vibe: "🌊 Brisa do mar, camarão & bons vinhos",
+      checkins_count: 19,
+      verified: false
+    },
+    {
+      id: 4,
+      name: "Boteco Central",
+      slug: "boteco-central",
+      rating: "4,5",
+      category: "bar",
+      category_label: "Boteco Tradicional & Samba 🍻",
+      address: "R. Vig. Antônio Pessoa, 255",
+      neighborhood: "Mangabeira, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1650,
+      longitude: -34.8450,
+      distance: 4200,
+      is_partner: false,
+      partner_tier: "organic",
+      cover_image_url: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=1000",
+      description: "Boteco raiz com mesas na calçada, chopp estupidamente gelado e roda de samba ao vivo nos finais de tarde.",
+      instagram: "@botecocentraljp",
+      tags: ["🍻 Chopp Gelado", "🍢 Petiscos", "🥁 Samba & Pagode"],
+      opening_hours: "Quarta a Domingo · 17h às 01h",
+      vibe: "🎉 Resenha animada, cerveja & samba",
+      checkins_count: 22,
+      verified: false
+    },
+    {
+      id: 5,
+      name: "Varanda do Mar",
+      slug: "varanda-do-mar",
+      rating: "4,8",
+      category: "nightclub",
+      category_label: "Lounge, Drinks & Balada 🔥",
+      address: "Av. João Maurício, 1341",
+      neighborhood: "Manaíra, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1030,
+      longitude: -34.8290,
+      distance: 1800,
+      is_partner: false,
+      partner_tier: "organic",
+      cover_image_url: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=1000",
+      description: "Rooftop lounge beira-mar com DJs de house/funk, coquetelaria autoral e a galera mais bonita e festeira da cidade.",
+      instagram: "@varandadomarjp",
+      tags: ["🍸 Rooftop Lounge", "🎧 DJ Set", "🍹 Drinks Autorais", "🔥 Paquera"],
+      opening_hours: "Quinta a Domingo · 19h às 04h",
+      vibe: "✨ Balada sofisticada, drinks & azaração",
+      checkins_count: 24,
+      verified: false
+    },
+    {
+      id: 6,
+      name: "Pizzaria Estação",
+      slug: "pizzaria-estacao",
+      rating: "4,7",
+      category: "restaurant",
+      category_label: "Pizzas Artesanais & Vinhos 🍕",
+      address: "R. Epitácio Pessoa, 672",
+      neighborhood: "Estados, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1210,
+      longitude: -34.8580,
+      distance: 2800,
+      is_partner: false,
+      partner_tier: "organic",
+      cover_image_url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1000",
+      description: "Forno a lenha napolitano, iluminação intimista à meia-luz e ambiente acolhedor para quebrar o gelo em grande estilo.",
+      instagram: "@pizzariaestacaojp",
+      tags: ["🍕 Pizza Napolitana", "🍷 Carta de Vinhos", "✨ Clima intimista"],
+      opening_hours: "Terça a Domingo · 18h às 23h30",
+      vibe: "🍕 Jantar descontraído & vinho",
+      checkins_count: 17,
+      verified: false
+    },
+    {
+      id: 7,
       name: "Dona Branca",
       slug: "dona-branca",
+      rating: "4,6",
       category: "bar",
-      category_label: "Bar & Petiscos 🍸",
+      category_label: "Bar & Petiscaria Regional 🍸",
       address: "Av. Gov. Flávio Ribeiro Coutinho, 115",
-      neighborhood: "Manaíra",
+      neighborhood: "Bessa, João Pessoa - PB",
       city: "João Pessoa",
       state: "PB",
       latitude: -7.0980,
@@ -1168,45 +1292,24 @@
       distance: 2400,
       is_partner: false,
       partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800",
-      description: "Bar tradicional com excelente culinária regional, cerveja gelada e mesinhas na calçada.",
+      cover_image_url: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=1000",
+      description: "Bar tradicional com culinária regional de primeira, carne de sol na nata, forró pé de serra e cervejas artesanais.",
       instagram: "@donabrancajp",
-      phone: "(83) 3246-1212",
+      tags: ["🍸 Petiscos", "🪗 Forró Pé de Serra", "🍻 Cervejas"],
       opening_hours: "Quarta a Domingo · 17h às 01h",
-      vibe: "🍻 Cerveja gelada, petiscos & bate-papo",
+      vibe: "🍻 Cerveja gelada & forrózin",
       checkins_count: 14,
       verified: false
     },
     {
-      id: 3,
-      name: "Orla de Cabo Branco",
-      slug: "orla-cabo-branco",
-      category: "beach",
-      category_label: "Praia & Orla 🏖️",
-      address: "Av. Cabo Branco (Calçadão)",
-      neighborhood: "Cabo Branco",
-      city: "João Pessoa",
-      state: "PB",
-      latitude: -7.1350,
-      longitude: -34.8210,
-      distance: 1200,
-      is_partner: false,
-      partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
-      description: "O point ao ar livre de quem ama praia, caminhada no fim de tarde, água de coco e paquera na brisa do mar.",
-      opening_hours: "Aberto 24 horas · Movimento 16h às 23h",
-      vibe: "🏖️ Brisa do mar, caminhada & drinks praianos",
-      checkins_count: 19,
-      verified: false
-    },
-    {
-      id: 4,
+      id: 8,
       name: "Posto Select Beira Rio",
       slug: "posto-select-beira-rio",
+      rating: "4,4",
       category: "convenience",
-      category_label: "Conveniência & Posto ⛽",
+      category_label: "Conveniência & Esquenta de Balada ⛽",
       address: "Av. Min. José Américo de Almeida, 1200",
-      neighborhood: "Torre",
+      neighborhood: "Torre, João Pessoa - PB",
       city: "João Pessoa",
       state: "PB",
       latitude: -7.1220,
@@ -1214,21 +1317,23 @@
       distance: 1800,
       is_partner: false,
       partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800",
-      description: "Famoso esquenta pré-balada com conveniência aberta, som ambiente e encontro de galera nos fins de semana.",
+      cover_image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1000",
+      description: "O clássico ponto de encontro pré-balada para encontrar a galera, tomar um drink rápido e decidir onde será a noite.",
+      tags: ["⛽ Conveniência 24h", "⚡ Esquenta Pré-Balada", "🥤 Bebidas"],
       opening_hours: "Aberto 24 Horas",
       vibe: "⚡ Esquenta pré-balada, cerveja & resenha",
       checkins_count: 11,
       verified: false
     },
     {
-      id: 5,
+      id: 9,
       name: "Feirinha de Tambaú",
       slug: "feirinha-de-tambau",
+      rating: "4,7",
       category: "beach",
       category_label: "Ponto Turístico & Praça 🛍️",
       address: "Praça Santo Antônio, Av. Alm. Tamandaré",
-      neighborhood: "Tambaú",
+      neighborhood: "Tambaú, João Pessoa - PB",
       city: "João Pessoa",
       state: "PB",
       latitude: -7.1180,
@@ -1236,8 +1341,9 @@
       distance: 600,
       is_partner: false,
       partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=800",
+      cover_image_url: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=1000",
       description: "Coração cultural e turístico de Tambaú. Tapiocas, artesanato, música ao vivo e fluxo constante de turistas e locais.",
+      tags: ["🛍️ Ponto Turístico", "🥥 Tapioca & Côco", "🎸 Música ao Vivo"],
       opening_hours: "Todos os dias · 17h às 23h",
       vibe: "🥥 Ponto de encontro, tapioca & paquera turística",
       checkins_count: 16,
@@ -1245,257 +1351,283 @@
     }
   ];
 
-  const VENUE_SECTORS = {
-    'bar-do-cuscuz': { angle: 38, baseDistPct: 0.58 },
-    'dona-branca': { angle: 135, baseDistPct: 0.74 },
-    'orla-cabo-branco': { angle: 220, baseDistPct: 0.48 },
-    'posto-select-beira-rio': { angle: 300, baseDistPct: 0.66 },
-    'feirinha-de-tambau': { angle: 358, baseDistPct: 0.36 }
-  };
-
-  let currentRadarFilter = 'all';
   let cachedVenues = [...INITIAL_VENUES];
-  let selectedVenueCategories = ['bar', 'beach', 'convenience', 'nightclub', 'restaurant'];
-  let selectedVibeFilter = 'all';
+  let selectedVenueId = 1;
+  let venuesRadius = 5000;
+  let currentVenuesCategory = 'all';
+  let currentVenuesSearchQuery = '';
+  let isVenuesRadiusDrawerOpen = false;
 
-  function setRadarFilter(filterType) {
-    currentRadarFilter = filterType || 'all';
-    document.querySelectorAll('.radar-filter-pill').forEach(btn => {
-      if (btn.getAttribute('data-filter') === currentRadarFilter) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-
-    renderRadarUsers();
-    renderVenuePins();
+  function renderVenuesPage() {
+    renderVenuesList();
+    renderVenueShowcase(selectedVenueId);
   }
 
-  function openRadarFiltersModal() {
-    const modal = document.getElementById('modalRadarFilters');
-    if (modal) {
-      modal.classList.add('active');
-      modal.setAttribute('aria-hidden', 'false');
+  function renderVenuesList() {
+    const listContainer = document.getElementById('venuesListContainer');
+    if (!listContainer) return;
+
+    let filtered = cachedVenues.filter(v => (v.distance || 0) <= venuesRadius);
+
+    if (currentVenuesCategory !== 'all') {
+      filtered = filtered.filter(v => v.category === currentVenuesCategory);
     }
-  }
 
-  function closeRadarFiltersModal() {
-    const modal = document.getElementById('modalRadarFilters');
-    if (modal) {
-      modal.classList.remove('active');
-      modal.setAttribute('aria-hidden', 'true');
+    if (currentVenuesSearchQuery.trim() !== '') {
+      const q = currentVenuesSearchQuery.toLowerCase().trim();
+      filtered = filtered.filter(v => 
+        (v.name && v.name.toLowerCase().includes(q)) ||
+        (v.address && v.address.toLowerCase().includes(q)) ||
+        (v.neighborhood && v.neighborhood.toLowerCase().includes(q)) ||
+        (v.vibe && v.vibe.toLowerCase().includes(q)) ||
+        (v.category_label && v.category_label.toLowerCase().includes(q)) ||
+        (v.tags && v.tags.some(t => t.toLowerCase().includes(q)))
+      );
     }
-  }
 
-  function selectRadarDisplayType(type) {
-    currentRadarFilter = type || 'all';
-    document.querySelectorAll('.filter-select-btn').forEach(btn => {
-      if (btn.getAttribute('data-filter-type') === currentRadarFilter) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
+    filtered.sort((a, b) => (b.is_partner ? 1 : 0) - (a.is_partner ? 1 : 0));
 
-    document.querySelectorAll('.radar-filter-pill').forEach(btn => {
-      if (btn.getAttribute('data-filter') === currentRadarFilter) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-  }
-
-  function onVenueCategoryToggle() {
-    const checked = Array.from(document.querySelectorAll('.venue-cat-chk:checked')).map(el => el.value);
-    selectedVenueCategories = checked;
-  }
-
-  function selectVibeFilter(vibe) {
-    selectedVibeFilter = vibe || 'all';
-    document.querySelectorAll('.filter-vibe-btn').forEach(btn => {
-      if (btn.getAttribute('data-vibe') === selectedVibeFilter) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-  }
-
-  function applyRadarFilters() {
-    closeRadarFiltersModal();
-    renderRadarUsers();
-    renderVenuePins();
-    showToast('🎯 Filtros do Radar aplicados!');
-  }
-
-  function renderVenuePins() {
-    const container = document.getElementById('radarVenuePinsContainer');
-    if (!container) return;
-
-    if (currentRadarFilter === 'people') {
-      container.innerHTML = '';
+    if (filtered.length === 0) {
+      listContainer.innerHTML = `
+        <div style="text-align: center; padding: 40px 16px; color: var(--text-muted); font-size: 13px;">
+          <span style="font-size: 32px; display: block; margin-bottom: 8px;">🔍</span>
+          <strong>Nenhum local encontrado</strong>
+          <p style="margin: 4px 0 0; font-size: 11.5px;">Tente expandir o raio de busca ou limpar os filtros.</p>
+        </div>
+      `;
       return;
     }
 
-    let venues = cachedVenues;
-    if (currentRadarFilter === 'bar') {
-      venues = venues.filter(v => v.category === 'bar');
-    } else if (currentRadarFilter === 'beach') {
-      venues = venues.filter(v => v.category === 'beach');
-    } else if (selectedVenueCategories && selectedVenueCategories.length > 0) {
-      venues = venues.filter(v => selectedVenueCategories.includes(v.category));
+    if (!filtered.some(v => String(v.id) === String(selectedVenueId))) {
+      selectedVenueId = filtered[0].id;
+      renderVenueShowcase(selectedVenueId);
     }
 
-    // Filter within current radar radius
-    const filteredVenues = venues.filter(v => (v.distance || 0) <= currentRadius);
-
-    if (filteredVenues.length === 0) {
-      container.innerHTML = '';
-      return;
-    }
-
-    // Anti-collision radial sector positioning
-    container.innerHTML = filteredVenues.map((v, i) => {
+    listContainer.innerHTML = filtered.map(v => {
+      const isSelected = String(v.id) === String(selectedVenueId);
       const isGold = v.is_partner && v.partner_tier === 'gold_partner';
-      const sector = VENUE_SECTORS[v.slug] || { angle: (i * 72) % 360, baseDistPct: 0.5 };
-      const angle = sector.angle;
-      
-      const distRatio = Math.min(1, Math.max(0.25, (v.distance || 500) / Math.max(currentRadius, 10)));
-      const distPct = 28 + distRatio * 52; // cleanly bounded between 28% and 80% from center
-      
-      const rad = (angle * Math.PI) / 180;
-      const x = (50 + (distPct / 2) * Math.cos(rad)).toFixed(1);
-      const y = (50 + (distPct / 2) * Math.sin(rad)).toFixed(1);
-
-      const partnerClass = isGold ? 'is-gold-partner' : 'is-organic';
-      const iconPrefix = isGold ? '⭐' : (v.category === 'bar' ? '🍸' : (v.category === 'beach' ? '🏖️' : (v.category === 'convenience' ? '⛽' : '📍')));
 
       return `
-        <div class="radar-venue-pin ${partnerClass}" data-venue-id="${v.id}" style="left: ${x}%; top: ${y}%;" onclick="window.azararApp.openVenueDetailsModal('${v.id}')" title="${v.name} (${formatRadiusLabel(v.distance || 0)})">
-          <div class="venue-pin-circle">
-            <span class="venue-pin-icon">${iconPrefix}</span>
-            <span class="venue-pin-bubble-count">${v.checkins_count || 12}</span>
+        <div class="venue-item-card ${isSelected ? 'selected' : ''} ${isGold ? 'is-gold-card' : ''}" onclick="window.azararApp.selectVenue('${v.id}')">
+          <div class="venue-thumb-circle-wrap">
+            <img src="${v.cover_image_url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=200'}" alt="${v.name}" class="venue-thumb-img" />
           </div>
-          <span class="venue-pin-name-tag">${v.name.split(' (')[0]}</span>
+          <div class="venue-item-info">
+            <div class="venue-item-title-row">
+              <span class="venue-item-name">
+                ${v.name}
+                ${isGold ? '<span style="color: #f59e0b; font-size: 12px;">⭐</span>' : ''}
+              </span>
+              <span class="venue-item-dist-badge">${formatRadiusLabel(v.distance || 0)}</span>
+            </div>
+            <span class="venue-item-address">${v.address} · ${v.neighborhood.split(',')[0]}</span>
+            <div class="venue-item-meta-row">
+              <span class="venue-item-presence">🔥 ${v.checkins_count || 12} pessoas aqui</span>
+              <span style="font-size: 10px; color: #fde047; font-weight: 800;">⭐ ${v.rating || '4,7'}</span>
+            </div>
+          </div>
+          <div class="venue-item-arrow">›</div>
         </div>
       `;
     }).join('');
   }
 
-  function openVenueDetailsModal(venueId) {
+  function renderVenueShowcase(venueId) {
+    const showcase = document.getElementById('venuesShowcaseColumn');
+    if (!showcase) return;
+
     const venue = cachedVenues.find(v => String(v.id) === String(venueId) || v.slug === String(venueId)) || cachedVenues[0];
     if (!venue) return;
 
-    const badgeWrap = document.getElementById('venueHeaderBadgeWrap');
-    const scrollBody = document.getElementById('venueModalScrollBody');
-    const modal = document.getElementById('modalVenueDetails');
+    const isGold = venue.is_partner && venue.partner_tier === 'gold_partner';
+    const allUsers = Storage.getUsers();
+    const sampleCheckedInUsers = allUsers.slice(0, 6);
 
-    if (badgeWrap) {
-      if (venue.is_partner && venue.partner_tier === 'gold_partner') {
-        badgeWrap.innerHTML = `<span class="venue-header-badge-tag gold">⭐ PARCEIRO OFICIAL AZARAR</span>`;
-      } else {
-        badgeWrap.innerHTML = `<span class="venue-header-badge-tag organic">📍 LOCAL POPULAR</span>`;
-      }
-    }
+    showcase.innerHTML = `
+      <div class="showcase-hero-backdrop" style="background-image: url('${venue.cover_image_url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1200'}');"></div>
+      <div class="showcase-hero-overlay"></div>
 
-    if (scrollBody) {
-      const isGold = venue.is_partner && venue.partner_tier === 'gold_partner';
-      const allUsers = Storage.getUsers();
-      const sampleCheckedInUsers = allUsers.slice(0, 6);
+      <div class="showcase-top-bar">
+        <button type="button" class="btn-showcase-back" onclick="window.azararApp.closeVenueShowcaseMobile()" title="Voltar para a lista">‹</button>
 
-      scrollBody.innerHTML = `
-        <div class="venue-hero-banner">
-          <img src="${venue.cover_image_url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800'}" alt="${venue.name}" class="venue-hero-img" />
-          <div class="venue-hero-overlay"></div>
+        <div class="showcase-top-actions">
+          <button type="button" class="btn-showcase-icon" onclick="window.azararApp.toast('Adicionado aos favoritos ❤️')" title="Favoritar local">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+          <button type="button" class="btn-showcase-icon" onclick="window.azararApp.toast('Link copiado para compartilhar 🔗')" title="Compartilhar local">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+          </button>
         </div>
+      </div>
 
-        <div class="venue-content-container">
-          <div class="venue-title-row">
-            <h3 class="venue-main-name">
+      <div class="showcase-details-card">
+        <div class="showcase-title-row">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <h2 class="showcase-name-heading">
               <span>${venue.name}</span>
-              ${isGold ? '<span title="Verificado" style="color: #fde047; font-size: 16px;">⭐</span>' : ''}
-            </h3>
-            <span class="venue-category-pill">${venue.category_label || 'Local & Point'} · ${venue.neighborhood || 'João Pessoa'} (${formatRadiusLabel(venue.distance || 0)})</span>
+              <span class="showcase-rating-pill">⭐ ${venue.rating || '4,8'}</span>
+            </h2>
+
+            ${isGold ? `
+              <span class="venue-header-badge-tag gold">⭐ PARCEIRO OFICIAL</span>
+            ` : `
+              <span class="venue-header-badge-tag organic">📍 LOCAL POPULAR</span>
+            `}
           </div>
 
-          <div class="venue-live-pulse-badge">
-            <span class="venue-pulse-green-dot"></span>
-            <span>🔥 <strong>${venue.checkins_count || 18} pessoas</strong> conectadas aqui agora</span>
+          <div class="showcase-address-row">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="#ff2a7a"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            <span>${venue.address}, ${venue.neighborhood} · (${formatRadiusLabel(venue.distance || 0)})</span>
           </div>
-
-          ${isGold && venue.perk_title ? `
-            <div class="venue-partner-perk-box">
-              <span class="venue-perk-headline">🎁 ${venue.perk_title}</span>
-              <p class="venue-perk-text">${venue.perk_description}</p>
-            </div>
-          ` : ''}
-
-          <p style="font-size: 12px; color: var(--text-muted); line-height: 1.5; margin: 0;">
-            ${venue.description || 'Ponto de encontro vibrante para paquerar e curtir a noite.'}
-          </p>
-
-          <div style="font-size: 11.5px; color: var(--text-dim); display: flex; flex-direction: column; gap: 3px;">
-            ${venue.address ? `<div>📍 <strong>Endereço:</strong> ${venue.address}</div>` : ''}
-            ${venue.opening_hours ? `<div>🕒 <strong>Horário:</strong> ${venue.opening_hours}</div>` : ''}
-            ${venue.instagram ? `<div>📸 <strong>Instagram:</strong> <a href="https://instagram.com/${venue.instagram.replace('@','')}" target="_blank" style="color: var(--primary-pink); font-weight: 700; text-decoration: none;">${venue.instagram}</a></div>` : ''}
-          </div>
-
-          <!-- Checked-in Users List -->
-          <div class="venue-users-section">
-            <div class="venue-section-label">
-              <span>Pessoas neste local (${sampleCheckedInUsers.length})</span>
-              <span style="font-size: 10px; color: var(--primary-pink);">Toque para conversar</span>
-            </div>
-            <div class="venue-users-horizontal-scroll">
-              ${sampleCheckedInUsers.map(u => `
-                <div class="venue-user-avatar-card" onclick="window.azararApp.closeVenueDetailsModal(); window.azararApp.openDirectChat('${u.id}')">
-                  <div class="venue-user-thumb-wrap">
-                    <img src="${u.avatar}" alt="${u.name}" class="venue-user-thumb-img" />
-                  </div>
-                  <span class="venue-user-first-name">${u.name.split(' ')[0]}</span>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="venue-actions-grid">
-            <button type="button" class="btn-venue-action btn-venue-checkin" onclick="window.azararApp.performVenueCheckin('${venue.id}')">
-              📍 Fazer Check-in
-            </button>
-            <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.name + ' ' + (venue.address || '') + ' João Pessoa')}" target="_blank" class="btn-venue-action btn-venue-route">
-              🗺️ Como Chegar
-            </a>
-          </div>
-
-          <!-- B2B Sponsor Lead Gen Box for Organic Spots -->
-          ${!isGold ? `
-            <div class="venue-b2b-cta-box">
-              <h4 class="venue-b2b-cta-title">⭐ É o proprietário ou gerente deste local?</h4>
-              <p class="venue-b2b-cta-desc">Destaque seu bar ou evento para milhares de solteiros na sua cidade! Tenha selo oficial, ofereça brindes e apareça no topo do radar.</p>
-              <button type="button" class="btn-b2b-partner-contact" onclick="window.open('https://api.whatsapp.com/send?phone=5583999999999&text=Olá,%20tenho%20interesse%20em%20ser%20Parceiro%20Oficial%20B2B%20no%20Azarar!', '_blank')">
-                🚀 Quero ser um Parceiro B2B Oficial
-              </button>
-            </div>
-          ` : ''}
         </div>
-      `;
-    }
 
-    if (modal) {
-      modal.classList.add('active');
-      modal.setAttribute('aria-hidden', 'false');
+        <div class="showcase-tags-wrap">
+          ${(venue.tags || ["🍸 Bar", "🍢 Petiscos", "🎵 Música ao vivo"]).map(t => `
+            <span class="showcase-vibe-tag">${t}</span>
+          `).join('')}
+        </div>
+
+        ${isGold && venue.perk_title ? `
+          <div class="venue-partner-perk-box">
+            <span class="venue-perk-headline">🎁 ${venue.perk_title}</span>
+            <p class="venue-perk-text">${venue.perk_description}</p>
+          </div>
+        ` : ''}
+
+        <p style="font-size: 12px; color: #cbd5e1; line-height: 1.5; margin: 0;">
+          ${venue.description || 'Ponto de encontro vibrante para paquerar e curtir momentos especiais.'}
+        </p>
+
+        <div class="venue-users-section">
+          <div class="venue-section-label">
+            <span>Solteiros neste local (${venue.checkins_count || 18} conectados)</span>
+            <span style="font-size: 10px; color: var(--primary-pink); font-weight: 700;">Toque para conversar</span>
+          </div>
+          <div class="venue-users-horizontal-scroll">
+            ${sampleCheckedInUsers.map(u => `
+              <div class="venue-user-avatar-card" onclick="window.azararApp.openDirectChat('${u.id}')">
+                <div class="venue-user-thumb-wrap">
+                  <img src="${u.avatar}" alt="${u.name}" class="venue-user-thumb-img" />
+                </div>
+                <span class="venue-user-first-name">${u.name.split(' ')[0]}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="showcase-actions-row">
+          <button type="button" class="btn-showcase-main-cta" onclick="window.azararApp.performVenueCheckin('${venue.id}')">
+            ${isGold ? '📍 Fazer Check-in no Local' : 'Quero conhecer este lugar'}
+          </button>
+          
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.name + ' ' + (venue.address || '') + ' João Pessoa')}" target="_blank" class="btn-showcase-bookmark" title="Como chegar no GPS" style="text-decoration: none;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+          </a>
+
+          <button type="button" class="btn-showcase-bookmark" onclick="window.azararApp.toast('Local salvo na sua lista de desejos 🔖')" title="Salvar local">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          </button>
+        </div>
+
+        ${!isGold ? `
+          <div class="venue-b2b-cta-box">
+            <h4 class="venue-b2b-cta-title">⭐ É o proprietário ou gerente deste local?</h4>
+            <p class="venue-b2b-cta-desc">Destaque seu bar ou evento para milhares de solteiros na sua cidade! Tenha selo oficial, ofereça brindes e apareça no topo do radar.</p>
+            <button type="button" class="btn-b2b-partner-contact" onclick="window.open('https://api.whatsapp.com/send?phone=5583999999999&text=Olá,%20tenho%20interesse%20em%20ser%20Parceiro%20Oficial%20B2B%20no%20Azarar!', '_blank')">
+              🚀 Quero ser um Parceiro B2B Oficial
+            </button>
+          </div>
+        ` : ''}
+
+      </div>
+    `;
+  }
+
+  function selectVenue(venueId) {
+    selectedVenueId = venueId;
+    renderVenuesList();
+    renderVenueShowcase(venueId);
+
+    const showcase = document.getElementById('venuesShowcaseColumn');
+    if (showcase) showcase.classList.add('active');
+  }
+
+  function closeVenueShowcaseMobile() {
+    const showcase = document.getElementById('venuesShowcaseColumn');
+    if (showcase) showcase.classList.remove('active');
+  }
+
+  function toggleVenuesRadiusDrawer() {
+    isVenuesRadiusDrawerOpen = !isVenuesRadiusDrawerOpen;
+    const drawer = document.getElementById('venuesRadiusDrawer');
+    const trigger = document.getElementById('btnVenuesRadiusToggle');
+
+    if (drawer) {
+      if (isVenuesRadiusDrawerOpen) drawer.classList.add('open');
+      else drawer.classList.remove('open');
+    }
+    if (trigger) {
+      if (isVenuesRadiusDrawerOpen) trigger.classList.add('open');
+      else trigger.classList.remove('open');
     }
   }
 
-  function closeVenueDetailsModal() {
-    const modal = document.getElementById('modalVenueDetails');
-    if (modal) {
-      modal.classList.remove('active');
-      modal.setAttribute('aria-hidden', 'true');
+  function onVenuesRadiusInput(val) {
+    setVenuesRadius(parseInt(val, 10));
+  }
+
+  function setVenuesRadius(meters) {
+    venuesRadius = meters;
+    const badge = document.getElementById('venuesRadiusCurrentBadge');
+    const display = document.getElementById('venuesDrawerValDisplay');
+    const slider = document.getElementById('rangeVenuesRadius');
+
+    const formatted = formatRadiusLabel(meters);
+    if (badge) badge.innerText = formatted;
+    if (display) display.innerText = formatted;
+    if (slider) slider.value = meters;
+
+    document.querySelectorAll('.venues-drawer-quick-chips .v-chip').forEach(chip => {
+      const chipMeters = parseInt(chip.getAttribute('data-v-meters'), 10);
+      if (chipMeters === meters) chip.classList.add('active');
+      else chip.classList.remove('active');
+    });
+
+    renderVenuesList();
+  }
+
+  function stepVenuesRadius(dir) {
+    let nextRadius = venuesRadius + (dir * 1000);
+    if (nextRadius < 5) nextRadius = 5;
+    if (nextRadius > 100000) nextRadius = 100000;
+    setVenuesRadius(nextRadius);
+  }
+
+  function filterVenuesByCategory(cat) {
+    currentVenuesCategory = cat || 'all';
+    document.querySelectorAll('.v-cat-pill').forEach(pill => {
+      if (pill.getAttribute('data-v-cat') === currentVenuesCategory) pill.classList.add('active');
+      else pill.classList.remove('active');
+    });
+    renderVenuesList();
+  }
+
+  function onVenuesSearchInput(val) {
+    currentVenuesSearchQuery = val || '';
+    const btnClear = document.getElementById('btnClearVenuesSearch');
+    if (btnClear) {
+      btnClear.style.display = currentVenuesSearchQuery.trim() !== '' ? 'block' : 'none';
     }
+    renderVenuesList();
+  }
+
+  function clearVenuesSearch() {
+    currentVenuesSearchQuery = '';
+    const input = document.getElementById('txtSearchVenues');
+    const btnClear = document.getElementById('btnClearVenuesSearch');
+    if (input) input.value = '';
+    if (btnClear) btnClear.style.display = 'none';
+    renderVenuesList();
   }
 
   function performVenueCheckin(venueId) {
@@ -1504,8 +1636,8 @@
 
     venue.checkins_count = (venue.checkins_count || 0) + 1;
     showToast(`📍 Check-in confirmado no ${venue.name}! Seu perfil está visível no local.`);
-    closeVenueDetailsModal();
-    renderVenuePins();
+    renderVenuesList();
+    renderVenueShowcase(venue.id);
     
     // Sync with backend API
     fetch(`/api/v1/venues/${venue.id}/checkin`, {
@@ -3086,6 +3218,18 @@
     openRadarPreview,
     centerGPSLocation,
     recalibrateRadar,
+    renderVenuesPage,
+    renderVenuesList,
+    renderVenueShowcase,
+    selectVenue,
+    closeVenueShowcaseMobile,
+    toggleVenuesRadiusDrawer,
+    onVenuesRadiusInput,
+    setVenuesRadius,
+    stepVenuesRadius,
+    filterVenuesByCategory,
+    onVenuesSearchInput,
+    clearVenuesSearch,
     setRadarFilter,
     openRadarFiltersModal,
     closeRadarFiltersModal,
