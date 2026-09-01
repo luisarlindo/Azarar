@@ -533,7 +533,7 @@
       if (el && currentUser.avatar) el.src = currentUser.avatar;
     });
 
-    // Populate User Hero Profile Card (Matching Mockup)
+    // Populate User Hero Profile Card (Matching Reference Design)
     const heroAvatar = document.getElementById('heroProfileAvatar');
     const heroName = document.getElementById('heroProfileName');
     const heroLoc = document.getElementById('heroProfileLocation');
@@ -541,10 +541,24 @@
     const heroBio = document.getElementById('heroProfileBio');
 
     if (heroAvatar) heroAvatar.src = currentUser.avatar || '/images/avatars/luisarlindo.jpg';
-    if (heroName) heroName.textContent = `${currentUser.name || 'Luis'}, ${currentUser.age || 28}`;
-    if (heroLoc) heroLoc.textContent = currentUser.location || 'Sousa, PB';
-    if (heroIntent) heroIntent.innerHTML = `Em busca de <strong>${currentUser.intent || 'conexões reais'}</strong>`;
-    if (heroBio) heroBio.textContent = currentUser.bio || 'Apaixonado por viagens e música 🎸';
+    if (heroName) heroName.textContent = `${currentUser.name || 'Lucas'}, ${currentUser.age || 29}`;
+    if (heroLoc) heroLoc.textContent = `${currentUser.profession || 'Empresário'} • ${currentUser.location || 'São Paulo, SP'}`;
+    if (heroIntent) heroIntent.textContent = currentUser.intent || 'Algo sério / Conexões reais';
+    if (heroBio) heroBio.textContent = currentUser.bio || 'Vivo intensamente e estou aqui por conexões reais.';
+
+    const aboutHeight = document.getElementById('profAboutHeight');
+    const aboutJob = document.getElementById('profAboutJob');
+    const aboutSign = document.getElementById('profAboutSign');
+    const aboutAge = document.getElementById('profAboutAge');
+    const aboutLoc = document.getElementById('profAboutLoc');
+    const aboutIntent = document.getElementById('profAboutIntent');
+
+    if (aboutHeight) aboutHeight.textContent = currentUser.height || '1,82 m';
+    if (aboutJob) aboutJob.textContent = currentUser.profession || 'Empresário';
+    if (aboutSign) aboutSign.textContent = currentUser.sign || 'Leão';
+    if (aboutAge) aboutAge.textContent = `${currentUser.age || 29} anos`;
+    if (aboutLoc) aboutLoc.textContent = currentUser.location || 'São Paulo, SP';
+    if (aboutIntent) aboutIntent.textContent = currentUser.intent || 'Algo sério / Conexões reais';
 
     const nameEl = document.getElementById('profFullName');
     if (nameEl) nameEl.textContent = currentUser.name || 'Seu Nome';
@@ -556,7 +570,7 @@
     if (bioEl) bioEl.textContent = currentUser.bio || 'Adicione sua biografia...';
 
     const locEl = document.getElementById('profLocation');
-    if (locEl) locEl.textContent = `${currentUser.location || 'Sousa, PB'} • No seu raio agora`;
+    if (locEl) locEl.textContent = `${currentUser.location || 'São Paulo, SP'} • No seu raio agora`;
     
     const intentBadge = document.getElementById('profIntentBadge');
     if (intentBadge) {
@@ -596,7 +610,7 @@
       page.classList.remove('active');
       page.style.display = 'none';
     });
-    document.querySelectorAll('.nav-tab-item').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.nav-tab-item, .az-dock-btn').forEach(btn => btn.classList.remove('active'));
 
     const activePage = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
     const activeNav = document.getElementById(`navTab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
