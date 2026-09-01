@@ -137,6 +137,7 @@ html, body {
 }
 
 .screen-container.view-mode-app-shell {
+  max-width: 520px !important;
   background-image: 
     radial-gradient(ellipse 90% 55% at 50% -8%, rgba(255, 42, 122, 0.34) 0%, transparent 65%),
     radial-gradient(ellipse 70% 50% at 95% 40%, rgba(168, 85, 247, 0.28) 0%, transparent 60%),
@@ -6224,31 +6225,38 @@ html, body {
   height: 100% !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
-  display: flex;
-  flex-direction: column;
+  display: block !important;
 }
 
 .az-dashboard-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1.32fr !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 8px 8px 90px !important;
+  box-sizing: border-box !important;
+  align-items: start !important;
+}
+
+.az-col-left,
+.az-col-right {
   display: flex !important;
   flex-direction: column !important;
-  gap: 14px !important;
+  gap: 8px !important;
+  min-width: 0 !important;
   width: 100% !important;
-  max-width: 100% !important;
-  margin: 0 auto !important;
-  padding: 14px 14px 110px !important;
-  box-sizing: border-box !important;
 }
 
 .az-card {
   width: 100% !important;
   box-sizing: border-box !important;
-  background: rgba(13, 20, 40, 0.82);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(13, 20, 40, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(59, 130, 246, 0.15);
-  border-radius: 20px;
-  padding: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-radius: 14px;
+  padding: 8px 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
   margin-bottom: 0px;
@@ -6262,61 +6270,62 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .az-card-title-group {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .az-card-title-text {
-  font-size: 11.5px;
+  font-size: 8.5px;
   font-weight: 800;
   color: #94a3b8;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   margin: 0;
 }
 
-/* Profile Card */
+/* 1. Profile Card */
 .az-profile-card {
-  padding: 12px;
+  padding: 6px !important;
 }
 
 .az-profile-photo-wrap {
   position: relative;
   width: 100%;
-  height: 230px;
-  border-radius: 16px;
+  height: 155px;
+  border-radius: 10px;
   overflow: hidden;
-  background: #111827;
+  background: #0f172a;
 }
 
 .az-profile-photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center top;
+  object-position: center 20%;
   display: block;
 }
 
 .az-btn-photo-edit {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px;
-  height: 32px;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: rgba(13, 20, 40, 0.75);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  padding: 0;
   transition: all 0.2s ease;
 }
 
@@ -6327,38 +6336,38 @@ html, body {
 
 .az-verified-pill {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
+  bottom: 6px;
+  left: 6px;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 8px;
+  gap: 3px;
+  padding: 2px 6px;
   border-radius: 999px;
-  background: rgba(10, 25, 20, 0.85);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(34, 197, 94, 0.45);
+  background: rgba(10, 25, 20, 0.88);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(34, 197, 94, 0.5);
   color: #22c55e;
-  font-size: 9.5px;
+  font-size: 7.5px;
   font-weight: 800;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
 }
 
 .az-profile-info-body {
-  padding: 12px 6px 4px;
+  padding: 6px 2px 2px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .az-name-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .az-profile-name {
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 900;
   color: #ffffff;
   margin: 0;
 }
@@ -6370,28 +6379,34 @@ html, body {
 }
 
 .az-profile-occupation {
-  font-size: 11.5px;
+  font-size: 8px;
   color: #94a3b8;
-  margin-top: -2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .az-profile-bio-quote {
-  font-size: 11.5px;
+  font-size: 7.5px;
   color: #cbd5e1;
-  line-height: 1.45;
-  margin-top: 4px;
+  line-height: 1.35;
+  margin-top: 2px;
 }
 
-/* Radar Card */
+/* 2. Radar Card */
+.az-radar-card {
+  padding: 8px 6px !important;
+}
+
 .az-radius-pill-badge {
   display: inline-flex;
   align-items: center;
-  padding: 3px 9px;
+  padding: 2px 6px;
   border-radius: 999px;
-  background: rgba(139, 92, 246, 0.18);
+  background: rgba(139, 92, 246, 0.2);
   border: 1px solid rgba(139, 92, 246, 0.45);
   color: #c084fc;
-  font-size: 10px;
+  font-size: 7.5px;
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -6406,17 +6421,17 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 0;
+  padding: 4px 0;
 }
 
 .az-radar-scope-circle {
-  width: 220px;
-  height: 220px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   position: relative;
-  background: radial-gradient(circle, rgba(16, 32, 68, 0.5) 0%, rgba(7, 12, 26, 0.95) 75%);
+  background: radial-gradient(circle, rgba(16, 32, 68, 0.55) 0%, rgba(7, 12, 26, 0.98) 75%);
   border: 1px solid rgba(59, 130, 246, 0.35);
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.15), inset 0 0 25px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.15), inset 0 0 16px rgba(59, 130, 246, 0.1);
   overflow: hidden;
 }
 
@@ -6447,33 +6462,33 @@ html, body {
   border: 1px solid rgba(59, 130, 246, 0.22);
 }
 
-.az-ring-1 { width: 55px; height: 55px; }
-.az-ring-2 { width: 110px; height: 110px; }
-.az-ring-3 { width: 165px; height: 165px; }
-.az-ring-4 { width: 216px; height: 216px; }
+.az-ring-1 { width: 35px; height: 35px; }
+.az-ring-2 { width: 70px; height: 70px; }
+.az-ring-3 { width: 105px; height: 105px; }
+.az-ring-4 { width: 136px; height: 136px; }
 
 .az-scope-dist-label {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 8px;
+  font-size: 6.5px;
   font-weight: 700;
   color: rgba(148, 163, 184, 0.6);
   pointer-events: none;
 }
 
-.d-500 { top: calc(50% + 28px); }
-.d-1k { top: calc(50% + 56px); }
-.d-15k { top: calc(50% + 84px); }
-.d-2k { top: calc(50% + 98px); }
+.d-500 { top: calc(50% + 18px); }
+.d-1k { top: calc(50% + 36px); }
+.d-15k { top: calc(50% + 53px); }
+.d-2k { top: calc(50% + 62px); }
 
 .az-radar-center-core {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6482,8 +6497,8 @@ html, body {
 
 .az-core-glow-pulse {
   position: absolute;
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
   background: rgba(56, 189, 248, 0.4);
   animation: corePulse 2s infinite ease-out;
@@ -6495,11 +6510,11 @@ html, body {
 }
 
 .az-core-dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #38bdf8;
-  box-shadow: 0 0 10px #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
 }
 
 .az-radar-sweep-beam {
@@ -6521,11 +6536,11 @@ html, body {
 
 .az-radar-avatar-node {
   position: absolute;
-  width: 28px;
-  height: 28px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   border: 1.5px solid #38bdf8;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
   cursor: pointer;
   z-index: 15;
   transition: transform 0.2s ease;
@@ -6548,28 +6563,32 @@ html, body {
   position: absolute;
   bottom: -1px;
   right: -1px;
-  width: 7px;
-  height: 7px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #22c55e;
   border: 1px solid #070a14;
 }
 
-/* Nearby List */
+/* 3. Nearby List */
+.az-nearby-card {
+  padding: 8px 6px !important;
+}
+
 .az-nearby-vertical-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .az-nearby-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 12px;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 8px;
   background: rgba(16, 24, 48, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -6581,8 +6600,8 @@ html, body {
 }
 
 .az-nearby-avatar-wrap {
-  width: 38px;
-  height: 38px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   position: relative;
   flex-shrink: 0;
@@ -6600,11 +6619,11 @@ html, body {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 9px;
-  height: 9px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #22c55e;
-  border: 1.5px solid #0d1428;
+  border: 1px solid #0d1428;
 }
 
 .az-nearby-info {
@@ -6613,63 +6632,68 @@ html, body {
 }
 
 .az-nearby-name {
-  font-size: 12px;
+  font-size: 8.5px;
   font-weight: 800;
   color: #ffffff;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.az-status-dot.green { color: #22c55e; font-size: 7px; }
-.az-status-dot.pink { color: #ec4899; font-size: 7px; }
-.az-status-dot.cyan { color: #38bdf8; font-size: 7px; }
+.az-status-dot.green { color: #22c55e; font-size: 5px; }
+.az-status-dot.pink { color: #ec4899; font-size: 5px; }
+.az-status-dot.cyan { color: #38bdf8; font-size: 5px; }
 
 .az-status-text {
-  font-size: 10px;
+  font-size: 7.5px;
   font-weight: 600;
   color: #94a3b8;
 }
 
 .az-nearby-dist {
-  font-size: 11px;
+  font-size: 7.5px;
   font-weight: 700;
   color: #64748b;
   flex-shrink: 0;
 }
 
-/* Hero Banner */
+/* 4. Hero Banner */
 .az-banner-hero-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  background: linear-gradient(135deg, rgba(16, 24, 52, 0.95) 0%, rgba(38, 16, 52, 0.85) 100%);
+  gap: 6px;
+  padding: 8px 8px !important;
+  background: linear-gradient(135deg, rgba(16, 24, 52, 0.95) 0%, rgba(38, 16, 52, 0.9) 100%);
   border: 1px solid rgba(236, 72, 153, 0.25);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(236, 72, 153, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 16px rgba(236, 72, 153, 0.08);
 }
 
 .az-banner-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  min-width: 0;
 }
 
 .az-banner-sublabel {
-  font-size: 9.5px;
+  font-size: 7px;
   font-weight: 800;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   color: #94a3b8;
   text-transform: uppercase;
 }
 
 .az-banner-headline {
-  font-size: 19px;
+  font-size: 11px;
   font-weight: 900;
   color: #ffffff;
-  line-height: 1.25;
-  margin: 2px 0 4px;
+  line-height: 1.2;
+  margin: 1px 0 2px;
 }
 
 .az-pink-gradient-text {
@@ -6679,38 +6703,38 @@ html, body {
 }
 
 .az-banner-desc {
-  font-size: 11px;
-  color: #cbd5e1;
-  line-height: 1.4;
-  margin-bottom: 8px;
+  font-size: 7px;
+  color: #94a3b8;
+  line-height: 1.3;
+  margin-bottom: 4px;
 }
 
 .az-btn-turbo {
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 4px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #f43f5e 100%);
   border: none;
   color: #ffffff;
-  font-size: 11px;
+  font-size: 7.5px;
   font-weight: 800;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.3px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.45);
+  box-shadow: 0 2px 10px rgba(244, 63, 94, 0.45);
   transition: all 0.2s ease;
 }
 
 .az-btn-turbo:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(244, 63, 94, 0.6);
 }
 
 .az-banner-art-wrap {
-  width: 90px;
-  height: 90px;
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -6730,87 +6754,86 @@ html, body {
 .az-heart-svg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.8));
+  filter: drop-shadow(0 0 8px rgba(236, 72, 153, 0.8));
 }
 
 .az-heart-pedestal {
   position: absolute;
-  bottom: 4px;
-  width: 50px;
-  height: 8px;
+  bottom: 2px;
+  width: 32px;
+  height: 6px;
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(236, 72, 153, 0.6) 0%, transparent 70%);
 }
 
-/* Stats 4-col Card */
+/* 5. Stats 4-col Card */
 .az-dropdown-pill {
-  font-size: 10.5px;
+  font-size: 7.5px;
   font-weight: 700;
   color: #94a3b8;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 3px 8px;
-  border-radius: 8px;
+  padding: 2px 6px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
 .az-stats-4col-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 4px;
 }
 
 .az-stat-box {
   background: rgba(16, 24, 48, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 10px 6px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 6px 2px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 2px;
+  gap: 1px;
 }
 
 .az-stat-icon-wrap {
-  font-size: 16px;
-  margin-bottom: 2px;
+  font-size: 11px;
+  margin-bottom: 1px;
 }
 
 .az-stat-number {
-  font-size: 16px;
+  font-size: 10.5px;
   font-weight: 900;
   color: #ffffff;
 }
 
 .az-stat-label {
-  font-size: 9.5px;
+  font-size: 6.5px;
   font-weight: 700;
   color: #94a3b8;
 }
 
 .az-stat-growth {
-  font-size: 8.5px;
+  font-size: 6px;
   font-weight: 700;
   color: #22c55e;
-  margin-top: 2px;
 }
 
 .az-stat-growth.highlight {
   color: #22c55e;
 }
 
-/* Sobre Você Card */
+/* 6. Sobre Você Card */
 .az-btn-inline-edit {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
-  border-radius: 8px;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: 6px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: #cbd5e1;
-  font-size: 10.5px;
+  font-size: 7.5px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -6825,21 +6848,21 @@ html, body {
 .az-about-grid-2x3 {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
+  gap: 4px;
 }
 
 .az-about-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  border-radius: 10px;
+  gap: 5px;
+  padding: 4px 6px;
+  border-radius: 8px;
   background: rgba(16, 24, 48, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .az-about-icon {
-  font-size: 16px;
+  font-size: 11px;
   flex-shrink: 0;
 }
 
@@ -6850,13 +6873,13 @@ html, body {
 }
 
 .az-about-k {
-  font-size: 9.5px;
+  font-size: 6.5px;
   font-weight: 600;
   color: #64748b;
 }
 
 .az-about-v {
-  font-size: 11px;
+  font-size: 8px;
   font-weight: 700;
   color: #ffffff;
   white-space: nowrap;
@@ -6864,9 +6887,9 @@ html, body {
   text-overflow: ellipsis;
 }
 
-/* Interesses Card */
+/* 7. Interesses Card */
 .az-link-view-all {
-  font-size: 10.5px;
+  font-size: 7.5px;
   font-weight: 700;
   color: #94a3b8;
   cursor: pointer;
@@ -6880,16 +6903,16 @@ html, body {
 .az-interests-pills-wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 4px;
 }
 
 .az-interest-pill {
-  padding: 5px 12px;
+  padding: 3px 7px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(59, 130, 246, 0.22);
+  border: 1px solid rgba(59, 130, 246, 0.2);
   color: #cbd5e1;
-  font-size: 11px;
+  font-size: 7.5px;
   font-weight: 700;
   transition: all 0.2s ease;
 }
@@ -6900,77 +6923,80 @@ html, body {
   background: rgba(56, 189, 248, 0.12);
 }
 
-/* Premium Card */
+/* 8. Premium Card */
 .az-premium-banner-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 6px;
+  padding: 8px 8px !important;
   background: linear-gradient(135deg, rgba(16, 24, 56, 0.95) 0%, rgba(32, 16, 56, 0.9) 100%);
   border: 1px solid rgba(139, 92, 246, 0.35);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(139, 92, 246, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 16px rgba(139, 92, 246, 0.1);
 }
 
 .az-premium-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 3px;
+  min-width: 0;
 }
 
 .az-premium-title-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .az-premium-title-text {
-  font-size: 14px;
+  font-size: 8.5px;
   font-weight: 900;
   color: #ffffff;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   margin: 0;
 }
 
 .az-premium-perks-list {
   list-style: none;
   padding: 0;
-  margin: 2px 0 6px;
+  margin: 1px 0 3px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 2px;
 }
 
 .az-premium-perks-list li {
-  font-size: 10.5px;
+  font-size: 7px;
   color: #cbd5e1;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 3px;
+  white-space: nowrap;
 }
 
 .az-btn-activate-premium {
   align-self: flex-start;
-  padding: 8px 18px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: linear-gradient(135deg, #f43f5e 0%, #ec4899 50%, #8b5cf6 100%);
   border: none;
   color: #ffffff;
-  font-size: 11px;
+  font-size: 7.5px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(139, 92, 246, 0.45);
+  box-shadow: 0 2px 10px rgba(139, 92, 246, 0.45);
   transition: all 0.2s ease;
 }
 
 .az-btn-activate-premium:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.6);
 }
 
 .az-premium-art-wrap {
-  width: 90px;
-  height: 90px;
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -6990,46 +7016,46 @@ html, body {
 .az-crown-svg {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.8));
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.8));
 }
 
 .az-crown-pedestal {
   position: absolute;
-  bottom: 6px;
-  width: 60px;
-  height: 10px;
+  bottom: 2px;
+  width: 36px;
+  height: 6px;
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
 }
 
-/* Featured Carousel */
+/* 9. Featured Carousel */
 .az-featured-carousel {
   display: flex;
-  gap: 10px;
+  gap: 6px;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 4px 0 2px;
+  padding: 2px 0;
 }
 
 .az-featured-item {
-  flex: 0 0 74px;
+  flex: 0 0 46px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   cursor: pointer;
-  gap: 3px;
+  gap: 2px;
   transition: transform 0.2s ease;
 }
 
 .az-featured-item:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .az-featured-img-wrap {
-  width: 58px;
-  height: 72px;
-  border-radius: 12px;
+  width: 44px;
+  height: 54px;
+  border-radius: 8px;
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(59, 130, 246, 0.25);
@@ -7045,27 +7071,27 @@ html, body {
 
 .az-featured-badge-dot {
   position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 7px;
-  height: 7px;
+  top: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #22c55e;
   border: 1px solid #070a14;
 }
 
 .az-featured-name {
-  font-size: 10.5px;
+  font-size: 7.5px;
   font-weight: 800;
   color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 74px;
+  max-width: 46px;
 }
 
 .az-featured-status {
-  font-size: 9px;
+  font-size: 6.5px;
   font-weight: 700;
   color: #22c55e;
 }
