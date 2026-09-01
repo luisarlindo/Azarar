@@ -6219,27 +6219,29 @@ html, body {
   box-shadow: 0 0 8px rgba(244, 63, 94, 0.8);
 }
 
-.az-dashboard-grid {
+.tab-radar {
+  width: 100% !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 14px 14px 100px;
 }
 
-@media (min-width: 768px) {
-  .az-dashboard-grid {
-    display: grid;
-    grid-template-columns: 310px 1fr;
-    gap: 16px;
-    align-items: start;
-    padding: 18px 18px 100px;
-  }
+.az-dashboard-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 14px 14px 110px !important;
+  box-sizing: border-box !important;
 }
 
 .az-card {
+  width: 100% !important;
+  box-sizing: border-box !important;
   background: rgba(13, 20, 40, 0.82);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -6249,7 +6251,7 @@ html, body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: hidden;
-  margin-bottom: 14px;
+  margin-bottom: 0px;
 }
 
 .az-card:hover {

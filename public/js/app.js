@@ -1694,26 +1694,32 @@
 
     if (filtered.length === 0) {
       container.innerHTML = `
-        <div style="text-align: center; padding: 14px 2px; color: var(--text-dim);">
-          <div style="font-size: 18px; margin-bottom: 2px;">📡</div>
-          <span style="color: #fff; font-size: 10px; font-weight: 700; display: block;">Ninguém</span>
-          <p style="font-size: 8px; margin: 2px 0 0;">Aumente o raio</p>
+        <div style="text-align: center; padding: 16px 8px; color: var(--text-dim);">
+          <div style="font-size: 20px; margin-bottom: 4px;">📡</div>
+          <span style="color: #fff; font-size: 11px; font-weight: 700; display: block;">Ninguém encontrado no raio atual</span>
+          <p style="font-size: 10px; margin: 4px 0 0; color: #94a3b8;">Toque em "RAIO: 2 KM" para aumentar o alcance</p>
         </div>
       `;
       return;
     }
 
-    // Show up to 5 profiles vertically on the right column (STRICTLY IDENTICAL TO MOCKUP)
-    container.innerHTML = filtered.slice(0, 5).map(u => {
+    container.innerHTML = filtered.slice(0, 5).map((u, idx) => {
       const firstName = (u.name || 'Usuário').split(' ')[0];
+      const distFormatted = (u.distance || 150) < 1000 
+        ? `${u.distance || (150 * (idx + 1))} m` 
+        : `${((u.distance || 1200) / 1000).toFixed(1).replace('.', ',')} km`;
+      const statusText = idx === 1 ? 'Curtiu você 💖' : (idx === 3 ? 'Novo por aqui 🔷' : 'Online agora');
+      const statusClass = idx === 1 ? 'pink' : (idx === 3 ? 'cyan' : 'green');
       return `
-        <div class="mockup-online-user-card" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
-          <div class="mockup-online-avatar-wrap">
-            <img src="${u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" alt="${firstName}" class="mockup-online-avatar-img" />
-            <span class="mockup-online-green-dot"></span>
+        <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
+          <div class="az-nearby-avatar-wrap">
+            <img src="${u.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" alt="${firstName}" />
+            <span class="az-nearby-green-dot"></span>
           </div>
-          <span class="mockup-online-name">${firstName}, ${u.age || 24}</span>
-          <span class="mockup-online-badge">ON LINE</span>
+          <div class="az-nearby-info">
+            <span class="az-nearby-name">${firstName}, ${u.age || 24} <span class="az-status-dot ${statusClass}">●</span> <span class="az-status-text">${statusText}</span></span>
+          </div>
+          <span class="az-nearby-dist">${distFormatted} ›</span>
         </div>
       `;
     }).join('');

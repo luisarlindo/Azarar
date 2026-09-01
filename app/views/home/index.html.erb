@@ -318,414 +318,406 @@
           <div class="tab-page tab-radar active" id="tabRadar">
             <div class="az-dashboard-grid">
               
-              <!-- ================= LEFT COLUMN ================= -->
-              <div class="az-col-left">
-                
-                <!-- 1. USER PROFILE CARD -->
-                <div class="az-card az-profile-card" id="heroProfileCard">
-                  <div class="az-profile-photo-wrap">
-                    <img src="/images/avatars/luisarlindo.jpg" id="heroProfileAvatar" alt="Lucas" class="az-profile-photo" />
-                    
-                    <!-- Edit Photo Button Top Right -->
-                    <button type="button" class="az-btn-photo-edit" onclick="window.azararApp.openEditProfileModal()" title="Editar Foto">
-                      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                    </button>
-                    
-                    <!-- Verified Pill Bottom Left -->
-                    <div class="az-verified-pill">
-                      <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#22c55e" stroke-width="3.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                      <span>VERIFICADO</span>
-                      <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-                    </div>
-                  </div>
-
-                  <div class="az-profile-info-body">
-                    <div class="az-name-row">
-                      <h3 class="az-profile-name" id="heroProfileName">Lucas, 29</h3>
-                      <span class="az-blue-check-badge" title="Perfil Verificado">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="#3b82f6"><circle cx="12" cy="12" r="10" fill="#3b82f6"/><path d="M8.5 12l2.5 2.5 4.5-4.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-                      </span>
-                    </div>
-
-                    <span class="az-profile-occupation" id="heroProfileLocation">Empresário • São Paulo, SP</span>
-
-                    <p class="az-profile-bio-quote" id="heroProfileBio">Vivo intensamente e estou aqui por conexões reais.</p>
+            <div class="az-dashboard-grid">
+              
+              <!-- 1. USER PROFILE CARD -->
+              <div class="az-card az-profile-card" id="heroProfileCard">
+                <div class="az-profile-photo-wrap">
+                  <img src="/images/avatars/luisarlindo.jpg" id="heroProfileAvatar" alt="Lucas" class="az-profile-photo" />
+                  
+                  <!-- Edit Photo Button Top Right -->
+                  <button type="button" class="az-btn-photo-edit" onclick="window.azararApp.openEditProfileModal()" title="Editar Foto">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                  </button>
+                  
+                  <!-- Verified Pill Bottom Left -->
+                  <div class="az-verified-pill">
+                    <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#22c55e" stroke-width="3.2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    <span>VERIFICADO</span>
+                    <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
                   </div>
                 </div>
 
-                <!-- 2. RADAR DE CONEXÕES CARD -->
-                <div class="az-card az-radar-card">
-                  <div class="az-card-header">
-                    <div class="az-card-title-group">
-                      <span class="az-card-icon-spin">🔮</span>
-                      <h4 class="az-card-title-text">RADAR DE CONEXÕES</h4>
-                    </div>
-                    <span class="az-radius-pill-badge" id="lblRadarRadiusPill" onclick="window.azararApp.openVipPlansModal()" title="Ajustar Raio">RAIO: 2 KM</span>
+                <div class="az-profile-info-body">
+                  <div class="az-name-row">
+                    <h3 class="az-profile-name" id="heroProfileName">Lucas, 29</h3>
+                    <span class="az-blue-check-badge" title="Perfil Verificado">
+                      <svg viewBox="0 0 24 24" width="15" height="15" fill="#3b82f6"><circle cx="12" cy="12" r="10" fill="#3b82f6"/><path d="M8.5 12l2.5 2.5 4.5-4.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+                    </span>
                   </div>
 
-                  <!-- RADAR SCOPE -->
-                  <div class="az-radar-scope-wrapper">
-                    <div class="az-radar-scope-circle">
-                      <div class="az-radar-cross-h"></div>
-                      <div class="az-radar-cross-v"></div>
+                  <span class="az-profile-occupation" id="heroProfileLocation">Empresário • São Paulo, SP</span>
 
-                      <!-- Concentric Range Rings -->
-                      <div class="az-scope-ring az-ring-4"></div>
-                      <div class="az-scope-ring az-ring-3"></div>
-                      <div class="az-scope-ring az-ring-2"></div>
-                      <div class="az-scope-ring az-ring-1"></div>
-
-                      <!-- Sweep Light Beam -->
-                      <div class="az-radar-sweep-beam is-spinning" id="radarSweepBeam"></div>
-
-                      <!-- Distance Ring Labels -->
-                      <span class="az-scope-dist-label d-500">500m</span>
-                      <span class="az-scope-dist-label d-1k">1km</span>
-                      <span class="az-scope-dist-label d-15k">1.5km</span>
-                      <span class="az-scope-dist-label d-2k">2km</span>
-
-                      <!-- Center Pulsing Core -->
-                      <div class="az-radar-center-core">
-                        <div class="az-core-glow-pulse"></div>
-                        <div class="az-core-dot"></div>
-                      </div>
-
-                      <!-- Dynamic Nearby Avatars on the Radar Ring -->
-                      <div class="az-radar-avatar-node n-1" onclick="window.azararApp.openDirectChat('usr_1')" style="top: 28%; left: 34%;" title="Juliana, 26">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Juliana" />
-                        <span class="az-avatar-dot-online"></span>
-                      </div>
-                      <div class="az-radar-avatar-node n-2" onclick="window.azararApp.openDirectChat('usr_2')" style="top: 24%; left: 74%;" title="Marina, 24">
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" alt="Marina" />
-                        <span class="az-avatar-dot-online"></span>
-                      </div>
-                      <div class="az-radar-avatar-node n-3" onclick="window.azararApp.openDirectChat('usr_3')" style="top: 50%; left: 19%;" title="Carol, 28">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Carol" />
-                        <span class="az-avatar-dot-online"></span>
-                      </div>
-                      <div class="az-radar-avatar-node n-4" onclick="window.azararApp.openDirectChat('usr_4')" style="top: 53%; left: 77%;" title="Beatriz, 25">
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150" alt="Beatriz" />
-                        <span class="az-avatar-dot-online"></span>
-                      </div>
-                      <div class="az-radar-avatar-node n-5" onclick="window.azararApp.openDirectChat('usr_5')" style="top: 76%; left: 31%;" title="Fernanda, 27">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Fernanda" />
-                        <span class="az-avatar-dot-online"></span>
-                      </div>
-                    </div>
-                  </div>
+                  <p class="az-profile-bio-quote" id="heroProfileBio">Vivo intensamente e estou aqui por conexões reais.</p>
                 </div>
-
-                <!-- 3. PESSOAS POR PERTO CARD -->
-                <div class="az-card az-nearby-card">
-                  <div class="az-card-header">
-                    <h4 class="az-card-title-text" style="font-size: 11px;">PESSOAS POR PERTO</h4>
-                  </div>
-
-                  <div class="az-nearby-vertical-list" id="nearbyUsersList">
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_1')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Juliana" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Juliana, 26 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
-                      </div>
-                      <span class="az-nearby-dist">150 m ›</span>
-                    </div>
-
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_2')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" alt="Marina" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Marina, 24 <span class="az-status-dot pink">●</span> <span class="az-status-text">Curtiu você 💖</span></span>
-                      </div>
-                      <span class="az-nearby-dist">320 m ›</span>
-                    </div>
-
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_3')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Carol" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Carol, 28 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
-                      </div>
-                      <span class="az-nearby-dist">550 m ›</span>
-                    </div>
-
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_4')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150" alt="Beatriz" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Beatriz, 25 <span class="az-status-dot cyan">●</span> <span class="az-status-text">Novo por aqui 🔷</span></span>
-                      </div>
-                      <span class="az-nearby-dist">800 m ›</span>
-                    </div>
-
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_5')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Fernanda" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Fernanda, 27 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
-                      </div>
-                      <span class="az-nearby-dist">1,2 km ›</span>
-                    </div>
-                  </div>
-                </div>
-
               </div>
 
-              <!-- ================= RIGHT COLUMN ================= -->
-              <div class="az-col-right">
+              <!-- 2. HERO PROMO BANNER (NEON HEART 3D) -->
+              <div class="az-card az-banner-hero-card">
+                <div class="az-banner-content">
+                  <span class="az-banner-sublabel">CONECTE-SE SEM LIMITES</span>
+                  <h2 class="az-banner-headline">Encontre alguém <span class="az-pink-gradient-text">inesquecível.</span></h2>
+                  <p class="az-banner-desc">Pessoas reais, desejos reais, conexões extraordinárias.</p>
+                  <button type="button" class="az-btn-turbo" onclick="window.azararApp.openFlashBoostModal()">
+                    <span>🚀</span>
+                    <span>TURBINAR PERFIL</span>
+                  </button>
+                </div>
                 
-                <!-- 1. HERO PROMO BANNER (NEON HEART 3D) -->
-                <div class="az-card az-banner-hero-card">
-                  <div class="az-banner-content">
-                    <span class="az-banner-sublabel">CONECTE-SE SEM LIMITES</span>
-                    <h2 class="az-banner-headline">Encontre alguém <span class="az-pink-gradient-text">inesquecível.</span></h2>
-                    <p class="az-banner-desc">Pessoas reais, desejos reais, conexões extraordinárias.</p>
-                    <button type="button" class="az-btn-turbo" onclick="window.azararApp.openFlashBoostModal()">
-                      <span>🚀</span>
-                      <span>TURBINAR PERFIL</span>
-                    </button>
+                <div class="az-banner-art-wrap">
+                  <!-- 3D Neon Glowing Heart Art -->
+                  <div class="az-neon-heart-art">
+                    <svg viewBox="0 0 100 100" class="az-heart-svg">
+                      <defs>
+                        <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#f43f5e" />
+                          <stop offset="50%" stop-color="#ec4899" />
+                          <stop offset="100%" stop-color="#8b5cf6" />
+                        </linearGradient>
+                        <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                          <feGaussianBlur stdDeviation="4" result="blur" />
+                          <feMerge>
+                            <feMergeNode in="blur" />
+                            <feMergeNode in="SourceGraphic" />
+                          </feMerge>
+                        </filter>
+                      </defs>
+                      <path d="M50 82 S18 56 18 34 A16 16 0 0 1 50 24 A16 16 0 0 1 82 34 C82 56 50 82 50 82 Z" fill="none" stroke="url(#heartGrad)" stroke-width="4.5" filter="url(#glowFilter)" />
+                    </svg>
+                    <div class="az-heart-pedestal"></div>
                   </div>
-                  
-                  <div class="az-banner-art-wrap">
-                    <!-- 3D Neon Glowing Heart Art -->
-                    <div class="az-neon-heart-art">
-                      <svg viewBox="0 0 100 100" class="az-heart-svg">
-                        <defs>
-                          <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#f43f5e" />
-                            <stop offset="50%" stop-color="#ec4899" />
-                            <stop offset="100%" stop-color="#8b5cf6" />
-                          </linearGradient>
-                          <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="4" result="blur" />
-                            <feMerge>
-                              <feMergeNode in="blur" />
-                              <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                          </filter>
-                        </defs>
-                        <path d="M50 82 S18 56 18 34 A16 16 0 0 1 50 24 A16 16 0 0 1 82 34 C82 56 50 82 50 82 Z" fill="none" stroke="url(#heartGrad)" stroke-width="4.5" filter="url(#glowFilter)" />
-                      </svg>
-                      <div class="az-heart-pedestal"></div>
+                </div>
+              </div>
+
+              <!-- 3. SEU DESEMPENHO CARD -->
+              <div class="az-card az-stats-card">
+                <div class="az-card-header">
+                  <div class="az-card-title-group">
+                    <span style="font-size: 14px;">📈</span>
+                    <h4 class="az-card-title-text">SEU DESEMPENHO</h4>
+                  </div>
+                  <span class="az-dropdown-pill">Esta semana ▾</span>
+                </div>
+
+                <div class="az-stats-4col-grid">
+                  <div class="az-stat-box">
+                    <span class="az-stat-icon-wrap heart">💖</span>
+                    <strong class="az-stat-number" id="statLikesCount">386</strong>
+                    <span class="az-stat-label">Curtidas</span>
+                    <span class="az-stat-growth">+23 esta semana</span>
+                  </div>
+
+                  <div class="az-stat-box">
+                    <span class="az-stat-icon-wrap eye">👁️</span>
+                    <strong class="az-stat-number" id="statViewsCount">1,2K</strong>
+                    <span class="az-stat-label">Visualizações</span>
+                    <span class="az-stat-growth">+56 esta semana</span>
+                  </div>
+
+                  <div class="az-stat-box">
+                    <span class="az-stat-icon-wrap chat">💬</span>
+                    <strong class="az-stat-number" id="statChatsCount">128</strong>
+                    <span class="az-stat-label">Conversas</span>
+                    <span class="az-stat-growth">+18 esta semana</span>
+                  </div>
+
+                  <div class="az-stat-box">
+                    <span class="az-stat-icon-wrap star">⭐</span>
+                    <strong class="az-stat-number" id="statRatingCount">4,8</strong>
+                    <span class="az-stat-label">Avaliação</span>
+                    <span class="az-stat-growth highlight">Alto interesse</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. RADAR DE CONEXÕES CARD -->
+              <div class="az-card az-radar-card">
+                <div class="az-card-header">
+                  <div class="az-card-title-group">
+                    <span class="az-card-icon-spin">🔮</span>
+                    <h4 class="az-card-title-text">RADAR DE CONEXÕES</h4>
+                  </div>
+                  <span class="az-radius-pill-badge" id="lblRadarRadiusPill" onclick="window.azararApp.openVipPlansModal()" title="Ajustar Raio">RAIO: 2 KM</span>
+                </div>
+
+                <!-- RADAR SCOPE -->
+                <div class="az-radar-scope-wrapper">
+                  <div class="az-radar-scope-circle">
+                    <div class="az-radar-cross-h"></div>
+                    <div class="az-radar-cross-v"></div>
+
+                    <!-- Concentric Range Rings -->
+                    <div class="az-scope-ring az-ring-4"></div>
+                    <div class="az-scope-ring az-ring-3"></div>
+                    <div class="az-scope-ring az-ring-2"></div>
+                    <div class="az-scope-ring az-ring-1"></div>
+
+                    <!-- Sweep Light Beam -->
+                    <div class="az-radar-sweep-beam is-spinning" id="radarSweepBeam"></div>
+
+                    <!-- Distance Ring Labels -->
+                    <span class="az-scope-dist-label d-500">500m</span>
+                    <span class="az-scope-dist-label d-1k">1km</span>
+                    <span class="az-scope-dist-label d-15k">1.5km</span>
+                    <span class="az-scope-dist-label d-2k">2km</span>
+
+                    <!-- Center Pulsing Core -->
+                    <div class="az-radar-center-core">
+                      <div class="az-core-glow-pulse"></div>
+                      <div class="az-core-dot"></div>
+                    </div>
+
+                    <!-- Dynamic Nearby Avatars on the Radar Ring -->
+                    <div class="az-radar-avatar-node n-1" onclick="window.azararApp.openDirectChat('usr_1')" style="top: 28%; left: 34%;" title="Juliana, 26">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Juliana" />
+                      <span class="az-avatar-dot-online"></span>
+                    </div>
+                    <div class="az-radar-avatar-node n-2" onclick="window.azararApp.openDirectChat('usr_2')" style="top: 24%; left: 74%;" title="Marina, 24">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" alt="Marina" />
+                      <span class="az-avatar-dot-online"></span>
+                    </div>
+                    <div class="az-radar-avatar-node n-3" onclick="window.azararApp.openDirectChat('usr_3')" style="top: 50%; left: 19%;" title="Carol, 28">
+                      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Carol" />
+                      <span class="az-avatar-dot-online"></span>
+                    </div>
+                    <div class="az-radar-avatar-node n-4" onclick="window.azararApp.openDirectChat('usr_4')" style="top: 53%; left: 77%;" title="Beatriz, 25">
+                      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150" alt="Beatriz" />
+                      <span class="az-avatar-dot-online"></span>
+                    </div>
+                    <div class="az-radar-avatar-node n-5" onclick="window.azararApp.openDirectChat('usr_5')" style="top: 76%; left: 31%;" title="Fernanda, 27">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Fernanda" />
+                      <span class="az-avatar-dot-online"></span>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <!-- 2. SEU DESEMPENHO CARD -->
-                <div class="az-card az-stats-card">
-                  <div class="az-card-header">
-                    <div class="az-card-title-group">
-                      <span style="font-size: 14px;">📈</span>
-                      <h4 class="az-card-title-text">SEU DESEMPENHO</h4>
+              <!-- 5. SOBRE VOCÊ CARD -->
+              <div class="az-card az-about-card">
+                <div class="az-card-header">
+                  <h4 class="az-card-title-text">SOBRE VOCÊ</h4>
+                  <button type="button" class="az-btn-inline-edit" onclick="window.azararApp.openEditProfileModal()">
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Editar</span>
+                  </button>
+                </div>
+
+                <div class="az-about-grid-2x3">
+                  <div class="az-about-item">
+                    <span class="az-about-icon">📏</span>
+                    <div class="az-about-text-group">
+                      <span class="az-about-k">Altura</span>
+                      <strong class="az-about-v" id="profAboutHeight">1,82 m</strong>
                     </div>
-                    <span class="az-dropdown-pill">Esta semana ▾</span>
                   </div>
 
-                  <div class="az-stats-4col-grid">
-                    <div class="az-stat-box">
-                      <span class="az-stat-icon-wrap heart">💖</span>
-                      <strong class="az-stat-number" id="statLikesCount">386</strong>
-                      <span class="az-stat-label">Curtidas</span>
-                      <span class="az-stat-growth">+23 esta semana</span>
+                  <div class="az-about-item">
+                    <span class="az-about-icon">💼</span>
+                    <div class="az-about-text-group">
+                      <span class="az-about-k">Profissão</span>
+                      <strong class="az-about-v" id="profAboutJob">Empresário</strong>
                     </div>
+                  </div>
 
-                    <div class="az-stat-box">
-                      <span class="az-stat-icon-wrap eye">👁️</span>
-                      <strong class="az-stat-number" id="statViewsCount">1,2K</strong>
-                      <span class="az-stat-label">Visualizações</span>
-                      <span class="az-stat-growth">+56 esta semana</span>
+                  <div class="az-about-item">
+                    <span class="az-about-icon">♌</span>
+                    <div class="az-about-text-group">
+                      <span class="az-about-k">Signo</span>
+                      <strong class="az-about-v" id="profAboutSign">Leão</strong>
                     </div>
+                  </div>
 
-                    <div class="az-stat-box">
-                      <span class="az-stat-icon-wrap chat">💬</span>
-                      <strong class="az-stat-number" id="statChatsCount">128</strong>
-                      <span class="az-stat-label">Conversas</span>
-                      <span class="az-stat-growth">+18 esta semana</span>
+                  <div class="az-about-item">
+                    <span class="az-about-icon">📅</span>
+                    <div class="az-about-text-group">
+                      <span class="az-about-k">Idade</span>
+                      <strong class="az-about-v" id="profAboutAge">29 anos</strong>
                     </div>
+                  </div>
 
-                    <div class="az-stat-box">
-                      <span class="az-stat-icon-wrap star">⭐</span>
-                      <strong class="az-stat-number" id="statRatingCount">4,8</strong>
-                      <span class="az-stat-label">Avaliação</span>
-                      <span class="az-stat-growth highlight">Alto interesse</span>
+                  <div class="az-about-item">
+                    <span class="az-about-icon">📍</span>
+                    <div class="az-about-text-group">
+                      <span class="az-about-k">Localização</span>
+                      <strong class="az-about-v" id="profAboutLoc">São Paulo, SP</strong>
+                    </div>
+                  </div>
+
+                  <div class="az-about-item">
+                    <span class="az-about-icon">🎯</span>
+                    <div class="az-about-text-group">
+                      <span class="az-about-k">Objetivo</span>
+                      <strong class="az-about-v" id="profAboutIntent">Algo sério / Conexões reais</strong>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <!-- 3. SOBRE VOCÊ CARD -->
-                <div class="az-card az-about-card">
-                  <div class="az-card-header">
-                    <h4 class="az-card-title-text">SOBRE VOCÊ</h4>
-                    <button type="button" class="az-btn-inline-edit" onclick="window.azararApp.openEditProfileModal()">
-                      <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-                      <span>Editar</span>
-                    </button>
-                  </div>
-
-                  <div class="az-about-grid-2x3">
-                    <div class="az-about-item">
-                      <span class="az-about-icon">📏</span>
-                      <div class="az-about-text-group">
-                        <span class="az-about-k">Altura</span>
-                        <strong class="az-about-v" id="profAboutHeight">1,82 m</strong>
-                      </div>
-                    </div>
-
-                    <div class="az-about-item">
-                      <span class="az-about-icon">💼</span>
-                      <div class="az-about-text-group">
-                        <span class="az-about-k">Profissão</span>
-                        <strong class="az-about-v" id="profAboutJob">Empresário</strong>
-                      </div>
-                    </div>
-
-                    <div class="az-about-item">
-                      <span class="az-about-icon">♌</span>
-                      <div class="az-about-text-group">
-                        <span class="az-about-k">Signo</span>
-                        <strong class="az-about-v" id="profAboutSign">Leão</strong>
-                      </div>
-                    </div>
-
-                    <div class="az-about-item">
-                      <span class="az-about-icon">📅</span>
-                      <div class="az-about-text-group">
-                        <span class="az-about-k">Idade</span>
-                        <strong class="az-about-v" id="profAboutAge">29 anos</strong>
-                      </div>
-                    </div>
-
-                    <div class="az-about-item">
-                      <span class="az-about-icon">📍</span>
-                      <div class="az-about-text-group">
-                        <span class="az-about-k">Localização</span>
-                        <strong class="az-about-v" id="profAboutLoc">São Paulo, SP</strong>
-                      </div>
-                    </div>
-
-                    <div class="az-about-item">
-                      <span class="az-about-icon">🎯</span>
-                      <div class="az-about-text-group">
-                        <span class="az-about-k">Objetivo</span>
-                        <strong class="az-about-v" id="profAboutIntent">Algo sério / Conexões reais</strong>
-                      </div>
-                    </div>
-                  </div>
+              <!-- 6. INTERESSES CARD -->
+              <div class="az-card az-interests-card">
+                <div class="az-card-header">
+                  <h4 class="az-card-title-text">INTERESSES</h4>
+                  <span class="az-link-view-all" onclick="window.azararApp.switchTab('profile')">Ver todos ›</span>
                 </div>
 
-                <!-- 4. INTERESSES CARD -->
-                <div class="az-card az-interests-card">
-                  <div class="az-card-header">
-                    <h4 class="az-card-title-text">INTERESSES</h4>
-                    <span class="az-link-view-all" onclick="window.azararApp.switchTab('profile')">Ver todos ›</span>
-                  </div>
+                <div class="az-interests-pills-wrap">
+                  <span class="az-interest-pill">✈️ Viagens</span>
+                  <span class="az-interest-pill">🎵 Música</span>
+                  <span class="az-interest-pill">🏋️ Treino</span>
+                  <span class="az-interest-pill">🍽️ Gastronomia</span>
+                  <span class="az-interest-pill">🏖️ Praia</span>
+                  <span class="az-interest-pill">💻 Tecnologia</span>
+                </div>
+              </div>
 
-                  <div class="az-interests-pills-wrap">
-                    <span class="az-interest-pill">✈️ Viagens</span>
-                    <span class="az-interest-pill">🎵 Música</span>
-                    <span class="az-interest-pill">🏋️ Treino</span>
-                    <span class="az-interest-pill">🍽️ Gastronomia</span>
-                    <span class="az-interest-pill">🏖️ Praia</span>
-                    <span class="az-interest-pill">💻 Tecnologia</span>
-                  </div>
+              <!-- 7. PESSOAS POR PERTO CARD -->
+              <div class="az-card az-nearby-card">
+                <div class="az-card-header">
+                  <h4 class="az-card-title-text" style="font-size: 11px;">PESSOAS POR PERTO</h4>
                 </div>
 
-                <!-- 5. AZARAR PREMIUM CARD (NEON CROWN 3D) -->
-                <div class="az-card az-premium-banner-card">
-                  <div class="az-premium-info">
-                    <div class="az-premium-title-row">
-                      <span class="az-premium-icon">💎</span>
-                      <h3 class="az-premium-title-text">AZARAR PREMIUM</h3>
+                <div class="az-nearby-vertical-list" id="nearbyUsersList">
+                  <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_1')">
+                    <div class="az-nearby-avatar-wrap">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Juliana" />
+                      <span class="az-nearby-green-dot"></span>
                     </div>
-
-                    <ul class="az-premium-perks-list">
-                      <li><span>⭐</span> Apareça para mais pessoas</li>
-                      <li><span>👁️</span> Veja quem te curtiu</li>
-                      <li><span>🛡️</span> Filtros avançados</li>
-                      <li><span>⭐</span> Destaque no Radar</li>
-                    </ul>
-
-                    <button type="button" class="az-btn-activate-premium" onclick="window.azararApp.openVipPlansModal()">
-                      ATIVAR PREMIUM
-                    </button>
+                    <div class="az-nearby-info">
+                      <span class="az-nearby-name">Juliana, 26 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
+                    </div>
+                    <span class="az-nearby-dist">150 m ›</span>
                   </div>
 
-                  <div class="az-premium-art-wrap">
-                    <div class="az-neon-crown-art">
-                      <svg viewBox="0 0 100 80" class="az-crown-svg">
-                        <defs>
-                          <linearGradient id="crownGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#38bdf8" />
-                            <stop offset="50%" stop-color="#ec4899" />
-                            <stop offset="100%" stop-color="#f59e0b" />
-                          </linearGradient>
-                        </defs>
-                        <path d="M15 65 L20 28 L38 48 L50 20 L62 48 L80 28 L85 65 Z" fill="none" stroke="url(#crownGrad)" stroke-width="4.5" stroke-linejoin="round" />
-                        <circle cx="20" cy="24" r="4" fill="#38bdf8" />
-                        <circle cx="50" cy="16" r="4.5" fill="#f43f5e" />
-                        <circle cx="80" cy="24" r="4" fill="#f59e0b" />
-                      </svg>
-                      <div class="az-crown-pedestal"></div>
+                  <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_2')">
+                    <div class="az-nearby-avatar-wrap">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" alt="Marina" />
+                      <span class="az-nearby-green-dot"></span>
                     </div>
-                  </div>
-                </div>
-
-                <!-- 6. DESTAQUES PARA VOCÊ CARD -->
-                <div class="az-card az-featured-card">
-                  <div class="az-card-header">
-                    <h4 class="az-card-title-text">DESTAQUES PARA VOCÊ</h4>
-                    <span class="az-link-view-all" onclick="window.azararApp.switchTab('likes')">Ver mais ›</span>
+                    <div class="az-nearby-info">
+                      <span class="az-nearby-name">Marina, 24 <span class="az-status-dot pink">●</span> <span class="az-status-text">Curtiu você 💖</span></span>
+                    </div>
+                    <span class="az-nearby-dist">320 m ›</span>
                   </div>
 
-                  <div class="az-featured-carousel">
-                    <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_1')">
-                      <div class="az-featured-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" alt="Isabela" />
-                        <span class="az-featured-badge-dot"></span>
-                      </div>
-                      <span class="az-featured-name">Isabela, 23</span>
-                      <span class="az-featured-status">online</span>
+                  <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_3')">
+                    <div class="az-nearby-avatar-wrap">
+                      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Carol" />
+                      <span class="az-nearby-green-dot"></span>
                     </div>
+                    <div class="az-nearby-info">
+                      <span class="az-nearby-name">Carol, 28 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
+                    </div>
+                    <span class="az-nearby-dist">550 m ›</span>
+                  </div>
 
-                    <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_2')">
-                      <div class="az-featured-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300" alt="Renata" />
-                        <span class="az-featured-badge-dot"></span>
-                      </div>
-                      <span class="az-featured-name">Renata, 26</span>
-                      <span class="az-featured-status">online</span>
+                  <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_4')">
+                    <div class="az-nearby-avatar-wrap">
+                      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150" alt="Beatriz" />
+                      <span class="az-nearby-green-dot"></span>
                     </div>
+                    <div class="az-nearby-info">
+                      <span class="az-nearby-name">Beatriz, 25 <span class="az-status-dot cyan">●</span> <span class="az-status-text">Novo por aqui 🔷</span></span>
+                    </div>
+                    <span class="az-nearby-dist">800 m ›</span>
+                  </div>
 
-                    <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_3')">
-                      <div class="az-featured-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300" alt="Larissa" />
-                        <span class="az-featured-badge-dot"></span>
-                      </div>
-                      <span class="az-featured-name">Larissa, 24</span>
-                      <span class="az-featured-status">online</span>
+                  <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_5')">
+                    <div class="az-nearby-avatar-wrap">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Fernanda" />
+                      <span class="az-nearby-green-dot"></span>
                     </div>
-
-                    <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_4')">
-                      <div class="az-featured-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300" alt="Aline" />
-                        <span class="az-featured-badge-dot"></span>
-                      </div>
-                      <span class="az-featured-name">Aline, 28</span>
-                      <span class="az-featured-status">online</span>
+                    <div class="az-nearby-info">
+                      <span class="az-nearby-name">Fernanda, 27 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
                     </div>
+                    <span class="az-nearby-dist">1,2 km ›</span>
                   </div>
                 </div>
+              </div>
 
+              <!-- 8. AZARAR PREMIUM CARD (NEON CROWN 3D) -->
+              <div class="az-card az-premium-banner-card">
+                <div class="az-premium-info">
+                  <div class="az-premium-title-row">
+                    <span class="az-premium-icon">💎</span>
+                    <h3 class="az-premium-title-text">AZARAR PREMIUM</h3>
+                  </div>
+
+                  <ul class="az-premium-perks-list">
+                    <li><span>⭐</span> Apareça para mais pessoas</li>
+                    <li><span>👁️</span> Veja quem te curtiu</li>
+                    <li><span>🛡️</span> Filtros avançados</li>
+                    <li><span>⭐</span> Destaque no Radar</li>
+                  </ul>
+
+                  <button type="button" class="az-btn-activate-premium" onclick="window.azararApp.openVipPlansModal()">
+                    ATIVAR PREMIUM
+                  </button>
+                </div>
+
+                <div class="az-premium-art-wrap">
+                  <div class="az-neon-crown-art">
+                    <svg viewBox="0 0 100 80" class="az-crown-svg">
+                      <defs>
+                        <linearGradient id="crownGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stop-color="#38bdf8" />
+                          <stop offset="50%" stop-color="#ec4899" />
+                          <stop offset="100%" stop-color="#f59e0b" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M15 65 L20 28 L38 48 L50 20 L62 48 L80 28 L85 65 Z" fill="none" stroke="url(#crownGrad)" stroke-width="4.5" stroke-linejoin="round" />
+                      <circle cx="20" cy="24" r="4" fill="#38bdf8" />
+                      <circle cx="50" cy="16" r="4.5" fill="#f43f5e" />
+                      <circle cx="80" cy="24" r="4" fill="#f59e0b" />
+                    </svg>
+                    <div class="az-crown-pedestal"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 9. DESTAQUES PARA VOCÊ CARD -->
+              <div class="az-card az-featured-card">
+                <div class="az-card-header">
+                  <h4 class="az-card-title-text">DESTAQUES PARA VOCÊ</h4>
+                  <span class="az-link-view-all" onclick="window.azararApp.switchTab('likes')">Ver mais ›</span>
+                </div>
+
+                <div class="az-featured-carousel">
+                  <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_1')">
+                    <div class="az-featured-img-wrap">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300" alt="Isabela" />
+                      <span class="az-featured-badge-dot"></span>
+                    </div>
+                    <span class="az-featured-name">Isabela, 23</span>
+                    <span class="az-featured-status">online</span>
+                  </div>
+
+                  <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_2')">
+                    <div class="az-featured-img-wrap">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=300" alt="Renata" />
+                      <span class="az-featured-badge-dot"></span>
+                    </div>
+                    <span class="az-featured-name">Renata, 26</span>
+                    <span class="az-featured-status">online</span>
+                  </div>
+
+                  <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_3')">
+                    <div class="az-featured-img-wrap">
+                      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300" alt="Larissa" />
+                      <span class="az-featured-badge-dot"></span>
+                    </div>
+                    <span class="az-featured-name">Larissa, 24</span>
+                    <span class="az-featured-status">online</span>
+                  </div>
+
+                  <div class="az-featured-item" onclick="window.azararApp.openDirectChat('usr_feat_4')">
+                    <div class="az-featured-img-wrap">
+                      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300" alt="Aline" />
+                      <span class="az-featured-badge-dot"></span>
+                    </div>
+                    <span class="az-featured-name">Aline, 28</span>
+                    <span class="az-featured-status">online</span>
+                  </div>
+                </div>
               </div>
 
             </div>
