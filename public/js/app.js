@@ -1463,7 +1463,10 @@
       <div class="showcase-hero-overlay"></div>
 
       <div class="showcase-top-bar">
-        <button type="button" class="btn-showcase-back" onclick="window.azararApp.closeVenueShowcaseMobile()" title="Voltar para a lista">‹</button>
+        <button type="button" class="btn-showcase-back" onclick="window.azararApp.closeVenueShowcaseMobile()" title="Voltar para a lista">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Voltar</span>
+        </button>
 
         <div class="showcase-top-actions">
           <button type="button" class="btn-showcase-icon" onclick="window.azararApp.toast('Adicionado aos favoritos ❤️')" title="Favoritar local">
