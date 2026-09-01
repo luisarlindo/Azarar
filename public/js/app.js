@@ -217,7 +217,12 @@
         localStorage.setItem('azarar_users', JSON.stringify(SEED_USERS));
         return SEED_USERS;
       }
-      return JSON.parse(data);
+      try {
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch(e) {}
+      localStorage.setItem('azarar_users', JSON.stringify(SEED_USERS));
+      return SEED_USERS;
     },
     saveUsers(users) {
       localStorage.setItem('azarar_users', JSON.stringify(users));
@@ -1094,6 +1099,16 @@
     onContinuousRadiusChange(val);
   }
 
+  const onRadiusSliderInput = onContinuousRadiusInput;
+  const onRadiusSliderChange = onContinuousRadiusChange;
+
+  function switchRadarSubTab(subTab) {
+    if (subTab === 'mural') {
+      const muralCard = document.querySelector('.pinned-mural-card') || document.querySelector('.mural-section');
+      if (muralCard) muralCard.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
   function setProximityStep(stepIndex) {
     const idx = parseInt(stepIndex, 10);
     if (isNaN(idx)) return;
@@ -1655,15 +1670,8 @@
       return (u.distance || 0) <= currentRadius;
     });
 
-    if (currentRadarFilter === 'venues') {
-      // In venues filter, prioritize venues
-      filtered = filtered.slice(0, 3);
-    }
-
     const countEl = document.getElementById('countOnlineUsers');
     if (countEl) countEl.textContent = filtered.length;
-
-    renderVenuePins();
 
     if (!container) return;
 
@@ -3069,26 +3077,8 @@
     animateParticles();
   }
 
-  // Delegated click handler for distance chips, steppers, venue pins, filters, and modal close buttons
+  // Delegated click handler for distance chips, steppers, and modal close buttons
   document.addEventListener('click', (e) => {
-    const venuePin = e.target.closest('.radar-venue-pin');
-    if (venuePin) {
-      e.preventDefault();
-      e.stopPropagation();
-      const vId = venuePin.getAttribute('data-venue-id');
-      if (vId) openVenueDetailsModal(vId);
-      return;
-    }
-
-    const filterPill = e.target.closest('.radar-filter-pill');
-    if (filterPill) {
-      e.preventDefault();
-      e.stopPropagation();
-      const fType = filterPill.getAttribute('data-filter');
-      if (fType) setRadarFilter(fType);
-      return;
-    }
-
     const stepperBtn = e.target.closest('.radar-stepper-btn');
     if (stepperBtn) {
       e.preventDefault();
@@ -3230,15 +3220,6 @@
     filterVenuesByCategory,
     onVenuesSearchInput,
     clearVenuesSearch,
-    setRadarFilter,
-    openRadarFiltersModal,
-    closeRadarFiltersModal,
-    selectRadarDisplayType,
-    onVenueCategoryToggle,
-    selectVibeFilter,
-    applyRadarFilters,
-    openVenueDetailsModal,
-    closeVenueDetailsModal,
     performVenueCheckin,
     toggleSideMenu,
     toggleRadarFilterModal,
