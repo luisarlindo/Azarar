@@ -33,8 +33,13 @@ class User < ApplicationRecord
   before_validation :clean_username
 
   # Preference Helpers for Flexible Schema
+  def preferences
+    val = super
+    val.is_a?(Hash) ? val : {}
+  end
+
   def sou
-    preferences["sou"]
+    preferences["sou"] || "homem"
   end
 
   def sou=(val)
@@ -42,7 +47,7 @@ class User < ApplicationRecord
   end
 
   def acompanhado
-    preferences["acompanhado"] || {}
+    preferences["acompanhado"] || { "tipo" => "sozinho", "sub_opcoes" => [] }
   end
 
   def acompanhado=(val)
@@ -50,7 +55,7 @@ class User < ApplicationRecord
   end
 
   def procuro
-    preferences["procuro"] || []
+    preferences["procuro"] || ["mulher"]
   end
 
   def procuro=(val)
