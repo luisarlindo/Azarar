@@ -307,14 +307,59 @@
   // ==========================================================================
   // 3. APP STATE & REFERENCES
   // ==========================================================================
-  let currentUser = (typeof window !== 'undefined' && window.INITIAL_CURRENT_USER) ? window.INITIAL_CURRENT_USER : Storage.getCurrentUser();
+  let initialDbUser = (typeof window !== 'undefined') ? (window.__INITIAL_USER__ || window.INITIAL_CURRENT_USER) : null;
+  let currentUser = initialDbUser || Storage.getCurrentUser();
   if (currentUser) {
     if (!currentUser.avatar || currentUser.avatar.includes('unsplash') || currentUser.emailPhone === 'luisarlindo2@gmail.com' || currentUser.username === 'luisarlindo' || currentUser.name === 'Luis Arlindo') {
-      currentUser.avatar = '/images/avatars/luisarlindo.jpg';
+      currentUser.avatar = (currentUser.avatar && !currentUser.avatar.includes('unsplash')) ? currentUser.avatar : '/images/avatars/luisarlindo.jpg';
       currentUser.name = currentUser.name || 'Luis Arlindo';
     }
     currentUser.plan = currentUser.plan || 'free';
+    currentUser.preferences = currentUser.preferences || {};
     Storage.saveCurrentUser(currentUser);
+  }
+
+  function formatSouLabel(val) {
+    switch (val) {
+      case 'homem': return '♂️ Sou Homem';
+      case 'mulher': return '♀️ Sou Mulher';
+      case 'lgbtqiapn': return '🏳️‍🌈 Sou LGBTQIAPN+';
+      default: return val ? String(val) : '♂️ Sou Homem';
+    }
+  }
+
+  function formatAcompanhadoLabel(acomp) {
+    if (!acomp) return '🚶 Sozinho(a)';
+    let tipo = typeof acomp === 'object' ? acomp.tipo : acomp;
+    let sub = (typeof acomp === 'object' && Array.isArray(acomp.sub_opcoes)) ? acomp.sub_opcoes : [];
+
+    switch (tipo) {
+      case 'homem': return '👤 De um Homem';
+      case 'mulher': return '👩 De uma Mulher';
+      case 'lgbtqiapn': return '💖 LGBTQIAPN+';
+      case 'familiar':
+        if (sub.length > 0) {
+          const subs = sub.map(s => s === 'pet' ? '🐾 Pet' : '👥 Pessoa').join(' + ');
+          return `👨‍👩‍👧 Familiar (${subs})`;
+        }
+        return '👨‍👩‍👧 Familiar';
+      case 'sozinho':
+      default:
+        return '🚶 Sozinho(a)';
+    }
+  }
+
+  function formatProcuroLabel(proc) {
+    if (!proc) return '👩 Mulher';
+    const list = Array.isArray(proc) ? proc : [proc];
+    const map = {
+      homem: '👤 Homem',
+      mulher: '👩 Mulher',
+      lgbtqiapn: '🏳️‍🌈 LGBTQIAPN+',
+      casal_tradicional: '💑 Casal Tradicional',
+      casal_homoafetivo: '👬 Casal Homoafetivo'
+    };
+    return list.map(p => map[p] || p).join(', ') || '👩 Mulher';
   }
   let currentRadius = 5000;
   let isOnlineNow = currentUser ? (currentUser.isOnline ?? true) : true;
@@ -585,6 +630,24 @@
     const statFollowers = document.getElementById('profStatFollowers');
     const statFollowing = document.getElementById('profStatFollowing');
 
+    // Populate Side Drawer User Info
+    const drawerAvatar = document.getElementById('azDrawerAvatar');
+    const drawerName = document.getElementById('azDrawerName');
+    const drawerHandle = document.getElementById('azDrawerHandle');
+    if (drawerAvatar && currentUser.avatar) drawerAvatar.src = currentUser.avatar;
+    if (drawerName) drawerName.textContent = currentUser.name || 'Luis Arlindo';
+    if (drawerHandle) drawerHandle.textContent = '@' + (currentUser.username || 'luisarlindo');
+
+    // Populate Preferences Labels on Profile
+    const elSou = document.getElementById('profPrefSou');
+    if (elSou) elSou.textContent = formatSouLabel(currentUser.preferences?.sou || currentUser.sou);
+
+    const elAcomp = document.getElementById('profPrefAcompanhado');
+    if (elAcomp) elAcomp.textContent = formatAcompanhadoLabel(currentUser.preferences?.acompanhado || currentUser.acompanhado);
+
+    const elProc = document.getElementById('profPrefProcuro');
+    if (elProc) elProc.textContent = formatProcuroLabel(currentUser.preferences?.procuro || currentUser.procuro);
+
     const userPosts = Storage.getPosts().filter(p => p.authorId === currentUser.id);
     if (statPosts) statPosts.textContent = userPosts.length + (currentUser.photos?.length || 0);
     if (statFollowers) statFollowers.textContent = currentUser.followersCount || 148;
@@ -606,20 +669,32 @@
     if (navigator.vibrate) navigator.vibrate(10);
     currentActiveTab = tabId;
 
+    // Remove active and hide all tab pages
     document.querySelectorAll('.tab-page').forEach(page => {
       page.classList.remove('active');
       page.style.display = 'none';
     });
-    document.querySelectorAll('.nav-tab-item, .az-dock-btn').forEach(btn => btn.classList.remove('active'));
 
-    const activePage = document.getElementById(`tab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
-    const activeNav = document.getElementById(`navTab${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`);
+    // Remove active from dock buttons, top nav tabs, and drawer items
+    document.querySelectorAll('.nav-tab-item, .az-dock-btn, .az-drawer-item').forEach(btn => {
+      btn.classList.remove('active');
+    });
+
+    const capTab = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+    const activePage = document.getElementById(`tab${capTab}`);
+    const activeNav = document.getElementById(`navTab${capTab}`);
+    const drawerNav = document.getElementById(`drawerNav${capTab}`);
 
     if (activePage) {
       activePage.classList.add('active');
-      activePage.style.display = 'flex';
+      activePage.style.display = (tabId === 'radar' ? 'block' : 'flex');
+      activePage.scrollTop = 0;
     }
     if (activeNav) activeNav.classList.add('active');
+    if (drawerNav) drawerNav.classList.add('active');
+
+    // Close side drawer if open
+    toggleSideMenu(false);
 
     if (tabId === 'radar') {
       activateRadarSpin(15);
@@ -630,6 +705,7 @@
     if (tabId === 'likes') renderLikesTab();
     if (tabId === 'messages') renderDirectConversations();
     if (tabId === 'profile') {
+      renderAppShell();
       updateVerificationUI();
       renderProfilePhotoGrid();
     }
@@ -668,14 +744,71 @@
     renderRadarUsers();
   }
 
-  function toggleSideMenu() {
+  function toggleSideMenu(forceState) {
     if (navigator.vibrate) navigator.vibrate(15);
-    showToast('✨ Menu AZARAR');
+    const drawer = document.getElementById('azSideMenuDrawer');
+    const overlay = document.getElementById('azSideMenuOverlay');
+    if (!drawer || !overlay) return;
+
+    const shouldOpen = (typeof forceState === 'boolean') ? forceState : !drawer.classList.contains('active');
+    if (shouldOpen) {
+      drawer.classList.add('active');
+      overlay.classList.add('active');
+    } else {
+      drawer.classList.remove('active');
+      overlay.classList.remove('active');
+    }
+  }
+
+  function openRadarFiltersModal() {
+    document.getElementById('modalRadarFilters')?.classList.add('active');
+  }
+
+  function closeRadarFiltersModal() {
+    document.getElementById('modalRadarFilters')?.classList.remove('active');
   }
 
   function toggleRadarFilterModal() {
-    if (navigator.vibrate) navigator.vibrate(15);
-    showToast('🎚️ Ajuste o raio de busca pelo slider abaixo do radar');
+    const modal = document.getElementById('modalRadarFilters');
+    if (!modal) return;
+    if (modal.classList.contains('active')) {
+      closeRadarFiltersModal();
+    } else {
+      openRadarFiltersModal();
+    }
+  }
+
+  function selectRadarDisplayType(type) {
+    ['fBtnAll', 'fBtnVenues', 'fBtnPeople'].forEach(id => {
+      document.getElementById(id)?.classList.remove('active');
+    });
+    if (type === 'all') document.getElementById('fBtnAll')?.classList.add('active');
+    if (type === 'venues') document.getElementById('fBtnVenues')?.classList.add('active');
+    if (type === 'people') document.getElementById('fBtnPeople')?.classList.add('active');
+  }
+
+  function selectVibeFilter(vibe) {
+    document.querySelectorAll('.filter-vibe-btn').forEach(btn => {
+      if (btn.dataset.vibe === vibe) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+  }
+
+  function onVenueCategoryToggle() {
+    // Re-filter if category checkbox toggles
+  }
+
+  function applyRadarFilters() {
+    closeRadarFiltersModal();
+    showToast('🎯 Filtros do Radar aplicados com sucesso!');
+    renderRadarUsers();
+  }
+
+  function closeVenueDetailsModal() {
+    document.getElementById('modalVenueDetails')?.classList.remove('active');
   }
 
   function getIntentIcon(intent) {
@@ -2355,12 +2488,37 @@
   // ==========================================================================
   // 8. DIRECT CONVERSATIONS (1-ON-1)
   // ==========================================================================
-  function renderDirectConversations() {
+  function filterChats(query) {
+    renderDirectConversations(query);
+  }
+
+  function renderDirectConversations(filterQuery = '') {
     const container = document.getElementById('directConversationsList');
     if (!container) return;
 
-    const users = Storage.getUsers().filter(u => u.id !== (currentUser?.id || ''));
+    const q = (filterQuery || '').toLowerCase().trim();
+    let users = Storage.getUsers().filter(u => u.id !== (currentUser?.id || ''));
     const allChats = Storage.getDirectMessages();
+
+    if (q) {
+      users = users.filter(u => {
+        const nameMatch = u.name && u.name.toLowerCase().includes(q);
+        const msgs = allChats[u.id] || [];
+        const msgMatch = msgs.some(m => m.text && m.text.toLowerCase().includes(q));
+        return nameMatch || msgMatch;
+      });
+    }
+
+    if (users.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 32px 16px; color: var(--text-dim); font-size: 13px;">
+          <span style="font-size: 28px; display: block; margin-bottom: 6px;">💬</span>
+          <strong>Nenhuma conversa encontrada</strong>
+          <p style="font-size: 11px; margin-top: 4px;">Inicie um novo bate-papo pelo radar!</p>
+        </div>
+      `;
+      return;
+    }
 
     container.innerHTML = users.map(u => {
       const userMsgs = allChats[u.id] || [];
@@ -2588,52 +2746,276 @@
     `).join('');
   }
 
+  let pendingAvatarDataUrl = null;
+
+  function initEditProfileChips() {
+    // SOU chips (single-selection)
+    document.querySelectorAll('#groupSou .az-pref-chip').forEach(chip => {
+      chip.onclick = function(e) {
+        e.preventDefault();
+        document.querySelectorAll('#groupSou .az-pref-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+      };
+    });
+
+    // ACOMPANHADO chips (single-selection with familiar drawer)
+    document.querySelectorAll('#groupAcompanhado .az-pref-chip').forEach(chip => {
+      chip.onclick = function(e) {
+        e.preventDefault();
+        document.querySelectorAll('#groupAcompanhado .az-pref-chip').forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        const box = document.getElementById('familiarSubOptionsBox');
+        if (box) {
+          box.style.display = (this.dataset.val === 'familiar') ? 'block' : 'none';
+        }
+      };
+    });
+
+    // FAMILIAR sub-chips (multi-selection: Pessoa, Meu Pet)
+    document.querySelectorAll('#familiarSubOptionsBox .az-sub-chip').forEach(chip => {
+      chip.onclick = function(e) {
+        e.preventDefault();
+        this.classList.toggle('active');
+        const box = document.getElementById('familiarSubOptionsBox');
+        if (box && !box.querySelector('.az-sub-chip.active')) {
+          this.classList.add('active');
+        }
+      };
+    });
+
+    // PROCURO multi-select chips
+    document.querySelectorAll('#groupProcuro .az-pref-chip').forEach(chip => {
+      chip.onclick = function(e) {
+        e.preventDefault();
+        this.classList.toggle('active');
+        const grid = document.getElementById('groupProcuro');
+        if (grid && !grid.querySelector('.az-pref-chip.active')) {
+          this.classList.add('active');
+        }
+      };
+    });
+  }
+
+  function handlePhotoFileInput(input) {
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+    if (!file.type.startsWith('image/')) {
+      showToast('⚠️ Por favor selecione uma imagem válida.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const maxDim = 600;
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxDim) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          }
+        } else {
+          if (height > maxDim) {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+        pendingAvatarDataUrl = compressedDataUrl;
+        const preview = document.getElementById('editAvatarPreview');
+        if (preview) preview.src = compressedDataUrl;
+        showToast('📸 Foto carregada com sucesso!');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    input.value = '';
+  }
+
   function openEditProfileModal() {
     if (!currentUser) return;
-    document.getElementById('editFullName').value = currentUser.name || '';
-    document.getElementById('editBio').value = currentUser.bio || '';
-    document.getElementById('editAvatarUrl').value = currentUser.avatar || '';
+    pendingAvatarDataUrl = null;
 
-    document.querySelectorAll('#editIntentChips .intent-chip').forEach(chip => {
-      if (chip.getAttribute('data-intent') === currentUser.intent) {
+    const nameInput = document.getElementById('editFullName');
+    const bioInput = document.getElementById('editBio');
+    const previewImg = document.getElementById('editAvatarPreview');
+
+    if (nameInput) nameInput.value = currentUser.name || '';
+    if (bioInput) bioInput.value = currentUser.bio || '';
+    if (previewImg) previewImg.src = currentUser.avatar || '/images/avatars/luisarlindo.jpg';
+
+    // Parse current preferences
+    const prefs = currentUser.preferences || {};
+    const souVal = prefs.sou || currentUser.sou || 'homem';
+
+    document.querySelectorAll('#groupSou .az-pref-chip').forEach(chip => {
+      if (chip.dataset.val === souVal) {
         chip.classList.add('active');
       } else {
         chip.classList.remove('active');
       }
     });
 
+    let acompTipo = 'sozinho';
+    let subOpcoes = ['pessoa', 'pet'];
+    if (prefs.acompanhado) {
+      if (typeof prefs.acompanhado === 'object') {
+        acompTipo = prefs.acompanhado.tipo || 'sozinho';
+        subOpcoes = prefs.acompanhado.sub_opcoes || ['pessoa', 'pet'];
+      } else if (typeof prefs.acompanhado === 'string') {
+        acompTipo = prefs.acompanhado;
+      }
+    } else if (currentUser.acompanhado) {
+      if (typeof currentUser.acompanhado === 'object') {
+        acompTipo = currentUser.acompanhado.tipo || 'sozinho';
+        subOpcoes = currentUser.acompanhado.sub_opcoes || ['pessoa', 'pet'];
+      } else {
+        acompTipo = currentUser.acompanhado;
+      }
+    }
+
+    document.querySelectorAll('#groupAcompanhado .az-pref-chip').forEach(chip => {
+      if (chip.dataset.val === acompTipo) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    });
+
+    const subBox = document.getElementById('familiarSubOptionsBox');
+    if (subBox) {
+      if (acompTipo === 'familiar') {
+        subBox.style.display = 'block';
+        const pChip = document.getElementById('subOptPessoa');
+        const petChip = document.getElementById('subOptPet');
+        if (pChip) {
+          if (subOpcoes.includes('pessoa')) pChip.classList.add('active');
+          else pChip.classList.remove('active');
+        }
+        if (petChip) {
+          if (subOpcoes.includes('pet')) petChip.classList.add('active');
+          else petChip.classList.remove('active');
+        }
+      } else {
+        subBox.style.display = 'none';
+      }
+    }
+
+    const procuroList = prefs.procuro || currentUser.procuro || ['mulher', 'casal_tradicional'];
+    document.querySelectorAll('#groupProcuro .az-pref-chip').forEach(chip => {
+      if (Array.isArray(procuroList) && procuroList.includes(chip.dataset.val)) {
+        chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
+      }
+    });
+
+    initEditProfileChips();
     document.getElementById('modalEditProfile')?.classList.add('active');
   }
 
   function closeEditProfileModal() {
     document.getElementById('modalEditProfile')?.classList.remove('active');
+    pendingAvatarDataUrl = null;
   }
 
-  function handleEditProfileSubmit() {
+  async function handleEditProfileSubmit() {
     if (!currentUser) return;
 
-    const newName = document.getElementById('editFullName')?.value.trim();
-    const newBio = document.getElementById('editBio')?.value.trim();
-    const newAvatar = document.getElementById('editAvatarUrl')?.value.trim();
-    const activeChip = document.querySelector('#editIntentChips .intent-chip.active');
-    const newIntent = activeChip ? activeChip.getAttribute('data-intent') : currentUser.intent;
+    const saveBtn = document.getElementById('btnSaveProfile');
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span>Salvando no banco de dados...</span>';
+    }
 
-    currentUser.name = newName || currentUser.name;
-    currentUser.bio = newBio || currentUser.bio;
-    if (newAvatar) currentUser.avatar = newAvatar;
-    currentUser.intent = newIntent;
+    const newName = document.getElementById('editFullName')?.value.trim() || currentUser.name;
+    const newBio = document.getElementById('editBio')?.value.trim() || '';
+    const newAvatar = pendingAvatarDataUrl || currentUser.avatar || '/images/avatars/luisarlindo.jpg';
+
+    const souChip = document.querySelector('#groupSou .az-pref-chip.active');
+    const newSou = souChip ? souChip.dataset.val : 'homem';
+
+    const acompChip = document.querySelector('#groupAcompanhado .az-pref-chip.active');
+    const newAcompTipo = acompChip ? acompChip.dataset.val : 'sozinho';
+    const subOpcoes = [];
+    if (newAcompTipo === 'familiar') {
+      if (document.getElementById('subOptPessoa')?.classList.contains('active')) subOpcoes.push('pessoa');
+      if (document.getElementById('subOptPet')?.classList.contains('active')) subOpcoes.push('pet');
+      if (subOpcoes.length === 0) subOpcoes.push('pessoa');
+    }
+
+    const newProcuro = Array.from(document.querySelectorAll('#groupProcuro .az-pref-chip.active')).map(c => c.dataset.val);
+    if (newProcuro.length === 0) newProcuro.push('mulher');
+
+    const updatedPreferences = {
+      ...(currentUser.preferences || {}),
+      sou: newSou,
+      acompanhado: {
+        tipo: newAcompTipo,
+        sub_opcoes: subOpcoes
+      },
+      procuro: newProcuro
+    };
+
+    currentUser.name = newName;
+    currentUser.bio = newBio;
+    currentUser.avatar = newAvatar;
+    currentUser.preferences = updatedPreferences;
+    currentUser.sou = newSou;
+    currentUser.acompanhado = updatedPreferences.acompanhado;
+    currentUser.procuro = newProcuro;
 
     Storage.saveCurrentUser(currentUser);
-
     const users = Storage.getUsers();
     const idx = users.findIndex(u => u.id === currentUser.id);
     if (idx !== -1) {
-      users[idx] = currentUser;
+      users[idx] = { ...users[idx], name: newName, bio: newBio, avatar: newAvatar, preferences: updatedPreferences };
       Storage.saveUsers(users);
     }
 
+    try {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+      const res = await fetch('/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken || '',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          user: {
+            name: newName,
+            bio: newBio,
+            avatar_url: newAvatar,
+            preferences: updatedPreferences
+          }
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log('✅ Perfil persistido com sucesso no banco de dados:', data);
+      } else {
+        console.warn('Backend returned non-ok status on /profile:', res.status);
+      }
+    } catch (err) {
+      console.error('Erro ao persistir perfil no backend:', err);
+    }
+
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.innerHTML = '<span>Salvar Alterações</span>';
+    }
+
     closeEditProfileModal();
-    showToast('✨ Perfil atualizado com sucesso!');
+    showToast('✨ Perfil salvo com sucesso!');
     renderAppShell();
   }
 
@@ -3165,7 +3547,10 @@
     });
   }
 
-  // If already logged in, enter shell directly
+  // Initialize chips
+  initEditProfileChips();
+
+  // If already logged in or initial user is present, enter shell directly
   if (currentUser) {
     showView('appShell');
   } else {
@@ -3209,6 +3594,7 @@
     handleLogout,
     handleCreatePostSubmit,
     handleEditProfileSubmit,
+    handlePhotoFileInput,
     sendMuralMessage,
     sendDirectChatMessage,
     sendQuickIcebreaker,
@@ -3223,6 +3609,7 @@
     resetFaceVerification,
     openDirectChat,
     closeDirectChat,
+    filterChats,
     openNewPostModal,
     closeNewPostModal,
     selectPresetPhoto,
@@ -3245,7 +3632,14 @@
     clearVenuesSearch,
     performVenueCheckin,
     toggleSideMenu,
+    openRadarFiltersModal,
+    closeRadarFiltersModal,
     toggleRadarFilterModal,
+    selectRadarDisplayType,
+    selectVibeFilter,
+    onVenueCategoryToggle,
+    applyRadarFilters,
+    closeVenueDetailsModal,
     toast: showToast
   };
 

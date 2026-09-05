@@ -2175,16 +2175,20 @@ html, body {
 }
 
 .tab-page {
-  display: none;
+  display: none !important;
   flex-direction: column;
-  padding: 12px 12px 24px;
-  animation: fadeIn 0.25s ease;
+  padding: 10px 10px 90px;
+  animation: fadeIn 0.22s ease;
   width: 100%;
   box-sizing: border-box;
 }
 
 .tab-page.active {
   display: flex !important;
+}
+
+.tab-page:not(.active) {
+  display: none !important;
 }
 
 /* ==========================================================================
@@ -6223,7 +6227,15 @@ html, body {
   height: 100% !important;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
+  padding: 0 !important;
+}
+
+.tab-radar.active {
   display: block !important;
+}
+
+.tab-radar:not(.active) {
+  display: none !important;
 }
 
 .az-dashboard-grid {
@@ -7157,5 +7169,457 @@ html, body {
   align-items: center;
   justify-content: center;
   border: 1.5px solid #0a0f20;
+}
+
+/* ==========================================================================
+   AZARAR SIDE MENU DRAWER (HAMBURGER ☰)
+   ========================================================================== */
+.az-side-drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(3, 4, 7, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9990;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.az-side-drawer-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.az-side-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 290px;
+  max-width: 84vw;
+  background: linear-gradient(180deg, #0d1224 0%, #060813 100%);
+  border-right: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.85);
+  z-index: 9995;
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.az-side-drawer.active {
+  transform: translateX(0);
+}
+
+.az-drawer-header {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.az-drawer-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.az-drawer-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #ec4899;
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+  flex-shrink: 0;
+}
+
+.az-drawer-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 2px;
+}
+
+.az-drawer-handle {
+  font-size: 11px;
+  color: #94a3b8;
+  display: block;
+}
+
+.az-drawer-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.az-drawer-close-btn:hover {
+  background: #ec4899;
+  border-color: #ec4899;
+}
+
+.az-drawer-nav {
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.az-drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.az-drawer-item:hover {
+  background: rgba(59, 130, 246, 0.15);
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+.az-drawer-item.active {
+  background: linear-gradient(90deg, rgba(236, 72, 153, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+}
+
+.az-drawer-icon {
+  font-size: 16px;
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.az-drawer-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 8px 10px;
+}
+
+.az-drawer-footer {
+  padding: 14px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 10.5px;
+  color: #64748b;
+  text-align: center;
+}
+
+/* ==========================================================================
+   EDIT PROFILE MODAL (HIGH FIDELITY, CLEAN & ATTRACTIVE)
+   ========================================================================== */
+.az-edit-modal-sheet {
+  max-width: 440px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(180deg, #0e1428 0%, #060914 100%) !important;
+  border: 1px solid rgba(236, 72, 153, 0.3) !important;
+  border-radius: 20px !important;
+  padding: 20px 18px 26px !important;
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.9) !important;
+}
+
+.az-edit-header {
+  text-align: center;
+  margin-bottom: 18px;
+  position: relative;
+}
+
+.az-edit-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f43f5e, #ec4899);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+}
+
+.az-edit-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 3px;
+  letter-spacing: -0.3px;
+}
+
+.az-edit-subtitle {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Photo Section */
+.az-photo-upload-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.az-avatar-preview-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  margin-bottom: 12px;
+  border: 2.5px solid #ec4899;
+  box-shadow: 0 0 18px rgba(236, 72, 153, 0.45);
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.az-avatar-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.az-photo-actions-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.az-btn-photo-action {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.az-btn-photo-action:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #38bdf8;
+  transform: translateY(-1px);
+}
+
+.az-btn-photo-action.camera {
+  border-color: rgba(236, 72, 153, 0.4);
+}
+
+.az-btn-photo-action.camera:hover {
+  background: rgba(236, 72, 153, 0.2);
+  border-color: #ec4899;
+}
+
+/* Form Inputs */
+.az-edit-field {
+  margin-bottom: 16px;
+}
+
+.az-field-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.az-form-input,
+.az-form-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(16, 24, 48, 0.7);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 10px;
+  padding: 9px 12px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12.5px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.az-form-input:focus,
+.az-form-textarea:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.3);
+}
+
+/* Sections: SOU, ESTOU ACOMPANHADO, PROCURO POR */
+.az-pref-section {
+  margin-bottom: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(16, 24, 48, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.az-pref-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.az-pref-chips-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.az-pref-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.az-pref-chip:hover {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.5);
+  color: #ffffff;
+}
+
+.az-pref-chip.active {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.25) 0%, rgba(139, 92, 246, 0.3) 100%);
+  border-color: #ec4899;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
+}
+
+/* Familiar Sub-Options Box */
+.az-sub-options-box {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: fadeIn 0.2s ease;
+}
+
+.az-sub-options-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #c084fc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.az-sub-chips-row {
+  display: flex;
+  gap: 8px;
+}
+
+.az-sub-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(168, 85, 247, 0.45);
+  color: #cbd5e1;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.az-sub-chip:hover {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: #c084fc;
+}
+
+.az-sub-chip.active {
+  background: rgba(168, 85, 247, 0.35);
+  border: 1px solid #c084fc;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+}
+
+/* Save Button */
+.az-btn-save-profile {
+  width: 100%;
+  height: 48px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f97316 0%, #ec4899 50%, #8b5cf6 100%);
+  border: none;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.5);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.az-btn-save-profile:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(244, 63, 94, 0.7);
 }
 

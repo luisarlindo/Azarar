@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_31_050000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_05_215108) do
   create_table "checkins", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
@@ -100,6 +100,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_31_050000) do
     t.string "password_digest", null: false
     t.string "plan", default: "free", null: false
     t.datetime "plan_expires_at"
+    t.text "preferences"
     t.integer "radius_meters", default: 500, null: false
     t.datetime "updated_at", null: false
     t.string "username", null: false

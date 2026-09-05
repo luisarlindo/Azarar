@@ -1,5 +1,5 @@
 <script>
-  window.INITIAL_CURRENT_USER = <%= current_user ? {
+  window.INITIAL_CURRENT_USER = <%= raw((@user_json || (current_user ? {
     id: current_user.id,
     name: current_user.name,
     username: current_user.username,
@@ -17,14 +17,14 @@
     planBadge: current_user.plan_badge,
     maxRadius: current_user.max_radar_distance,
     planExpiresAt: current_user.plan_expires_at&.iso8601
-  }.to_json.html_safe : "null" %>;
+  } : nil)).to_json) %>;
 </script>
 
 <!-- Main Application Screen -->
   <main class="app-screen">
     
     <!-- Screen Container (Isolated In-App Views Container) -->
-    <div class="screen-container <%= current_user ? 'view-mode-app-shell' : 'view-mode-home' %>" id="screenContainer">
+    <div class="screen-container <%= (@user_json || current_user) ? 'view-mode-app-shell' : 'view-mode-home' %>" id="screenContainer">
       
       <!-- Ambient Particles Canvas (Persistent Across All Screens) -->
       <canvas id="particlesCanvas" class="particles-canvas"></canvas>
@@ -32,7 +32,7 @@
       <!-- ============================================ -->
       <!-- VIEW 1: HOME / LANDING SCREEN (Logged Out)  -->
       <!-- ============================================ -->
-      <section class="app-view view-home <%= current_user ? '' : 'active' %>" id="viewHome" style="<%= current_user ? 'display: none !important;' : 'display: flex !important;' %>">
+      <section class="app-view view-home <%= (@user_json || current_user) ? '' : 'active' %>" id="viewHome" style="<%= (@user_json || current_user) ? 'display: none !important;' : 'display: flex !important;' %>">
 
         <!-- Top Branding Section -->
         <header class="app-header">
@@ -293,7 +293,7 @@
       <!-- ============================================ -->
       <!-- VIEW 4: APP SHELL (Logged In Experience)     -->
       <!-- ============================================ -->
-      <section class="app-view view-app-shell <%= current_user ? 'active' : '' %>" id="viewAppShell" style="<%= current_user ? 'display: flex !important;' : 'display: none !important;' %>">
+      <section class="app-view view-app-shell <%= (@user_json || current_user) ? 'active' : '' %>" id="viewAppShell" style="<%= (@user_json || current_user) ? 'display: flex !important;' : 'display: none !important;' %>">
         
         <!-- App Top Header (Matching Image: Hamburger | AZARAR Gradient Logo | Notification Bell with Badge 5) -->
         <header class="az-topbar">
@@ -310,6 +310,71 @@
             <span class="az-bell-badge">5</span>
           </button>
         </header>
+
+        <!-- SIDE MENU DRAWER (HAMBURGER ☰) -->
+        <div class="az-side-drawer-overlay" id="azSideMenuOverlay" onclick="window.azararApp.toggleSideMenu(false)"></div>
+        <aside class="az-side-drawer" id="azSideMenuDrawer" aria-label="Menu Lateral">
+          <div class="az-drawer-header">
+            <div class="az-drawer-user-info">
+              <img src="/images/avatars/luisarlindo.jpg" id="azDrawerAvatar" alt="Perfil" class="az-drawer-avatar" />
+              <div>
+                <h4 class="az-drawer-name" id="azDrawerName">Luis Arlindo</h4>
+                <span class="az-drawer-handle" id="azDrawerHandle">@luisarlindo</span>
+              </div>
+            </div>
+            <button type="button" class="az-drawer-close-btn" onclick="window.azararApp.toggleSideMenu(false)" aria-label="Fechar Menu">✕</button>
+          </div>
+
+          <nav class="az-drawer-nav">
+            <button type="button" class="az-drawer-item active" id="drawerNavRadar" onclick="window.azararApp.switchTab('radar'); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">🔮</span>
+              <span>Radar de Conexões</span>
+            </button>
+            <button type="button" class="az-drawer-item" id="drawerNavVenues" onclick="window.azararApp.switchTab('venues'); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">📍</span>
+              <span>Locais & Bares</span>
+            </button>
+            <button type="button" class="az-drawer-item" id="drawerNavLikes" onclick="window.azararApp.switchTab('likes'); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">💖</span>
+              <span>Curtidas & Brindes</span>
+            </button>
+            <button type="button" class="az-drawer-item" id="drawerNavMessages" onclick="window.azararApp.switchTab('messages'); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">💬</span>
+              <span>Mensagens Privadas</span>
+            </button>
+            <button type="button" class="az-drawer-item" id="drawerNavProfile" onclick="window.azararApp.switchTab('profile'); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">👤</span>
+              <span>Meu Perfil</span>
+            </button>
+            <div class="az-drawer-divider"></div>
+            <button type="button" class="az-drawer-item" onclick="window.azararApp.openEditProfileModal(); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">✏️</span>
+              <span>Editar Perfil</span>
+            </button>
+            <button type="button" class="az-drawer-item" onclick="window.azararApp.openVipPlansModal(); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">💎</span>
+              <span>Planos VIP & Raio</span>
+            </button>
+            <button type="button" class="az-drawer-item" onclick="window.azararApp.openFlashBoostModal(); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">⚡</span>
+              <span>Turbinar Perfil (Boost)</span>
+            </button>
+            <button type="button" class="az-drawer-item" onclick="window.azararApp.openFaceVerificationModal(); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">🛡️</span>
+              <span>Verificação Facial</span>
+            </button>
+            <div class="az-drawer-divider"></div>
+            <button type="button" class="az-drawer-item" onclick="window.azararApp.handleLogout();" style="color: #f43f5e;">
+              <span class="az-drawer-icon">🚪</span>
+              <span>Sair da Conta</span>
+            </button>
+          </nav>
+
+          <div class="az-drawer-footer">
+            AZARAR Social Network © 2026<br>
+            Versão 2.4.0 • João Pessoa, PB
+          </div>
+        </aside>
 
         <!-- Dynamic Tab Pages Container -->
         <div class="tab-content-container" id="tabContentContainer">
@@ -704,7 +769,7 @@
           </div>
 
           <!-- TAB 2: LOCAIS & POINTS PRÓXIMOS (SEARCH, DISCOVERY & B2B SHOWCASE) -->
-          <div class="tab-page tab-venues" id="tabVenues" style="display: none;">
+          <div class="tab-page tab-venues" id="tabVenues">
             
             <div class="venues-split-layout">
               
@@ -955,6 +1020,9 @@
 
                 <h4 class="tinder-card-heading" style="margin-top: 18px;">Informações Adicionais</h4>
                 <div class="tinder-info-rows">
+                  <div class="info-item-row"><span class="info-label">Identidade:</span> <strong id="profPrefSou">♂️ Sou Homem</strong></div>
+                  <div class="info-item-row"><span class="info-label">Acompanhado:</span> <strong id="profPrefAcompanhado">🚶 Sozinho(a)</strong></div>
+                  <div class="info-item-row"><span class="info-label">Procuro Por:</span> <strong id="profPrefProcuro">👩 Mulher, 💑 Casal Tradicional</strong></div>
                   <div class="info-item-row"><span class="info-label">Signo:</span> <strong>Escorpião ♏</strong></div>
                   <div class="info-item-row"><span class="info-label">Altura:</span> <strong>1,75 m</strong></div>
                   <div class="info-item-row"><span class="info-label">Bebida:</span> <strong>Socialmente 🍸</strong></div>
@@ -966,7 +1034,7 @@
           </div>
 
           <!-- TAB 5: CURTIDAS & BRINDES 🥂 -->
-          <div class="tab-page tab-likes" id="tabLikes" style="display: none;">
+          <div class="tab-page tab-likes" id="tabLikes">
             <div class="likes-header">
               <h2 class="messages-title">Curtidas & Brindes 🥂</h2>
               <p style="font-size: 12px; color: var(--text-dim); margin-top: 4px;">Pessoas que enviaram um brinde ou curtiram seu perfil</p>
@@ -1070,48 +1138,139 @@
     <!-- ============================================ -->
     <!-- MODAL: EDITAR PERFIL                         -->
     <!-- ============================================ -->
+    <!-- ============================================ -->
+    <!-- MODAL: EDITAR PERFIL (MONTE O SEU PERFIL)    -->
+    <!-- ============================================ -->
     <div class="app-modal" id="modalEditProfile" role="dialog" aria-modal="true">
       <div class="modal-backdrop" onclick="window.azararApp.closeEditProfileModal()"></div>
-      <div class="modal-card-sheet">
-        <div class="modal-header">
-          <h3 class="modal-title">Editar Meu Perfil</h3>
-          <button class="modal-close-btn" onclick="window.azararApp.closeEditProfileModal()">✕</button>
+      <div class="modal-card-sheet az-edit-modal-sheet">
+        
+        <div class="az-edit-header">
+          <button class="modal-close-btn" onclick="window.azararApp.closeEditProfileModal()" style="position: absolute; right: 0; top: 0;">✕</button>
+          <span class="az-edit-badge">AZARAR • CONFIGURAÇÃO</span>
+          <h3 class="az-edit-title">Monte o Seu Perfil</h3>
+          <p class="az-edit-subtitle">Escolha as opções que combinam com você</p>
         </div>
 
-        <form class="modal-form" onsubmit="event.preventDefault(); window.azararApp.handleEditProfileSubmit();">
+        <!-- Hidden file inputs for Camera and Gallery -->
+        <input type="file" id="editPhotoCamera" accept="image/*" capture="user" style="display: none;" onchange="window.azararApp.handlePhotoFileInput(this)">
+        <input type="file" id="editPhotoGallery" accept="image/*" style="display: none;" onchange="window.azararApp.handlePhotoFileInput(this)">
+
+        <form class="az-edit-form" onsubmit="event.preventDefault(); window.azararApp.handleEditProfileSubmit();">
           
-          <div class="form-group">
-            <label for="editFullName">Nome completo</label>
-            <div class="input-wrap">
-              <input type="text" id="editFullName" required />
+          <!-- 1. PHOTO SECTION (CAMERA OR GALLERY) -->
+          <div class="az-photo-upload-section">
+            <div class="az-avatar-preview-wrap">
+              <img src="/images/avatars/luisarlindo.jpg" id="editAvatarPreview" alt="Foto de Perfil" class="az-avatar-preview-img" />
+            </div>
+            
+            <div class="az-photo-actions-row">
+              <button type="button" class="az-btn-photo-action camera" onclick="document.getElementById('editPhotoCamera').click();">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                <span>Tirar Foto</span>
+              </button>
+              
+              <button type="button" class="az-btn-photo-action" onclick="document.getElementById('editPhotoGallery').click();">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <span>Galeria</span>
+              </button>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="editBio">Biografia</label>
-            <div class="input-wrap">
-              <textarea id="editBio" rows="3" placeholder="Conte um pouco sobre sua vibe e o que você curte..."></textarea>
+          <!-- 2. NAME & BIO -->
+          <div class="az-edit-field">
+            <label class="az-field-label" for="editFullName">Nome de Exibição</label>
+            <input type="text" id="editFullName" class="az-form-input" placeholder="Seu nome" required />
+          </div>
+
+          <div class="az-edit-field">
+            <label class="az-field-label" for="editBio">Biografia / Status</label>
+            <textarea id="editBio" class="az-form-textarea" rows="2" placeholder="Conte um pouco sobre sua vibe e estilo..."></textarea>
+          </div>
+
+          <!-- 3. SEÇÃO: SOU -->
+          <div class="az-pref-section">
+            <div class="az-pref-section-title">
+              <span>SOU</span>
+              <span style="font-size: 8.5px; color: #94a3b8; font-weight: 500;">Identidade</span>
+            </div>
+            <div class="az-pref-chips-grid" id="groupSou">
+              <button type="button" class="az-pref-chip active" data-group="sou" data-val="homem">
+                <span class="chip-icon">♂️</span> Sou Homem
+              </button>
+              <button type="button" class="az-pref-chip" data-group="sou" data-val="mulher">
+                <span class="chip-icon">♀️</span> Sou Mulher
+              </button>
+              <button type="button" class="az-pref-chip" data-group="sou" data-val="lgbtqiapn">
+                <span class="chip-icon">🏳️‍🌈</span> Sou LGBTQIAPN+
+              </button>
             </div>
           </div>
 
-          <div class="form-group">
-            <label>Intenção Principal:</label>
-            <div class="intent-chips-grid" id="editIntentChips">
-              <button type="button" class="intent-chip" data-intent="Relacionamento Sério">💍 Relacionamento Sério</button>
-              <button type="button" class="intent-chip" data-intent="Casual">🍹 Encontros Casuais</button>
-              <button type="button" class="intent-chip" data-intent="Sexo">💋 Sexo sem tabus</button>
-              <button type="button" class="intent-chip" data-intent="Companhia">✨ Companhia & Amizade</button>
+          <!-- 4. SEÇÃO: ESTOU ACOMPANHADO -->
+          <div class="az-pref-section">
+            <div class="az-pref-section-title">
+              <span>ESTOU ACOMPANHADO</span>
+              <span style="font-size: 8.5px; color: #94a3b8; font-weight: 500;">Status no Local</span>
+            </div>
+            <div class="az-pref-chips-grid" id="groupAcompanhado">
+              <button type="button" class="az-pref-chip" data-group="acompanhado" data-val="homem">
+                <span class="chip-icon">👤</span> De um Homem
+              </button>
+              <button type="button" class="az-pref-chip" data-group="acompanhado" data-val="mulher">
+                <span class="chip-icon">👩</span> De uma Mulher
+              </button>
+              <button type="button" class="az-pref-chip" data-group="acompanhado" data-val="lgbtqiapn">
+                <span class="chip-icon">💖</span> LGBTQIAPN+
+              </button>
+              <button type="button" class="az-pref-chip" data-group="acompanhado" data-val="familiar" id="chipFamiliar">
+                <span class="chip-icon">👨‍👩‍👧</span> Familiar
+              </button>
+              <button type="button" class="az-pref-chip active" data-group="acompanhado" data-val="sozinho">
+                <span class="chip-icon">🚶</span> Sozinho(a)
+              </button>
+            </div>
+
+            <!-- Sub-opções de Familiar (Pessoa e Meu Pet) -->
+            <div class="az-sub-options-box" id="familiarSubOptionsBox" style="display: none;">
+              <span class="az-sub-options-label">Sub-opções do Familiar:</span>
+              <div class="az-sub-chips-row">
+                <button type="button" class="az-sub-chip active" id="subOptPessoa" data-sub="pessoa">
+                  <span class="chip-icon">👥</span> Pessoa
+                </button>
+                <button type="button" class="az-sub-chip active" id="subOptPet" data-sub="pet">
+                  <span class="chip-icon">🐾</span> Meu Pet
+                </button>
+              </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="editAvatarUrl">URL da Foto de Perfil:</label>
-            <div class="input-wrap">
-              <input type="url" id="editAvatarUrl" placeholder="https://..." />
+          <!-- 5. SEÇÃO: PROCURO POR (MULTI-SELECT) -->
+          <div class="az-pref-section">
+            <div class="az-pref-section-title">
+              <span>PROCURO POR</span>
+              <span style="font-size: 8.5px; color: var(--primary-pink); font-weight: 700;">Multi-seleção</span>
+            </div>
+            <div class="az-pref-chips-grid" id="groupProcuro">
+              <button type="button" class="az-pref-chip multi" data-group="procuro" data-val="homem">
+                <span class="chip-icon">👤</span> Homem
+              </button>
+              <button type="button" class="az-pref-chip multi active" data-group="procuro" data-val="mulher">
+                <span class="chip-icon">👩</span> Mulher
+              </button>
+              <button type="button" class="az-pref-chip multi" data-group="procuro" data-val="lgbtqiapn">
+                <span class="chip-icon">🏳️‍🌈</span> LGBTQIAPN+
+              </button>
+              <button type="button" class="az-pref-chip multi active" data-group="procuro" data-val="casal_tradicional">
+                <span class="chip-icon">💑</span> Casal Tradicional
+              </button>
+              <button type="button" class="az-pref-chip multi" data-group="procuro" data-val="casal_homoafetivo">
+                <span class="chip-icon">👬</span> Casal Homoafetivo
+              </button>
             </div>
           </div>
 
-          <button type="submit" class="btn-primary" style="margin-top: 14px; height: 50px;">
+          <button type="submit" class="az-btn-save-profile" id="btnSaveProfile">
             <span>Salvar Alterações</span>
           </button>
         </form>
@@ -1510,6 +1669,11 @@
     <div class="toast-notification" id="toastNotification" aria-live="polite"></div>
 
   </main>
+
+  <!-- Initial Database User Injection -->
+  <script>
+    window.__INITIAL_USER__ = <%= raw(@user_json ? @user_json.to_json : 'null') %>;
+  </script>
 
   <!-- JavaScript -->
   <script src="/js/app.js?v=<%= Time.current.to_i %>"></script>

@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_secure_password
+  serialize :preferences, coder: JSON, default: {}
 
   has_many :posts, dependent: :destroy
   has_many :likes, dependent: :destroy
@@ -30,6 +31,31 @@ class User < ApplicationRecord
   scope :verified_users, -> { where(verified: true) }
 
   before_validation :clean_username
+
+  # Preference Helpers for Flexible Schema
+  def sou
+    preferences["sou"]
+  end
+
+  def sou=(val)
+    self.preferences = (preferences || {}).merge("sou" => val)
+  end
+
+  def acompanhado
+    preferences["acompanhado"] || {}
+  end
+
+  def acompanhado=(val)
+    self.preferences = (preferences || {}).merge("acompanhado" => val)
+  end
+
+  def procuro
+    preferences["procuro"] || []
+  end
+
+  def procuro=(val)
+    self.preferences = (preferences || {}).merge("procuro" => Array(val))
+  end
 
   def display_avatar
     avatar_url.presence || "/images/avatars/luisarlindo.jpg"
