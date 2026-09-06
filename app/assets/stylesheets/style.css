@@ -5424,34 +5424,53 @@ html, body {
    TAB 2: LOCAIS & POINTS DUAL SHOWCASE (SPLIT DISCOVERY & B2B HERO)
    ========================================================================== */
 .tab-venues {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #090310;
-  display: flex;
-  flex-direction: column;
+  width: 100% !important;
+  height: 100% !important;
+  flex: 1 1 100% !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  background: #090310 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  box-sizing: border-box !important;
+}
+
+.tab-venues.active {
+  display: flex !important;
+  flex: 1 1 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+.tab-venues:not(.active) {
+  display: none !important;
 }
 
 .venues-split-layout {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
+  display: flex !important;
+  width: 100% !important;
+  height: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  position: relative !important;
 }
 
 /* LEFT COLUMN: LIST, SEARCH, CATEGORIES & MINIMALIST DRAWER (FULL WIDTH) */
 .venues-list-column {
-  width: 100%;
-  flex: 1;
-  max-width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background: #0e0417;
-  position: relative;
-  z-index: 10;
-  overflow: hidden;
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: #0e0417 !important;
+  position: relative !important;
+  z-index: 10 !important;
+  overflow: hidden !important;
 }
 
 .venues-header-top {
@@ -5743,19 +5762,20 @@ html, body {
 
 /* Venues Items Vertical List */
 .venues-items-vertical-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 4px 14px 80px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  padding: 6px 14px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 
 .venue-item-card {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   padding: 10px 12px;
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.03);
@@ -5764,6 +5784,13 @@ html, body {
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   user-select: none;
+}
+
+.venue-card-main-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
 }
 
 .venue-item-card:hover {
@@ -5819,7 +5846,7 @@ html, body {
 }
 
 .venue-item-name {
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 800;
   color: #ffffff;
   white-space: nowrap;
@@ -5882,20 +5909,92 @@ html, body {
   font-weight: 900;
 }
 
+/* Transport Action Strip in Venue Card */
+.venue-card-transport-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding-top: 7px;
+  margin-top: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  width: 100%;
+}
+
+.transport-strip-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #94a3b8;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.transport-strip-btns {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-ride-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3.5px 7.5px;
+  border-radius: 7px;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn-ride-pill:hover, .btn-ride-pill:active {
+  transform: scale(1.05);
+}
+
+.btn-ride-pill.uber {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+
+.btn-ride-pill.app99 {
+  background: rgba(255, 209, 0, 0.14);
+  border: 1px solid rgba(255, 209, 0, 0.45);
+  color: #ffd100;
+}
+
+.btn-ride-pill.waze {
+  background: rgba(51, 204, 255, 0.14);
+  border: 1px solid rgba(51, 204, 255, 0.45);
+  color: #38bdf8;
+}
+
+.btn-ride-pill.gmaps {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
 /* Sticky Footer: Ver no Mapa */
 .venues-list-footer-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 10px 16px calc(var(--safe-bottom) + 10px);
-  background: linear-gradient(180deg, transparent 0%, #0e0417 60%, #0e0417 100%);
-  z-index: 20;
+  flex-shrink: 0 !important;
+  width: 100% !important;
+  padding: 8px 16px 10px !important;
+  background: rgba(14, 4, 23, 0.96) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  z-index: 20 !important;
+  box-sizing: border-box !important;
 }
 
 .btn-view-on-map {
   width: 100%;
-  height: 40px;
+  height: 38px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
@@ -7623,3 +7722,400 @@ html, body {
   box-shadow: 0 6px 22px rgba(244, 63, 94, 0.7);
 }
 
+
+/* ==========================================================================
+   MODAL: COMO IR ATÉ O LOCAL (UBER, 99, WAZE, GOOGLE MAPS)
+   ========================================================================== */
+.az-ride-modal-sheet {
+  background: linear-gradient(180deg, #180829 0%, #0c0214 100%) !important;
+  border-top: 1px solid rgba(255, 42, 122, 0.35) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 24px 24px 0 0 !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 42, 122, 0.2) !important;
+  padding: 22px 20px calc(var(--safe-bottom) + 20px) !important;
+  max-height: 88vh !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.az-ride-modal-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 32px;
+}
+
+.az-ride-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #ff2a7a;
+  background: rgba(255, 42, 122, 0.15);
+  border: 1px solid rgba(255, 42, 122, 0.3);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 2px;
+}
+
+.az-ride-modal-title {
+  font-size: 19px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.az-ride-modal-address {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.az-ride-groups-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.az-ride-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.az-ride-group-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #cbd5e1;
+  text-transform: uppercase;
+}
+
+.az-ride-group-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.az-ride-option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+
+.az-ride-option-btn:hover, .az-ride-option-btn:active {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.az-ride-option-btn.uber:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.az-ride-option-btn.app99:hover {
+  border-color: #ffd100;
+  box-shadow: 0 4px 16px rgba(255, 209, 0, 0.25);
+}
+
+.az-ride-option-btn.waze:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.25);
+}
+
+.az-ride-option-btn.gmaps:hover {
+  border-color: #34d399;
+  box-shadow: 0 4px 16px rgba(52, 211, 153, 0.25);
+}
+
+.az-ride-app-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.az-ride-app-icon.uber {
+  background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.az-ride-app-icon.app99 {
+  background: #ffd100;
+  color: #1a1100;
+}
+
+.az-ride-app-icon.waze {
+  background: #33ccff;
+}
+
+.az-ride-app-icon.gmaps {
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.az-ride-btn-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.az-ride-btn-info strong {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.az-ride-btn-info span {
+  font-size: 11px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.az-ride-action-tag {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 9px;
+  border-radius: 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.az-ride-action-tag.uber {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.az-ride-action-tag.app99 {
+  background: rgba(255, 209, 0, 0.15);
+  color: #ffd100;
+  border: 1px solid rgba(255, 209, 0, 0.35);
+}
+
+.az-ride-action-tag.waze {
+  background: rgba(51, 204, 255, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(51, 204, 255, 0.35);
+}
+
+.az-ride-action-tag.gmaps {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.az-btn-copy-address {
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.az-btn-copy-address:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================================
+   SHOWCASE RIDE OPTIONS BOX (IN VENUE SHOWCASE DETAILS)
+   ========================================================================== */
+.showcase-ride-options-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.showcase-ride-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.showcase-ride-box-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+.showcase-ride-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.showcase-ride-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.showcase-ride-grid-2x2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.showcase-ride-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+}
+
+.showcase-ride-card:hover, .showcase-ride-card:active {
+  transform: translateY(-1px);
+}
+
+.showcase-ride-card.uber:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.showcase-ride-card.app99:hover {
+  border-color: rgba(255, 209, 0, 0.45);
+  background: rgba(255, 209, 0, 0.08);
+}
+
+.showcase-ride-card.waze:hover {
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.showcase-ride-card.gmaps:hover {
+  border-color: rgba(52, 211, 153, 0.45);
+  background: rgba(52, 211, 153, 0.08);
+}
+
+.showcase-ride-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.showcase-ride-icon.uber {
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.showcase-ride-icon.app99 {
+  background: #ffd100;
+}
+
+.showcase-ride-icon.waze {
+  background: #33ccff;
+}
+
+.showcase-ride-icon.gmaps {
+  background: #fff;
+}
+
+.showcase-ride-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.showcase-ride-meta strong {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.showcase-ride-meta span {
+  font-size: 9.5px;
+  color: #94a3b8;
+  line-height: 1.2;
+}
+
+.showcase-ride-badge {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.showcase-ride-badge.uber {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.showcase-ride-badge.app99 {
+  background: rgba(255, 209, 0, 0.18);
+  color: #ffd100;
+}
+
+.showcase-ride-badge.waze {
+  background: rgba(51, 204, 255, 0.18);
+  color: #38bdf8;
+}
+
+.showcase-ride-badge.gmaps {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}

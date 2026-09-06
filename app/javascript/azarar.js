@@ -1519,6 +1519,117 @@
   let currentVenuesCategory = 'all';
   let currentVenuesSearchQuery = '';
   let isVenuesRadiusDrawerOpen = false;
+  let activeRideVenueId = 1;
+
+  const RIDE_ICONS_MINI = {
+    uber: `<svg viewBox="0 0 24 24" width="11" height="11" fill="none"><rect width="24" height="24" rx="4" fill="#000"/><path d="M5 9h2.2v4.2c0 1.5.8 2.3 2.1 2.3s2.1-.8 2.1-2.3V9h2.2v4.2c0 2.8-1.7 4.3-4.3 4.3s-4.3-1.5-4.3-4.3V9z" fill="#fff"/><path d="M14.5 9h2v1.2c.4-.8 1.3-1.4 2.4-1.4 1.8 0 3 1.3 3 3.4v5.3h-2.1v-4.9c0-1.2-.6-1.9-1.6-1.9-1 0-1.7.7-1.7 1.9v4.9h-2V9z" fill="#fff"/></svg>`,
+    app99: `<svg viewBox="0 0 24 24" width="11" height="11" fill="none"><rect width="24" height="24" rx="4" fill="#ffd100"/><text x="12" y="16.5" font-family="-apple-system, sans-serif" font-weight="900" font-size="12" fill="#1a1100" text-anchor="middle">99</text></svg>`,
+    waze: `<svg viewBox="0 0 24 24" width="11" height="11" fill="none"><rect width="24" height="24" rx="4" fill="#33ccff"/><path d="M18.5 12.8c0-3.5-2.9-6.3-6.5-6.3-3.6 0-6.5 2.8-6.5 6.3 0 1.2.3 2.3.9 3.2l-.7 2.1 2.4-.6c1.1.7 2.4 1.1 3.9 1.1 3.6 0 6.5-2.8 6.5-6.3z" fill="#fff"/><circle cx="9.5" cy="12.5" r="1.2" fill="#1e293b"/><circle cx="14.5" cy="12.5" r="1.2" fill="#1e293b"/><circle cx="8" cy="17" r="1" fill="#1e293b"/><circle cx="16" cy="17" r="1" fill="#1e293b"/></svg>`,
+    gmaps: `<svg viewBox="0 0 24 24" width="11" height="11" fill="none"><rect width="24" height="24" rx="4" fill="#fff"/><path d="M12 3C8.4 3 5.5 5.9 5.5 9.5c0 4.8 6.5 11.5 6.5 11.5s6.5-6.7 6.5-11.5C18.5 5.9 15.6 3 12 3z" fill="#EA4335"/><circle cx="12" cy="9.5" r="2.8" fill="#fff"/><circle cx="12" cy="9.5" r="1.8" fill="#4285F4"/></svg>`
+  };
+
+  const RIDE_ICONS = {
+    uber: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect width="24" height="24" rx="5" fill="#000"/><path d="M5 9h2.2v4.2c0 1.5.8 2.3 2.1 2.3s2.1-.8 2.1-2.3V9h2.2v4.2c0 2.8-1.7 4.3-4.3 4.3s-4.3-1.5-4.3-4.3V9z" fill="#fff"/><path d="M14.5 9h2v1.2c.4-.8 1.3-1.4 2.4-1.4 1.8 0 3 1.3 3 3.4v5.3h-2.1v-4.9c0-1.2-.6-1.9-1.6-1.9-1 0-1.7.7-1.7 1.9v4.9h-2V9z" fill="#fff"/></svg>`,
+    app99: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect width="24" height="24" rx="5" fill="#ffd100"/><text x="12" y="16.5" font-family="-apple-system, sans-serif" font-weight="900" font-size="13" fill="#1a1100" text-anchor="middle">99</text></svg>`,
+    waze: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect width="24" height="24" rx="5" fill="#33ccff"/><path d="M18.5 12.8c0-3.5-2.9-6.3-6.5-6.3-3.6 0-6.5 2.8-6.5 6.3 0 1.2.3 2.3.9 3.2l-.7 2.1 2.4-.6c1.1.7 2.4 1.1 3.9 1.1 3.6 0 6.5-2.8 6.5-6.3z" fill="#fff"/><circle cx="9.5" cy="12.5" r="1.2" fill="#1e293b"/><circle cx="14.5" cy="12.5" r="1.2" fill="#1e293b"/><circle cx="8" cy="17" r="1" fill="#1e293b"/><circle cx="16" cy="17" r="1" fill="#1e293b"/></svg>`,
+    gmaps: `<svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect width="24" height="24" rx="5" fill="#fff"/><path d="M12 3C8.4 3 5.5 5.9 5.5 9.5c0 4.8 6.5 11.5 6.5 11.5s6.5-6.7 6.5-11.5C18.5 5.9 15.6 3 12 3z" fill="#EA4335"/><circle cx="12" cy="9.5" r="2.8" fill="#fff"/><circle cx="12" cy="9.5" r="1.8" fill="#4285F4"/></svg>`
+  };
+
+  function openRideOptionsModal(venueId) {
+    if (venueId) activeRideVenueId = venueId;
+    const venue = cachedVenues.find(v => String(v.id) === String(activeRideVenueId) || v.slug === String(activeRideVenueId)) || cachedVenues[0];
+    if (!venue) return;
+
+    const titleEl = document.getElementById('modalRideVenueName');
+    const addrEl = document.getElementById('modalRideVenueAddress');
+    if (titleEl) titleEl.textContent = venue.name;
+    if (addrEl) addrEl.textContent = `${venue.address} · ${venue.neighborhood}`;
+
+    const modal = document.getElementById('modalRideOptions');
+    if (modal) modal.classList.add('active');
+  }
+
+  function closeRideOptionsModal() {
+    const modal = document.getElementById('modalRideOptions');
+    if (modal) modal.classList.remove('active');
+  }
+
+  function fallbackCopyAddress(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('📋 Endereço copiado com sucesso!');
+    } catch (e) {
+      showToast('⚠️ Erro ao copiar endereço');
+    }
+  }
+
+  function copyActiveVenueAddress(venueId) {
+    const targetId = venueId || activeRideVenueId || selectedVenueId;
+    const venue = cachedVenues.find(v => String(v.id) === String(targetId) || v.slug === String(targetId)) || cachedVenues[0];
+    if (!venue) return;
+
+    const fullAddr = `${venue.name}, ${venue.address} - ${venue.neighborhood}`;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(fullAddr).then(() => {
+        showToast('📋 Endereço copiado com sucesso!');
+      }).catch(() => {
+        fallbackCopyAddress(fullAddr);
+      });
+    } else {
+      fallbackCopyAddress(fullAddr);
+    }
+  }
+
+  function openRideApp(appType, venueId) {
+    const targetId = venueId || activeRideVenueId || selectedVenueId;
+    const venue = cachedVenues.find(v => String(v.id) === String(targetId) || v.slug === String(targetId)) || cachedVenues[0];
+    if (!venue) return;
+
+    const fullAddress = `${venue.address}, ${venue.neighborhood}, ${venue.city || 'João Pessoa'} - ${venue.state || 'PB'}`;
+    const lat = venue.latitude || -7.1190;
+    const lng = venue.longitude || -34.8250;
+    const venueName = venue.name;
+
+    switch (appType) {
+      case 'uber': {
+        const uberUrl = `https://m.uber.com/ul/?action=setPickup&pickup=my_location&dropoff[formatted_address]=${encodeURIComponent(fullAddress)}&dropoff[latitude]=${lat}&dropoff[longitude]=${lng}&dropoff[nickname]=${encodeURIComponent(venueName)}`;
+        window.open(uberUrl, '_blank');
+        break;
+      }
+      case '99': {
+        const isMobile = /android|iphone|ipad|ipod/i.test(navigator.userAgent.toLowerCase());
+        const encodedAddr = encodeURIComponent(fullAddress);
+        if (isMobile) {
+          window.location.href = `taxis99://call?endLat=${lat}&endLng=${lng}&endAddr=${encodedAddr}`;
+          setTimeout(() => {
+            window.open('https://d.99app.com/', '_blank');
+          }, 1500);
+        } else {
+          window.open('https://d.99app.com/', '_blank');
+        }
+        break;
+      }
+      case 'waze': {
+        const wazeUrl = `https://waze.com/ul?ll=${lat},${lng}&navigate=yes&q=${encodeURIComponent(venueName + ', ' + fullAddress)}`;
+        window.open(wazeUrl, '_blank');
+        break;
+      }
+      case 'gmaps': {
+        const gmapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venueName + ', ' + fullAddress)}&travelmode=driving`;
+        window.open(gmapsUrl, '_blank');
+        break;
+      }
+      default:
+        openRideOptionsModal(venue.id);
+    }
+  }
 
   function renderVenuesPage() {
     renderVenuesList();
@@ -1571,24 +1682,47 @@
 
       return `
         <div class="venue-item-card ${isSelected ? 'selected' : ''} ${isGold ? 'is-gold-card' : ''}" onclick="window.azararApp.selectVenue('${v.id}')">
-          <div class="venue-thumb-circle-wrap">
-            <img src="${v.cover_image_url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=200'}" alt="${v.name}" class="venue-thumb-img" />
-          </div>
-          <div class="venue-item-info">
-            <div class="venue-item-title-row">
-              <span class="venue-item-name">
-                ${v.name}
-                ${isGold ? '<span style="color: #f59e0b; font-size: 12px;">⭐</span>' : ''}
-              </span>
-              <span class="venue-item-dist-badge">${formatRadiusLabel(v.distance || 0)}</span>
+          <div class="venue-card-main-row">
+            <div class="venue-thumb-circle-wrap">
+              <img src="${v.cover_image_url || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=200'}" alt="${v.name}" class="venue-thumb-img" />
             </div>
-            <span class="venue-item-address">${v.address} · ${v.neighborhood.split(',')[0]}</span>
-            <div class="venue-item-meta-row">
-              <span class="venue-item-presence">🔥 ${v.checkins_count || 12} pessoas aqui</span>
-              <span style="font-size: 10px; color: #fde047; font-weight: 800;">⭐ ${v.rating || '4,7'}</span>
+            <div class="venue-item-info">
+              <div class="venue-item-title-row">
+                <span class="venue-item-name">
+                  ${v.name}
+                  ${isGold ? '<span style="color: #f59e0b; font-size: 12px;">⭐</span>' : ''}
+                </span>
+                <span class="venue-item-dist-badge">${formatRadiusLabel(v.distance || 0)}</span>
+              </div>
+              <span class="venue-item-address">${v.address} · ${v.neighborhood.split(',')[0]}</span>
+              <div class="venue-item-meta-row">
+                <span class="venue-item-presence">🔥 ${v.checkins_count || 12} pessoas aqui</span>
+                <span style="font-size: 10px; color: #fde047; font-weight: 800;">⭐ ${v.rating || '4,7'}</span>
+              </div>
+            </div>
+            <div class="venue-item-arrow">›</div>
+          </div>
+
+          <div class="venue-card-transport-strip">
+            <span class="transport-strip-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              Como ir:
+            </span>
+            <div class="transport-strip-btns">
+              <button type="button" class="btn-ride-pill uber" onclick="event.stopPropagation(); window.azararApp.openRideApp('uber', '${v.id}')" title="Ir de Uber com endereço pronto">
+                ${RIDE_ICONS_MINI.uber} Uber
+              </button>
+              <button type="button" class="btn-ride-pill app99" onclick="event.stopPropagation(); window.azararApp.openRideApp('99', '${v.id}')" title="Ir de 99 Pop com endereço">
+                ${RIDE_ICONS_MINI.app99} 99
+              </button>
+              <button type="button" class="btn-ride-pill waze" onclick="event.stopPropagation(); window.azararApp.openRideApp('waze', '${v.id}')" title="Navegar com Waze">
+                ${RIDE_ICONS_MINI.waze} Waze
+              </button>
+              <button type="button" class="btn-ride-pill gmaps" onclick="event.stopPropagation(); window.azararApp.openRideApp('gmaps', '${v.id}')" title="Rota no Google Maps">
+                ${RIDE_ICONS_MINI.gmaps} Maps
+              </button>
             </div>
           </div>
-          <div class="venue-item-arrow">›</div>
         </div>
       `;
     }).join('');
@@ -1680,14 +1814,73 @@
           </div>
         </div>
 
+        <div class="showcase-ride-options-box">
+          <div class="showcase-ride-box-header">
+            <div class="showcase-ride-box-title">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ff2a7a" stroke-width="2.2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+              <span>Como ir até o local</span>
+            </div>
+            <button type="button" class="showcase-ride-copy-btn" onclick="window.azararApp.copyActiveVenueAddress('${venue.id}')">
+              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              <span>Copiar endereço</span>
+            </button>
+          </div>
+
+          <div class="showcase-ride-grid-2x2">
+            <button type="button" class="showcase-ride-card uber" onclick="window.azararApp.openRideApp('uber', '${venue.id}')">
+              <div class="showcase-ride-icon uber">
+                ${RIDE_ICONS.uber}
+              </div>
+              <div class="showcase-ride-meta">
+                <strong>Uber</strong>
+                <span>Pedir corrida</span>
+              </div>
+              <span class="showcase-ride-badge uber">Abrir ›</span>
+            </button>
+
+            <button type="button" class="showcase-ride-card app99" onclick="window.azararApp.openRideApp('99', '${venue.id}')">
+              <div class="showcase-ride-icon app99">
+                ${RIDE_ICONS.app99}
+              </div>
+              <div class="showcase-ride-meta">
+                <strong>99 Pop</strong>
+                <span>Pedir corrida</span>
+              </div>
+              <span class="showcase-ride-badge app99">Abrir ›</span>
+            </button>
+
+            <button type="button" class="showcase-ride-card waze" onclick="window.azararApp.openRideApp('waze', '${venue.id}')">
+              <div class="showcase-ride-icon waze">
+                ${RIDE_ICONS.waze}
+              </div>
+              <div class="showcase-ride-meta">
+                <strong>Waze</strong>
+                <span>GPS ao vivo</span>
+              </div>
+              <span class="showcase-ride-badge waze">Navegar ›</span>
+            </button>
+
+            <button type="button" class="showcase-ride-card gmaps" onclick="window.azararApp.openRideApp('gmaps', '${venue.id}')">
+              <div class="showcase-ride-icon gmaps">
+                ${RIDE_ICONS.gmaps}
+              </div>
+              <div class="showcase-ride-meta">
+                <strong>Google Maps</strong>
+                <span>Ver rota</span>
+              </div>
+              <span class="showcase-ride-badge gmaps">Rotas ›</span>
+            </button>
+          </div>
+        </div>
+
         <div class="showcase-actions-row">
           <button type="button" class="btn-showcase-main-cta" onclick="window.azararApp.performVenueCheckin('${venue.id}')">
             ${isGold ? '📍 Fazer Check-in no Local' : 'Quero conhecer este lugar'}
           </button>
           
-          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venue.name + ' ' + (venue.address || '') + ' João Pessoa')}" target="_blank" class="btn-showcase-bookmark" title="Como chegar no GPS" style="text-decoration: none;">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
-          </a>
+          <button type="button" class="btn-showcase-bookmark" onclick="window.azararApp.openRideOptionsModal('${venue.id}')" title="Como ir até o local (Uber, 99, Waze, Maps)">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </button>
 
           <button type="button" class="btn-showcase-bookmark" onclick="window.azararApp.toast('Local salvo na sua lista de desejos 🔖')" title="Salvar local">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
@@ -3618,6 +3811,10 @@
     openRadarPreview,
     centerGPSLocation,
     recalibrateRadar,
+    openRideApp,
+    openRideOptionsModal,
+    closeRideOptionsModal,
+    copyActiveVenueAddress,
     renderVenuesPage,
     renderVenuesList,
     renderVenueShowcase,

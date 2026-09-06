@@ -1665,6 +1665,84 @@
       </div>
     </div>
 
+    <!-- ============================================ -->
+    <!-- MODAL: COMO IR ATÉ O LOCAL (UBER, 99, WAZE, MAPS) -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalRideOptions" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeRideOptionsModal()"></div>
+      <div class="modal-card-sheet az-ride-modal-sheet">
+        <div class="az-ride-modal-header">
+          <button class="modal-close-btn" onclick="window.azararApp.closeRideOptionsModal()" style="position: absolute; right: 14px; top: 14px;">✕</button>
+          <span class="az-ride-badge">COMO CHEGAR</span>
+          <h3 class="az-ride-modal-title" id="modalRideVenueName">Bar do Cuscuz</h3>
+          <p class="az-ride-modal-address" id="modalRideVenueAddress">R. dos Tabajaras, 439 - Tambaú</p>
+        </div>
+
+        <div class="az-ride-groups-container">
+          <!-- Carro por Aplicativo -->
+          <div class="az-ride-group">
+            <span class="az-ride-group-title">🚕 Carro por Aplicativo</span>
+            <div class="az-ride-group-items">
+              <button type="button" class="az-ride-option-btn uber" id="btnModalRideUber" onclick="window.azararApp.openRideApp('uber')">
+                <div class="az-ride-app-icon uber">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="6" fill="#000"/><path d="M4.5 9h2.2v4.2c0 1.5.8 2.3 2.1 2.3s2.1-.8 2.1-2.3V9h2.2v4.2c0 2.8-1.7 4.3-4.3 4.3s-4.3-1.5-4.3-4.3V9z" fill="#fff"/><path d="M14.5 9h2v1.2c.4-.8 1.3-1.4 2.4-1.4 1.8 0 3 1.3 3 3.4v5.3h-2.1v-4.9c0-1.2-.6-1.9-1.6-1.9-1 0-1.7.7-1.7 1.9v4.9h-2V9z" fill="#fff"/></svg>
+                </div>
+                <div class="az-ride-btn-info">
+                  <strong>Uber</strong>
+                  <span>Abrir aplicativo com destino pronto</span>
+                </div>
+                <span class="az-ride-action-tag uber">Pedir ›</span>
+              </button>
+
+              <button type="button" class="az-ride-option-btn app99" id="btnModalRide99" onclick="window.azararApp.openRideApp('99')">
+                <div class="az-ride-app-icon app99">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="6" fill="#ffd100"/><text x="12" y="16.5" font-family="-apple-system, sans-serif" font-weight="900" font-size="13" fill="#1a1100" text-anchor="middle">99</text></svg>
+                </div>
+                <div class="az-ride-btn-info">
+                  <strong>99 Pop</strong>
+                  <span>Abrir app 99 com endereço pré-definido</span>
+                </div>
+                <span class="az-ride-action-tag app99">Pedir ›</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Seu Próprio Veículo -->
+          <div class="az-ride-group">
+            <span class="az-ride-group-title">🧭 Seu Próprio Veículo (Navegação GPS)</span>
+            <div class="az-ride-group-items">
+              <button type="button" class="az-ride-option-btn waze" id="btnModalRideWaze" onclick="window.azararApp.openRideApp('waze')">
+                <div class="az-ride-app-icon waze">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="6" fill="#33ccff"/><path d="M18.5 12.8c0-3.5-2.9-6.3-6.5-6.3-3.6 0-6.5 2.8-6.5 6.3 0 1.2.3 2.3.9 3.2l-.7 2.1 2.4-.6c1.1.7 2.4 1.1 3.9 1.1 3.6 0 6.5-2.8 6.5-6.3z" fill="#fff"/><circle cx="9.5" cy="12.5" r="1.2" fill="#1e293b"/><circle cx="14.5" cy="12.5" r="1.2" fill="#1e293b"/><circle cx="8" cy="17" r="1" fill="#1e293b"/><circle cx="16" cy="17" r="1" fill="#1e293b"/></svg>
+                </div>
+                <div class="az-ride-btn-info">
+                  <strong>Waze</strong>
+                  <span>Rotas em tempo real e avisos de trânsito</span>
+                </div>
+                <span class="az-ride-action-tag waze">Navegar ›</span>
+              </button>
+
+              <button type="button" class="az-ride-option-btn gmaps" id="btnModalRideGmaps" onclick="window.azararApp.openRideApp('gmaps')">
+                <div class="az-ride-app-icon gmaps">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none"><rect width="24" height="24" rx="6" fill="#fff"/><path d="M12 3C8.4 3 5.5 5.9 5.5 9.5c0 4.8 6.5 11.5 6.5 11.5s6.5-6.7 6.5-11.5C18.5 5.9 15.6 3 12 3z" fill="#EA4335"/><circle cx="12" cy="9.5" r="2.8" fill="#fff"/><circle cx="12" cy="9.5" r="1.8" fill="#4285F4"/></svg>
+                </div>
+                <div class="az-ride-btn-info">
+                  <strong>Google Maps</strong>
+                  <span>Trajeto GPS completo de carro, moto ou a pé</span>
+                </div>
+                <span class="az-ride-action-tag gmaps">Ver Rota ›</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="az-btn-copy-address" id="btnModalCopyAddress" onclick="window.azararApp.copyActiveVenueAddress()">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copiar endereço completo</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Toast Notification -->
     <div class="toast-notification" id="toastNotification" aria-live="polite"></div>
 
