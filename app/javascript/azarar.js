@@ -1290,6 +1290,9 @@
       name: "Bar do Cuscuz",
       slug: "bar-do-cuscuz",
       rating: "4,8",
+      stars_tier: 5,
+      max_photos: 5,
+      max_videos: 5,
       category: "bar",
       category_label: "Bar, Petiscos & Música ao Vivo ⭐",
       address: "R. dos Tabajaras, 439",
@@ -1302,6 +1305,20 @@
       is_partner: true,
       partner_tier: "gold_partner",
       cover_image_url: "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+        "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800",
+        "https://images.unsplash.com/photo-1574096079513-d8259312b785?w=800",
+        "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=800",
+        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-cocktail-glass-with-smoke-43286-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-dj-playing-music-in-a-club-41712-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-people-dancing-in-a-party-with-neon-lights-42988-large.mp4"
+      ],
       description: "O point mais famoso e animado de João Pessoa, de frente para o mar de Tambaú. Música ao vivo todos os dias, chopp trincando, gastronomia regional premiada e a melhor paquera da cidade.",
       instagram: "@bardocuscuzjp",
       phone: "(83) 3247-1010",
@@ -1310,89 +1327,20 @@
       perk_description: "Apresente o aplicativo Azarar VIP para o garçom e ganhe 1 Drink cortesia na compra de qualquer petisco!",
       opening_hours: "Terça a Domingo · 16h às 02h",
       vibe: "🔥 Forró, Sertanejo & Azaração na Orla",
-      checkins_count: 28,
-      verified: true
-    },
-    {
-      id: 2,
-      name: "Café São Bento",
-      slug: "cafe-sao-bento",
-      rating: "4,7",
-      category: "restaurant",
-      category_label: "Café, Bistrô & Charme ☕",
-      address: "R. Des. Souto Maior, 90",
-      neighborhood: "Centro, João Pessoa - PB",
-      city: "João Pessoa",
-      state: "PB",
-      latitude: -7.1150,
-      longitude: -34.8850,
-      distance: 3500,
-      is_partner: false,
-      partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1000",
-      description: "Ambiente histórico e acolhedor no coração do Centro Histórico. Cafés especiais, tortas artesanais e música acústica para encontros inesquecíveis.",
-      instagram: "@cafesaobentojp",
-      tags: ["☕ Café", "🥐 Bistrô", "🎶 Música acústica", "🏛️ Histórico"],
-      opening_hours: "Segunda a Sábado · 09h às 20h",
-      vibe: "✨ Encontros românticos & conversas profundas",
-      checkins_count: 15,
-      verified: false
-    },
-    {
-      id: 3,
-      name: "Restaurante Sabor da Orla",
-      slug: "restaurante-sabor-da-orla",
-      rating: "4,6",
-      category: "restaurant",
-      category_label: "Frutos do Mar & Vista Mar 🍽️",
-      address: "Av. Cabo Branco, 2810",
-      neighborhood: "Cabo Branco, João Pessoa - PB",
-      city: "João Pessoa",
-      state: "PB",
-      latitude: -7.1360,
-      longitude: -34.8220,
-      distance: 1400,
-      is_partner: false,
-      partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000",
-      description: "Gastronomia marítima refinada com vista deslumbrante para a praia de Cabo Branco. Carta de vinhos selecionados e clima perfeito para primeiros dates.",
-      instagram: "@sabordaorlajp",
-      tags: ["🍽️ Frutos do Mar", "🏖️ Vista mar", "🍷 Vinhos", "🕯️ Clima a dois"],
-      opening_hours: "Todos os dias · 11h às 23h",
-      vibe: "🌊 Brisa do mar, camarão & bons vinhos",
-      checkins_count: 19,
-      verified: false
-    },
-    {
-      id: 4,
-      name: "Boteco Central",
-      slug: "boteco-central",
-      rating: "4,5",
-      category: "bar",
-      category_label: "Boteco Tradicional & Samba 🍻",
-      address: "R. Vig. Antônio Pessoa, 255",
-      neighborhood: "Mangabeira, João Pessoa - PB",
-      city: "João Pessoa",
-      state: "PB",
-      latitude: -7.1650,
-      longitude: -34.8450,
-      distance: 4200,
-      is_partner: false,
-      partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=1000",
-      description: "Boteco raiz com mesas na calçada, chopp estupidamente gelado e roda de samba ao vivo nos finais de tarde.",
-      instagram: "@botecocentraljp",
-      tags: ["🍻 Chopp Gelado", "🍢 Petiscos", "🥁 Samba & Pagode"],
-      opening_hours: "Quarta a Domingo · 17h às 01h",
-      vibe: "🎉 Resenha animada, cerveja & samba",
-      checkins_count: 22,
-      verified: false
+      checkins_count: 38,
+      verified: true,
+      billing_cycle: "annual",
+      subscription_status: "active",
+      is_blocked: false
     },
     {
       id: 5,
       name: "Varanda do Mar",
       slug: "varanda-do-mar",
-      rating: "4,8",
+      rating: "4,9",
+      stars_tier: 5,
+      max_photos: 5,
+      max_videos: 5,
       category: "nightclub",
       category_label: "Lounge, Drinks & Balada 🔥",
       address: "Av. João Maurício, 1341",
@@ -1402,22 +1350,173 @@
       latitude: -7.1030,
       longitude: -34.8290,
       distance: 1800,
-      is_partner: false,
-      partner_tier: "organic",
+      is_partner: true,
+      partner_tier: "gold_partner",
       cover_image_url: "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800",
+        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800",
+        "https://images.unsplash.com/photo-1574096079513-d8259312b785?w=800",
+        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+        "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-dj-playing-music-in-a-club-41712-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-people-dancing-in-a-party-with-neon-lights-42988-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-cocktail-glass-with-smoke-43286-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4"
+      ],
       description: "Rooftop lounge beira-mar com DJs de house/funk, coquetelaria autoral e a galera mais bonita e festeira da cidade.",
       instagram: "@varandadomarjp",
+      phone: "(83) 3247-2200",
       tags: ["🍸 Rooftop Lounge", "🎧 DJ Set", "🍹 Drinks Autorais", "🔥 Paquera"],
+      perk_title: "Shot VIP na Entrada",
+      perk_description: "Solteiros com Azarar VIP ganham um shot autoral na recepção!",
       opening_hours: "Quinta a Domingo · 19h às 04h",
       vibe: "✨ Balada sofisticada, drinks & azaração",
+      checkins_count: 45,
+      verified: true,
+      billing_cycle: "monthly",
+      subscription_status: "active",
+      is_blocked: false
+    },
+    {
+      id: 4,
+      name: "Boteco Central",
+      slug: "boteco-central",
+      rating: "4,6",
+      stars_tier: 4,
+      max_photos: 4,
+      max_videos: 4,
+      category: "bar",
+      category_label: "Boteco Tradicional & Samba 🍻",
+      address: "R. Vig. Antônio Pessoa, 255",
+      neighborhood: "Mangabeira, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1650,
+      longitude: -34.8450,
+      distance: 4200,
+      is_partner: true,
+      partner_tier: "partner",
+      cover_image_url: "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800",
+        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800",
+        "https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=800",
+        "https://images.unsplash.com/photo-1574096079513-d8259312b785?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-people-dancing-in-a-party-with-neon-lights-42988-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-dj-playing-music-in-a-club-41712-large.mp4"
+      ],
+      description: "Boteco raiz com mesas na calçada, chopp estupidamente gelado e roda de samba ao vivo nos finais de tarde.",
+      instagram: "@botecocentraljp",
+      phone: "(83) 3247-4400",
+      tags: ["🍻 Chopp Gelado", "🍢 Petiscos", "🥁 Samba & Pagode"],
+      opening_hours: "Quarta a Domingo · 17h às 01h",
+      vibe: "🎉 Resenha animada, cerveja & samba",
+      checkins_count: 29,
+      verified: true,
+      billing_cycle: "semiannual",
+      subscription_status: "active",
+      is_blocked: false
+    },
+    {
+      id: 2,
+      name: "Café São Bento",
+      slug: "cafe-sao-bento",
+      rating: "4,7",
+      stars_tier: 3,
+      max_photos: 3,
+      max_videos: 3,
+      category: "restaurant",
+      category_label: "Café, Bistrô & Charme ☕",
+      address: "R. Des. Souto Maior, 90",
+      neighborhood: "Centro, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1150,
+      longitude: -34.8850,
+      distance: 3500,
+      is_partner: true,
+      partner_tier: "partner",
+      cover_image_url: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800",
+        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-cocktail-glass-with-smoke-43286-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4"
+      ],
+      description: "Ambiente histórico e acolhedor no coração do Centro Histórico. Cafés especiais, tortas artesanais e música acústica para encontros inesquecíveis.",
+      instagram: "@cafesaobentojp",
+      phone: "(83) 3247-5500",
+      tags: ["☕ Café", "🥐 Bistrô", "🎶 Música acústica", "🏛️ Histórico"],
+      opening_hours: "Segunda a Sábado · 09h às 20h",
+      vibe: "✨ Encontros românticos & conversas profundas",
+      checkins_count: 21,
+      verified: true,
+      billing_cycle: "monthly",
+      subscription_status: "active",
+      is_blocked: false
+    },
+    {
+      id: 3,
+      name: "Restaurante Sabor da Orla",
+      slug: "restaurante-sabor-da-orla",
+      rating: "4,6",
+      stars_tier: 3,
+      max_photos: 3,
+      max_videos: 3,
+      category: "restaurant",
+      category_label: "Frutos do Mar & Vista Mar 🍽️",
+      address: "Av. Cabo Branco, 2810",
+      neighborhood: "Cabo Branco, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1360,
+      longitude: -34.8220,
+      distance: 1400,
+      is_partner: true,
+      partner_tier: "partner",
+      cover_image_url: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800",
+        "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800",
+        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-cocktail-glass-with-smoke-43286-large.mp4"
+      ],
+      description: "Gastronomia marítima refinada com vista deslumbrante para a praia de Cabo Branco. Carta de vinhos selecionados e clima perfeito para primeiros dates.",
+      instagram: "@sabordaorlajp",
+      phone: "(83) 3247-6600",
+      tags: ["🍽️ Frutos do Mar", "🏖️ Vista mar", "🍷 Vinhos", "🕯️ Clima a dois"],
+      opening_hours: "Todos os dias · 11h às 23h",
+      vibe: "🌊 Brisa do mar, camarão & bons vinhos",
       checkins_count: 24,
-      verified: false
+      verified: true,
+      billing_cycle: "semiannual",
+      subscription_status: "active",
+      is_blocked: false
     },
     {
       id: 6,
       name: "Pizzaria Estação",
       slug: "pizzaria-estacao",
       rating: "4,7",
+      stars_tier: 3,
+      max_photos: 3,
+      max_videos: 3,
       category: "restaurant",
       category_label: "Pizzas Artesanais & Vinhos 🍕",
       address: "R. Epitácio Pessoa, 672",
@@ -1427,22 +1526,39 @@
       latitude: -7.1210,
       longitude: -34.8580,
       distance: 2800,
-      is_partner: false,
-      partner_tier: "organic",
+      is_partner: true,
+      partner_tier: "partner",
       cover_image_url: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800",
+        "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800",
+        "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-cocktail-glass-with-smoke-43286-large.mp4"
+      ],
       description: "Forno a lenha napolitano, iluminação intimista à meia-luz e ambiente acolhedor para quebrar o gelo em grande estilo.",
       instagram: "@pizzariaestacaojp",
+      phone: "(83) 3247-7700",
       tags: ["🍕 Pizza Napolitana", "🍷 Carta de Vinhos", "✨ Clima intimista"],
       opening_hours: "Terça a Domingo · 18h às 23h30",
       vibe: "🍕 Jantar descontraído & vinho",
-      checkins_count: 17,
-      verified: false
+      checkins_count: 20,
+      verified: true,
+      billing_cycle: "monthly",
+      subscription_status: "active",
+      is_blocked: false
     },
     {
       id: 7,
       name: "Dona Branca",
       slug: "dona-branca",
       rating: "4,6",
+      stars_tier: 2,
+      max_photos: 2,
+      max_videos: 2,
       category: "bar",
       category_label: "Bar & Petiscaria Regional 🍸",
       address: "Av. Gov. Flávio Ribeiro Coutinho, 115",
@@ -1452,46 +1568,37 @@
       latitude: -7.0980,
       longitude: -34.8380,
       distance: 2400,
-      is_partner: false,
-      partner_tier: "organic",
+      is_partner: true,
+      partner_tier: "partner",
       cover_image_url: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=800",
+        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4"
+      ],
       description: "Bar tradicional com culinária regional de primeira, carne de sol na nata, forró pé de serra e cervejas artesanais.",
       instagram: "@donabrancajp",
+      phone: "(83) 3247-8800",
       tags: ["🍸 Petiscos", "🪗 Forró Pé de Serra", "🍻 Cervejas"],
       opening_hours: "Quarta a Domingo · 17h às 01h",
       vibe: "🍻 Cerveja gelada & forrózin",
-      checkins_count: 14,
-      verified: false
-    },
-    {
-      id: 8,
-      name: "Posto Select Beira Rio",
-      slug: "posto-select-beira-rio",
-      rating: "4,4",
-      category: "convenience",
-      category_label: "Conveniência & Esquenta de Balada ⛽",
-      address: "Av. Min. José Américo de Almeida, 1200",
-      neighborhood: "Torre, João Pessoa - PB",
-      city: "João Pessoa",
-      state: "PB",
-      latitude: -7.1220,
-      longitude: -34.8510,
-      distance: 1800,
-      is_partner: false,
-      partner_tier: "organic",
-      cover_image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1000",
-      description: "O clássico ponto de encontro pré-balada para encontrar a galera, tomar um drink rápido e decidir onde será a noite.",
-      tags: ["⛽ Conveniência 24h", "⚡ Esquenta Pré-Balada", "🥤 Bebidas"],
-      opening_hours: "Aberto 24 Horas",
-      vibe: "⚡ Esquenta pré-balada, cerveja & resenha",
-      checkins_count: 11,
-      verified: false
+      checkins_count: 18,
+      verified: true,
+      billing_cycle: "monthly",
+      subscription_status: "active",
+      is_blocked: false
     },
     {
       id: 9,
       name: "Feirinha de Tambaú",
       slug: "feirinha-de-tambau",
       rating: "4,7",
+      stars_tier: 2,
+      max_photos: 2,
+      max_videos: 2,
       category: "beach",
       category_label: "Ponto Turístico & Praça 🛍️",
       address: "Praça Santo Antônio, Av. Alm. Tamandaré",
@@ -1504,12 +1611,78 @@
       is_partner: false,
       partner_tier: "organic",
       cover_image_url: "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1533777857889-4be7c70b33f7?w=800",
+        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-people-dancing-in-a-party-with-neon-lights-42988-large.mp4",
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4"
+      ],
       description: "Coração cultural e turístico de Tambaú. Tapiocas, artesanato, música ao vivo e fluxo constante de turistas e locais.",
       tags: ["🛍️ Ponto Turístico", "🥥 Tapioca & Côco", "🎸 Música ao Vivo"],
       opening_hours: "Todos os dias · 17h às 23h",
       vibe: "🥥 Ponto de encontro, tapioca & paquera turística",
-      checkins_count: 16,
-      verified: false
+      checkins_count: 22,
+      verified: false,
+      billing_cycle: "monthly",
+      subscription_status: "active",
+      is_blocked: false
+    },
+    {
+      id: 8,
+      name: "Posto Select Beira Rio",
+      slug: "posto-select-beira-rio",
+      rating: "4,4",
+      stars_tier: 1,
+      max_photos: 1,
+      max_videos: 1,
+      category: "convenience",
+      category_label: "Conveniência & Esquenta de Balada ⛽",
+      address: "Av. Min. José Américo de Almeida, 1200",
+      neighborhood: "Torre, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      latitude: -7.1220,
+      longitude: -34.8510,
+      distance: 1800,
+      is_partner: false,
+      partner_tier: "organic",
+      cover_image_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1000",
+      gallery_images: [
+        "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800"
+      ],
+      gallery_videos: [
+        "https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4"
+      ],
+      description: "O clássico ponto de encontro pré-balada para encontrar a galera, tomar um drink rápido e decidir onde será a noite.",
+      tags: ["⛽ Conveniência 24h", "⚡ Esquenta Pré-Balada", "🥤 Bebidas"],
+      opening_hours: "Aberto 24 Horas",
+      vibe: "⚡ Esquenta pré-balada, cerveja & resenha",
+      checkins_count: 15,
+      verified: false,
+      billing_cycle: "monthly",
+      subscription_status: "active",
+      is_blocked: false
+    },
+    {
+      id: 99,
+      name: "Club Expirado Bloqueado (Exemplo de Inadimplência)",
+      slug: "club-expirado",
+      rating: "4,0",
+      stars_tier: 3,
+      max_photos: 3,
+      max_videos: 3,
+      category: "nightclub",
+      address: "Av. Epitácio Pessoa, 9999",
+      neighborhood: "Tambaú, João Pessoa - PB",
+      city: "João Pessoa",
+      state: "PB",
+      distance: 500,
+      checkins_count: 50,
+      billing_cycle: "monthly",
+      subscription_status: "expired",
+      is_blocked: true
     }
   ];
 
@@ -2003,6 +2176,767 @@
       headers: { 'Content-Type': 'application/json' }
     }).catch(() => {});
   }
+
+  // ==========================================================================
+  // 6B. B2B PARTNERS & REGISTERED VENUES (PLANO DE ESTRELAS, CHECKOUT CARTÃO & ALGORITMO MULTI-CRITÉRIO)
+  // ==========================================================================
+  let selectedB2BStars = 3;
+  let selectedB2BCycle = 'monthly';
+  let b2bPhotos = [];
+  let b2bVideos = [];
+  let currentEditingVenueId = null;
+  let registeredSearchQuery = '';
+  let registeredSearchRadius = 5000;
+  let registeredPriorityOrder = ['stars', 'people', 'distance'];
+  let editingVenueMediaPhotos = [];
+  let editingVenueMediaVideos = [];
+
+  const STAR_PLAN_PRICES = {
+    1: { monthly: 99, semiannual: 89, annual: 79, label: '⭐ 1 Estrela' },
+    2: { monthly: 179, semiannual: 161, annual: 143, label: '⭐⭐ 2 Estrelas' },
+    3: { monthly: 249, semiannual: 224, annual: 199, label: '⭐⭐⭐ 3 Estrelas' },
+    4: { monthly: 349, semiannual: 314, annual: 279, label: '⭐⭐⭐⭐ 4 Estrelas' },
+    5: { monthly: 499, semiannual: 449, annual: 399, label: '⭐⭐⭐⭐⭐ 5 Estrelas' }
+  };
+
+  const SAMPLE_VENUE_PHOTOS = [
+    'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800',
+    'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800',
+    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
+    'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=800',
+    'https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800'
+  ];
+
+  const SAMPLE_VENUE_VIDEOS = [
+    'https://assets.mixkit.co/videos/preview/mixkit-friends-toasting-with-glasses-of-beer-in-a-bar-42998-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-bartender-making-a-cocktail-at-a-bar-counter-43187-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-hands-holding-a-cocktail-glass-with-smoke-43286-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-dj-playing-music-in-a-club-41712-large.mp4',
+    'https://assets.mixkit.co/videos/preview/mixkit-people-dancing-in-a-party-with-neon-lights-42988-large.mp4'
+  ];
+
+  function toggleKebabMenu(forceState) {
+    const dropdown = document.getElementById('azKebabMenuDropdown');
+    const backdrop = document.getElementById('azKebabBackdrop');
+    const btn = document.getElementById('btnTopbarKebab');
+    if (!dropdown) return;
+    const isOpen = dropdown.classList.contains('active');
+    const shouldOpen = forceState !== undefined ? forceState : !isOpen;
+    if (shouldOpen) {
+      dropdown.classList.add('active');
+      dropdown.setAttribute('aria-hidden', 'false');
+      if (backdrop) backdrop.classList.add('active');
+      if (btn) btn.classList.add('active');
+    } else {
+      dropdown.classList.remove('active');
+      dropdown.setAttribute('aria-hidden', 'true');
+      if (backdrop) backdrop.classList.remove('active');
+      if (btn) btn.classList.remove('active');
+    }
+  }
+
+  function openRegisterVenueModal() {
+    toggleKebabMenu(false);
+    const modal = document.getElementById('modalRegisterVenueB2B');
+    if (modal) {
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    selectStarPlan(3);
+    selectBillingCycle('monthly');
+  }
+
+  function closeRegisterVenueModal() {
+    const modal = document.getElementById('modalRegisterVenueB2B');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function selectStarPlan(stars) {
+    selectedB2BStars = parseInt(stars, 10) || 3;
+    const hidden = document.getElementById('selectedStarsTier');
+    if (hidden) hidden.value = selectedB2BStars;
+
+    document.querySelectorAll('.az-star-plan-card').forEach(card => {
+      const s = parseInt(card.getAttribute('data-stars'), 10);
+      if (s === selectedB2BStars) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    });
+
+    const prices = STAR_PLAN_PRICES[selectedB2BStars] || STAR_PLAN_PRICES[3];
+    const elMonthly = document.getElementById('cyclePriceMonthly');
+    const elSemiannual = document.getElementById('cyclePriceSemiannual');
+    const elAnnual = document.getElementById('cyclePriceAnnual');
+
+    if (elMonthly) elMonthly.textContent = `R$ ${prices.monthly}/mês`;
+    if (elSemiannual) elSemiannual.textContent = `R$ ${prices.semiannual}/mês`;
+    if (elAnnual) elAnnual.textContent = `R$ ${prices.annual}/mês`;
+
+    const badge = document.getElementById('b2bMediaQuotaBadge');
+    if (badge) {
+      badge.textContent = `Limite: ${selectedB2BStars} Foto${selectedB2BStars > 1 ? 's' : ''} / ${selectedB2BStars} Vídeo${selectedB2BStars > 1 ? 's' : ''}`;
+    }
+
+    renderB2BMediaSlots(selectedB2BStars);
+  }
+
+  function selectBillingCycle(cycle) {
+    selectedB2BCycle = cycle;
+    const hidden = document.getElementById('selectedBillingCycle');
+    if (hidden) hidden.value = cycle;
+    document.querySelectorAll('input[name="billingCycleRadio"]').forEach(r => {
+      r.checked = (r.value === cycle);
+    });
+  }
+
+  function maskCPF(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    input.value = v;
+  }
+
+  function maskCNPJ(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 14) v = v.slice(0, 14);
+    v = v.replace(/^(\d{2})(\d)/, '$1.$2');
+    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+    v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
+    v = v.replace(/(\d{4})(\d)/, '$1-$2');
+    input.value = v;
+  }
+
+  function maskPhone(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 10) {
+      v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    } else if (v.length > 6) {
+      v = v.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+    } else if (v.length > 2) {
+      v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+    }
+    input.value = v;
+  }
+
+  function handleCardNumberInput(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 16) v = v.slice(0, 16);
+
+    let brand = 'VISA';
+    if (/^5[1-5]/.test(v)) brand = 'MASTERCARD';
+    else if (/^4/.test(v)) brand = 'VISA';
+    else if (/^3[47]/.test(v)) brand = 'AMEX';
+    else if (/^(606282|3841)/.test(v)) brand = 'HIPERCARD';
+    else if (/^(4011|4312|4389|4514|4576|5041|5066|5067|509)/.test(v)) brand = 'ELO';
+
+    const brandEl = document.getElementById('vcardBrand');
+    if (brandEl) brandEl.textContent = brand;
+
+    const formatted = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+    input.value = formatted;
+
+    const numEl = document.getElementById('vcardNumber');
+    if (numEl) numEl.textContent = formatted || '•••• •••• •••• ••••';
+  }
+
+  function handleCardHolderInput(input) {
+    input.value = input.value.toUpperCase();
+    const holderEl = document.getElementById('vcardHolder');
+    if (holderEl) holderEl.textContent = input.value || 'SEU NOME AQUI';
+  }
+
+  function handleCardExpiryInput(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length > 4) v = v.slice(0, 4);
+    if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+    input.value = v;
+
+    const expEl = document.getElementById('vcardExpiry');
+    if (expEl) expEl.textContent = v || 'MM/AA';
+  }
+
+  function renderB2BMediaSlots(starsCount) {
+    const container = document.getElementById('b2bMediaSlotsContainer');
+    if (!container) return;
+
+    if (b2bPhotos.length < starsCount) {
+      for (let i = b2bPhotos.length; i < starsCount; i++) {
+        b2bPhotos.push(SAMPLE_VENUE_PHOTOS[i % SAMPLE_VENUE_PHOTOS.length]);
+      }
+    } else if (b2bPhotos.length > starsCount) {
+      b2bPhotos = b2bPhotos.slice(0, starsCount);
+    }
+
+    if (b2bVideos.length < starsCount) {
+      for (let i = b2bVideos.length; i < starsCount; i++) {
+        b2bVideos.push(SAMPLE_VENUE_VIDEOS[i % SAMPLE_VENUE_VIDEOS.length]);
+      }
+    } else if (b2bVideos.length > starsCount) {
+      b2bVideos = b2bVideos.slice(0, starsCount);
+    }
+
+    let html = `
+      <div class="az-b2b-slot-group">
+        <span class="az-b2b-slot-label">📸 Fotos Permitidas no Plano (${starsCount}/${starsCount})</span>
+        <div class="az-b2b-slots-row">
+    `;
+
+    for (let i = 0; i < starsCount; i++) {
+      const photo = b2bPhotos[i];
+      html += `
+        <div class="az-b2b-slot-card ${photo ? 'has-media' : ''}" onclick="window.azararApp.triggerMediaUpload('photo', ${i})" title="Toque para alternar foto">
+          <span class="az-b2b-slot-badge">Foto ${i + 1}</span>
+          ${photo ? `<img src="${photo}" alt="Foto ${i + 1}" />` : `
+            <span style="font-size: 18px;">📷</span>
+            <span style="font-size: 9px; color: #94a3b8;">Adicionar</span>
+          `}
+        </div>
+      `;
+    }
+
+    html += `
+        </div>
+      </div>
+
+      <div class="az-b2b-slot-group" style="margin-top: 10px;">
+        <span class="az-b2b-slot-label">🎥 Vídeos Permitidos no Plano (${starsCount}/${starsCount})</span>
+        <div class="az-b2b-slots-row">
+    `;
+
+    for (let i = 0; i < starsCount; i++) {
+      const video = b2bVideos[i];
+      html += `
+        <div class="az-b2b-slot-card ${video ? 'has-media' : ''}" onclick="window.azararApp.triggerMediaUpload('video', ${i})" title="Toque para alternar vídeo">
+          <span class="az-b2b-slot-badge">Vídeo ${i + 1}</span>
+          ${video ? `
+            <video src="${video}" muted playsinline></video>
+            <div class="az-b2b-video-play-overlay">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            </div>
+          ` : `
+            <span style="font-size: 18px;">🎬</span>
+            <span style="font-size: 9px; color: #94a3b8;">Adicionar</span>
+          `}
+        </div>
+      `;
+    }
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+  }
+
+  function triggerMediaUpload(type, index) {
+    if (type === 'photo') {
+      const nextPhoto = SAMPLE_VENUE_PHOTOS[(index + 1) % SAMPLE_VENUE_PHOTOS.length];
+      b2bPhotos[index] = nextPhoto;
+      renderB2BMediaSlots(selectedB2BStars);
+      showToast(`📸 Foto ${index + 1} atualizada!`);
+    } else {
+      const nextVideo = SAMPLE_VENUE_VIDEOS[(index + 1) % SAMPLE_VENUE_VIDEOS.length];
+      b2bVideos[index] = nextVideo;
+      renderB2BMediaSlots(selectedB2BStars);
+      showToast(`🎥 Vídeo ${index + 1} atualizado!`);
+    }
+  }
+
+  async function handleRegisterVenueSubmit(e) {
+    if (e) e.preventDefault();
+
+    const ownerName = (document.getElementById('venueOwnerName')?.value || '').trim();
+    const cpf = (document.getElementById('venueCpf')?.value || '').trim();
+    const cnpj = (document.getElementById('venueCnpj')?.value || '').trim();
+    const name = (document.getElementById('venueName')?.value || '').trim();
+    const category = document.getElementById('venueCategory')?.value || 'bar';
+    const phone = (document.getElementById('venuePhone')?.value || '').trim();
+    const address = (document.getElementById('venueAddress')?.value || '').trim();
+    const instagram = (document.getElementById('venueInstagram')?.value || '').trim();
+    const starsTier = parseInt(document.getElementById('selectedStarsTier')?.value, 10) || selectedB2BStars;
+    const billingCycle = document.getElementById('selectedBillingCycle')?.value || selectedB2BCycle;
+    const cardNumber = (document.getElementById('cardInputNumber')?.value || '').trim();
+    const cardHolder = (document.getElementById('cardInputHolder')?.value || '').trim();
+    const cardExpiry = (document.getElementById('cardInputExpiry')?.value || '').trim();
+
+    if (!ownerName || !cpf || !cnpj || !name || !address || !cardNumber) {
+      showToast('⚠️ Preencha todos os campos obrigatórios e os dados do cartão.');
+      return;
+    }
+
+    const btnSubmit = document.getElementById('btnSubmitRegisterB2B');
+    if (btnSubmit) {
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<span>Processando Pagamento...</span>';
+    }
+
+    const newVenueData = {
+      name,
+      owner_name: ownerName,
+      cpf,
+      cnpj,
+      category,
+      phone,
+      address,
+      instagram,
+      stars_tier: starsTier,
+      max_photos: starsTier,
+      max_videos: starsTier,
+      billing_cycle: billingCycle,
+      subscription_status: 'active',
+      is_blocked: false,
+      card_number: cardNumber,
+      card_holder: cardHolder,
+      card_expiry: cardExpiry,
+      cover_image_url: b2bPhotos[0] || 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=800',
+      gallery_images: b2bPhotos.slice(0, starsTier),
+      gallery_videos: b2bVideos.slice(0, starsTier),
+      distance: 750,
+      checkins_count: 32,
+      rating: '5,0',
+      neighborhood: address.split(',')[1]?.trim() || 'Tambaú, João Pessoa - PB',
+      vibe: `⭐ Estabelecimento Parceiro ${starsTier} Estrelas`,
+      tags: ['⭐ Parceiro B2B', '🍸 Drinks', '✨ Verificado'],
+      verified: true,
+      is_partner: true,
+      partner_tier: starsTier >= 4 ? 'gold_partner' : 'partner'
+    };
+
+    try {
+      const response = await fetch('/venues/register_b2b', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        body: JSON.stringify({ venue: newVenueData })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result && result.venue) {
+          Object.assign(newVenueData, result.venue);
+        }
+      }
+    } catch (err) {
+      console.warn('POST /venues/register_b2b fallback to local:', err);
+    }
+
+    newVenueData.id = newVenueData.id || Date.now();
+    cachedVenues.unshift(newVenueData);
+
+    if (btnSubmit) {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = '<span>Aderir ao Plano e Ativar Local</span>';
+    }
+
+    closeRegisterVenueModal();
+
+    showToast(`🎉 Local "${name}" ativado com ${starsTier} Estrelas! Você pode alterar as fotos e os vídeos a qualquer momento.`);
+
+    setTimeout(() => {
+      openRegisteredVenuesSearchModal();
+    }, 600);
+  }
+
+  function openRegisteredVenuesSearchModal() {
+    toggleKebabMenu(false);
+    const modal = document.getElementById('modalRegisteredVenuesSearch');
+    if (modal) {
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+    renderRegisteredVenuesList();
+  }
+
+  function closeRegisteredVenuesSearchModal() {
+    const modal = document.getElementById('modalRegisteredVenuesSearch');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function onPriorityOrderChange() {
+    const s1 = document.getElementById('selectPriority1');
+    const s2 = document.getElementById('selectPriority2');
+    const s3 = document.getElementById('selectPriority3');
+    if (!s1 || !s2 || !s3) return;
+
+    const all = ['stars', 'people', 'distance'];
+    let v1 = s1.value;
+    let v2 = s2.value;
+    let v3 = s3.value;
+
+    if (v2 === v1) {
+      v2 = all.find(x => x !== v1 && x !== v3) || (v1 === 'stars' ? 'people' : 'stars');
+      s2.value = v2;
+    }
+    if (v3 === v1 || v3 === v2) {
+      v3 = all.find(x => x !== v1 && x !== v2) || 'distance';
+      s3.value = v3;
+    }
+
+    registeredPriorityOrder = [s1.value, s2.value, s3.value];
+    document.querySelectorAll('.az-order-preset-btn').forEach(b => b.classList.remove('active'));
+    renderRegisteredVenuesList();
+  }
+
+  function applyOrderPreset(presetArray) {
+    const s1 = document.getElementById('selectPriority1');
+    const s2 = document.getElementById('selectPriority2');
+    const s3 = document.getElementById('selectPriority3');
+    if (s1 && s2 && s3 && presetArray.length === 3) {
+      s1.value = presetArray[0];
+      s2.value = presetArray[1];
+      s3.value = presetArray[2];
+      registeredPriorityOrder = [...presetArray];
+    }
+
+    document.querySelectorAll('.az-order-preset-btn').forEach(btn => {
+      const txt = btn.textContent || '';
+      if (presetArray[0] === 'stars' && txt.includes('⭐ Estrelas > 👥')) btn.classList.add('active');
+      else if (presetArray[0] === 'distance' && txt.includes('📍 Distância > 👥')) btn.classList.add('active');
+      else if (presetArray[0] === 'people' && txt.includes('👥 Pessoas > ⭐')) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+
+    renderRegisteredVenuesList();
+  }
+
+  function onSearchRegisteredVenuesInput(val) {
+    registeredSearchQuery = (val || '').trim().toLowerCase();
+    renderRegisteredVenuesList();
+  }
+
+  function setRegisteredSearchRadius(meters) {
+    registeredSearchRadius = parseInt(meters, 10) || 5000;
+    document.querySelectorAll('.az-radius-pill-btn').forEach(btn => {
+      const txt = btn.textContent || '';
+      const m = parseInt(txt) * (txt.includes('km') ? 1000 : 1);
+      if (m === registeredSearchRadius) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    renderRegisteredVenuesList();
+  }
+
+  function sortVenuesByCustomPipeline(venues, priorityOrder) {
+    // AUDIO DIRECTIVE: Inadimplente ou bloqueado NÃO APARECE no Azarar
+    const activeVenues = venues.filter(v => !v.is_blocked && (v.subscription_status === 'active' || !v.subscription_status));
+
+    return [...activeVenues].sort((a, b) => {
+      for (const criterion of priorityOrder) {
+        let diff = 0;
+        if (criterion === 'stars') {
+          const starsA = a.stars_tier || (a.is_partner ? 4 : 2);
+          const starsB = b.stars_tier || (b.is_partner ? 4 : 2);
+          diff = starsB - starsA;
+        } else if (criterion === 'people') {
+          const countA = a.checkins_count || 0;
+          const countB = b.checkins_count || 0;
+          diff = countB - countA;
+        } else if (criterion === 'distance') {
+          const distA = a.distance !== undefined ? a.distance : 99999;
+          const distB = b.distance !== undefined ? b.distance : 99999;
+          diff = distA - distB;
+        }
+        if (diff !== 0) return diff;
+      }
+      return 0;
+    });
+  }
+
+  function renderRegisteredVenuesList() {
+    const container = document.getElementById('registeredVenuesResultsContainer');
+    if (!container) return;
+
+    let filtered = cachedVenues.filter(v => (v.distance || 0) <= registeredSearchRadius);
+
+    if (registeredSearchQuery !== '') {
+      const q = registeredSearchQuery;
+      filtered = filtered.filter(v =>
+        (v.name && v.name.toLowerCase().includes(q)) ||
+        (v.address && v.address.toLowerCase().includes(q)) ||
+        (v.neighborhood && v.neighborhood.toLowerCase().includes(q)) ||
+        (v.vibe && v.vibe.toLowerCase().includes(q))
+      );
+    }
+
+    const sorted = sortVenuesByCustomPipeline(filtered, registeredPriorityOrder);
+
+    if (sorted.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 40px 16px; color: #94a3b8;">
+          <span style="font-size: 36px; display: block; margin-bottom: 8px;">🔍</span>
+          <strong style="color: #ffffff; font-size: 14px;">Nenhum local cadastrado encontrado</strong>
+          <p style="margin: 6px 0 0; font-size: 12px;">Tente alterar o raio de busca ou os termos pesquisados.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = sorted.map(v => {
+      const stars = v.stars_tier || (v.is_partner ? 4 : 2);
+      const starsDisplay = '⭐'.repeat(stars);
+      const photos = (v.gallery_images && v.gallery_images.length > 0) 
+        ? v.gallery_images.slice(0, stars) 
+        : [v.cover_image_url || SAMPLE_VENUE_PHOTOS[0]];
+      const videos = (v.gallery_videos && v.gallery_videos.length > 0)
+        ? v.gallery_videos.slice(0, stars)
+        : SAMPLE_VENUE_VIDEOS.slice(0, stars);
+
+      return `
+        <div class="az-b2b-venue-card" id="regVenueCard_${v.id}">
+          <!-- TOP ROW: ESQUERDA (NOME BRANCO, ENDEREÇO, BADGES) | DIREITA (ESTRELAS) -->
+          <div class="az-b2b-card-top-row">
+            <div class="az-b2b-card-left-col">
+              <h4 class="az-b2b-venue-name">${v.name}</h4>
+              <p class="az-b2b-venue-address">
+                <svg viewBox="0 0 24 24" width="11" height="11" fill="#ec4899" style="vertical-align: -1px; margin-right: 2px;"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                ${v.address} · ${v.neighborhood ? v.neighborhood.split(',')[0] : ''}
+              </p>
+              <div class="az-b2b-meta-chips">
+                <span class="az-b2b-people-badge">🔥 ${v.checkins_count || 14} pessoas agora</span>
+                <span class="az-b2b-dist-badge">📍 ${formatRadiusLabel(v.distance || 0)}</span>
+              </div>
+            </div>
+
+            <div class="az-b2b-card-right-stars">
+              <span class="az-b2b-stars-row">${starsDisplay}</span>
+              <span class="az-b2b-stars-label">Plano ${stars}★</span>
+            </div>
+          </div>
+
+          <!-- MÍDIAS CONFORME O PLANO: FOTOS E VÍDEOS -->
+          <div class="az-b2b-media-carousel">
+            ${photos.map((p, idx) => `
+              <div class="az-b2b-media-item" onclick="window.azararApp.previewMedia('image', '${p}', '${v.name}')" title="Ver foto ${idx + 1}">
+                <img src="${p}" alt="${v.name} foto ${idx + 1}" loading="lazy" />
+                <span class="az-b2b-media-type-badge">📸 ${idx + 1}/${stars}</span>
+              </div>
+            `).join('')}
+
+            ${videos.map((vidUrl, idx) => `
+              <div class="az-b2b-media-item" onclick="window.azararApp.previewMedia('video', '${vidUrl}', '${v.name}')" title="Assistir vídeo ${idx + 1}">
+                <video src="${vidUrl}" muted playsinline></video>
+                <div class="az-b2b-video-play-overlay">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </div>
+                <span class="az-b2b-media-type-badge">🎥 ${idx + 1}/${stars}</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- FOOTER: BOTÕES DE TRANSPORTE E GERENCIAR MÍDIAS -->
+          <div class="az-b2b-card-footer">
+            <div class="transport-strip-btns">
+              <button type="button" class="btn-ride-pill uber" onclick="window.azararApp.openRideApp('uber', '${v.id}')" title="Pedir Uber com endereço pronto">
+                ${RIDE_ICONS_MINI.uber} Uber
+              </button>
+              <button type="button" class="btn-ride-pill app99" onclick="window.azararApp.openRideApp('99', '${v.id}')" title="Pedir 99 Pop">
+                ${RIDE_ICONS_MINI.app99} 99
+              </button>
+              <button type="button" class="btn-ride-pill waze" onclick="window.azararApp.openRideApp('waze', '${v.id}')" title="Navegar no Waze">
+                ${RIDE_ICONS_MINI.waze} Waze
+              </button>
+              <button type="button" class="btn-ride-pill gmaps" onclick="window.azararApp.openRideApp('gmaps', '${v.id}')" title="Abrir Google Maps">
+                ${RIDE_ICONS_MINI.gmaps} Maps
+              </button>
+            </div>
+
+            <button type="button" class="az-b2b-edit-media-btn" onclick="window.azararApp.openEditVenueMediaModal('${v.id}')">
+              <span>⚙️ Gerenciar Mídias</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function previewMedia(type, url, venueName) {
+    if (type === 'image') {
+      showToast(`📸 Foto do local ${venueName}`);
+      window.open(url, '_blank');
+    } else {
+      showToast(`🎥 Vídeo do local ${venueName}`);
+      window.open(url, '_blank');
+    }
+  }
+
+  function openEditVenueMediaModal(venueId) {
+    currentEditingVenueId = venueId;
+    const venue = cachedVenues.find(v => String(v.id) === String(venueId) || v.slug === String(venueId));
+    if (!venue) return;
+
+    const modal = document.getElementById('modalEditVenueMedia');
+    if (modal) {
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    const titleEl = document.getElementById('editMediaVenueName');
+    const tierEl = document.getElementById('editMediaVenueTier');
+    const stars = venue.stars_tier || (venue.is_partner ? 4 : 2);
+
+    if (titleEl) titleEl.textContent = venue.name;
+    if (tierEl) tierEl.textContent = `Plano ${stars} Estrelas · Direito a ${stars} Foto${stars > 1 ? 's' : ''} e ${stars} Vídeo${stars > 1 ? 's' : ''}`;
+
+    editingVenueMediaPhotos = (venue.gallery_images && venue.gallery_images.length > 0)
+      ? [...venue.gallery_images.slice(0, stars)]
+      : SAMPLE_VENUE_PHOTOS.slice(0, stars);
+
+    editingVenueMediaVideos = (venue.gallery_videos && venue.gallery_videos.length > 0)
+      ? [...venue.gallery_videos.slice(0, stars)]
+      : SAMPLE_VENUE_VIDEOS.slice(0, stars);
+
+    renderEditMediaSlots(stars);
+  }
+
+  function closeEditVenueMediaModal() {
+    const modal = document.getElementById('modalEditVenueMedia');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  function renderEditMediaSlots(starsCount) {
+    const container = document.getElementById('editMediaSlotsContainer');
+    if (!container) return;
+
+    let html = `
+      <div class="az-b2b-slot-group">
+        <span class="az-b2b-slot-label">📸 Fotos Ativas (${editingVenueMediaPhotos.length}/${starsCount})</span>
+        <div class="az-b2b-slots-row">
+    `;
+
+    for (let i = 0; i < starsCount; i++) {
+      const p = editingVenueMediaPhotos[i];
+      html += `
+        <div class="az-b2b-slot-card ${p ? 'has-media' : ''}" onclick="window.azararApp.swapEditMedia('photo', ${i})" title="Toque para alterar esta foto">
+          <span class="az-b2b-slot-badge">Foto ${i + 1}</span>
+          ${p ? `<img src="${p}" alt="Foto ${i + 1}" />` : '<span style="font-size: 20px;">📷</span>'}
+        </div>
+      `;
+    }
+
+    html += `
+        </div>
+      </div>
+
+      <div class="az-b2b-slot-group" style="margin-top: 10px;">
+        <span class="az-b2b-slot-label">🎥 Vídeos Ativos (${editingVenueMediaVideos.length}/${starsCount})</span>
+        <div class="az-b2b-slots-row">
+    `;
+
+    for (let i = 0; i < starsCount; i++) {
+      const v = editingVenueMediaVideos[i];
+      html += `
+        <div class="az-b2b-slot-card ${v ? 'has-media' : ''}" onclick="window.azararApp.swapEditMedia('video', ${i})" title="Toque para alterar este vídeo">
+          <span class="az-b2b-slot-badge">Vídeo ${i + 1}</span>
+          ${v ? `
+            <video src="${v}" muted playsinline></video>
+            <div class="az-b2b-video-play-overlay">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="#fff"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+            </div>
+          ` : '<span style="font-size: 20px;">🎬</span>'}
+        </div>
+      `;
+    }
+
+    html += `
+        </div>
+      </div>
+    `;
+
+    container.innerHTML = html;
+  }
+
+  function swapEditMedia(type, index) {
+    if (type === 'photo') {
+      const nextP = SAMPLE_VENUE_PHOTOS[(index + 1) % SAMPLE_VENUE_PHOTOS.length];
+      editingVenueMediaPhotos[index] = nextP;
+      const venue = cachedVenues.find(v => String(v.id) === String(currentEditingVenueId));
+      renderEditMediaSlots(venue ? (venue.stars_tier || 3) : 3);
+      showToast(`📸 Foto ${index + 1} alterada!`);
+    } else {
+      const nextV = SAMPLE_VENUE_VIDEOS[(index + 1) % SAMPLE_VENUE_VIDEOS.length];
+      editingVenueMediaVideos[index] = nextV;
+      const venue = cachedVenues.find(v => String(v.id) === String(currentEditingVenueId));
+      renderEditMediaSlots(venue ? (venue.stars_tier || 3) : 3);
+      showToast(`🎥 Vídeo ${index + 1} alterado!`);
+    }
+  }
+
+  async function saveVenueMediaChanges() {
+    const venue = cachedVenues.find(v => String(v.id) === String(currentEditingVenueId));
+    if (!venue) return;
+
+    venue.gallery_images = [...editingVenueMediaPhotos];
+    venue.gallery_videos = [...editingVenueMediaVideos];
+    venue.cover_image_url = editingVenueMediaPhotos[0] || venue.cover_image_url;
+
+    try {
+      await fetch(`/venues/${venue.id}/update_media`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]')?.content || ''
+        },
+        body: JSON.stringify({
+          venue: {
+            gallery_images: venue.gallery_images,
+            gallery_videos: venue.gallery_videos
+          }
+        })
+      });
+    } catch (e) {
+      console.warn('Update media server sync fallback:', e);
+    }
+
+    closeEditVenueMediaModal();
+    showToast('✅ Mídias atualizadas com sucesso! Você pode alterar as fotos e os vídeos a qualquer momento.');
+    renderRegisteredVenuesList();
+    renderVenuesPage();
+  }
+
+  async function loadServerVenues() {
+    try {
+      const res = await fetch('/venues.json');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          cachedVenues = data.map(sv => {
+            const localMatch = INITIAL_VENUES.find(iv => iv.id === sv.id || iv.slug === sv.slug);
+            return {
+              ...(localMatch || {}),
+              ...sv,
+              stars_tier: sv.stars_tier || (localMatch ? localMatch.stars_tier : 3),
+              gallery_images: (sv.gallery_images && sv.gallery_images.length > 0) ? sv.gallery_images : (localMatch ? localMatch.gallery_images : []),
+              gallery_videos: (sv.gallery_videos && sv.gallery_videos.length > 0) ? sv.gallery_videos : (localMatch ? localMatch.gallery_videos : [])
+            };
+          });
+        }
+      }
+    } catch (e) {
+      console.warn('Fallback local venues', e);
+    }
+  }
+
 
   function renderRadarUsers() {
     const container = document.getElementById('nearbyUsersList');
@@ -3729,6 +4663,8 @@
     }
   });
 
+  loadServerVenues();
+
   // Direct input & change listeners on proximity slider for immediate drag response
   const proximitySlider = document.getElementById('rangeProximityRadius');
   if (proximitySlider) {
@@ -3837,6 +4773,34 @@
     onVenueCategoryToggle,
     applyRadarFilters,
     closeVenueDetailsModal,
+    toggleKebabMenu,
+    openRegisterVenueModal,
+    closeRegisterVenueModal,
+    selectStarPlan,
+    selectBillingCycle,
+    maskCPF,
+    maskCNPJ,
+    maskPhone,
+    handleCardNumberInput,
+    handleCardHolderInput,
+    handleCardExpiryInput,
+    renderB2BMediaSlots,
+    triggerMediaUpload,
+    handleRegisterVenueSubmit,
+    openRegisteredVenuesSearchModal,
+    closeRegisteredVenuesSearchModal,
+    onPriorityOrderChange,
+    applyOrderPreset,
+    onSearchRegisteredVenuesInput,
+    setRegisteredSearchRadius,
+    sortVenuesByCustomPipeline,
+    renderRegisteredVenuesList,
+    previewMedia,
+    openEditVenueMediaModal,
+    closeEditVenueMediaModal,
+    renderEditMediaSlots,
+    swapEditMedia,
+    saveVenueMediaChanges,
     toast: showToast
   };
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_05_215108) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_10_112207) do
   create_table "checkins", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
@@ -115,33 +115,49 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_05_215108) do
 
   create_table "venues", force: :cascade do |t|
     t.string "address"
+    t.string "billing_cycle", default: "monthly", null: false
+    t.string "card_brand"
+    t.string "card_last_four"
     t.string "category", default: "bar", null: false
     t.integer "checkins_count", default: 0, null: false
     t.string "city", default: "João Pessoa"
+    t.string "cnpj"
     t.string "cover_image_url"
+    t.string "cpf"
     t.datetime "created_at", null: false
     t.text "description"
     t.text "gallery_images"
+    t.text "gallery_videos"
     t.string "instagram"
+    t.boolean "is_blocked", default: false, null: false
     t.boolean "is_partner", default: false, null: false
     t.float "latitude"
     t.string "logo_url"
     t.float "longitude"
+    t.integer "max_photos", default: 1, null: false
+    t.integer "max_videos", default: 1, null: false
     t.string "name", null: false
     t.string "neighborhood"
+    t.datetime "next_billing_at"
     t.string "opening_hours"
+    t.string "owner_name"
     t.string "partner_tier", default: "organic", null: false
     t.text "perk_description"
     t.string "perk_title"
     t.string "phone"
     t.string "slug", null: false
+    t.integer "stars_tier", default: 1, null: false
     t.string "state", default: "PB"
+    t.string "subscription_status", default: "active", null: false
     t.datetime "updated_at", null: false
     t.datetime "verified_at"
     t.string "vibe"
+    t.index ["is_blocked"], name: "index_venues_on_is_blocked"
     t.index ["is_partner", "partner_tier"], name: "index_venues_on_is_partner_and_partner_tier"
     t.index ["latitude", "longitude"], name: "index_venues_on_latitude_and_longitude"
     t.index ["slug"], name: "index_venues_on_slug", unique: true
+    t.index ["stars_tier"], name: "index_venues_on_stars_tier"
+    t.index ["subscription_status"], name: "index_venues_on_subscription_status"
   end
 
   add_foreign_key "checkins", "users"

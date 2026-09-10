@@ -295,7 +295,7 @@
       <!-- ============================================ -->
       <section class="app-view view-app-shell <%= (@user_json || current_user) ? 'active' : '' %>" id="viewAppShell" style="<%= (@user_json || current_user) ? 'display: flex !important;' : 'display: none !important;' %>">
         
-        <!-- App Top Header (Matching Image: Hamburger | AZARAR Gradient Logo | Notification Bell with Badge 5) -->
+        <!-- App Top Header (Matching Image: Hamburger | AZARAR Gradient Logo | Right Actions: Bell + 3-Dots Kebab Menu) -->
         <header class="az-topbar">
           <button type="button" class="az-topbar-btn-menu" onclick="window.azararApp.toggleSideMenu()" aria-label="Menu Principal">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
@@ -305,11 +305,94 @@
             <span class="az-logo-text">AZARAR</span>
           </div>
           
-          <button type="button" class="az-topbar-btn-bell" onclick="window.azararApp.switchTab('messages')" aria-label="Notificações">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-            <span class="az-bell-badge">5</span>
-          </button>
+          <div class="az-topbar-right-actions">
+            <button type="button" class="az-topbar-btn-bell" onclick="window.azararApp.switchTab('messages')" aria-label="Notificações">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              <span class="az-bell-badge">5</span>
+            </button>
+
+            <!-- KEBAB MENU BUTTON (⋮ TRÊS PONTINHOS NO TOPO DIREITO DE TODAS AS TELAS) -->
+            <button type="button" class="az-topbar-btn-kebab" id="btnTopbarKebab" onclick="window.azararApp.toggleKebabMenu()" aria-label="Mais opções">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <circle cx="12" cy="5" r="2.2"></circle>
+                <circle cx="12" cy="12" r="2.2"></circle>
+                <circle cx="12" cy="19" r="2.2"></circle>
+              </svg>
+            </button>
+          </div>
         </header>
+
+        <!-- KEBAB DROPDOWN MENU (POPOVER) -->
+        <div class="az-kebab-backdrop" id="azKebabBackdrop" onclick="window.azararApp.toggleKebabMenu(false)"></div>
+        <div class="az-kebab-menu-dropdown" id="azKebabMenuDropdown" aria-hidden="true">
+          <div class="az-kebab-menu-header">
+            <span>Estabelecimentos & Opções</span>
+          </div>
+          <div class="az-kebab-menu-items">
+            <!-- 1. Cadastrar Locais (Destaque Principal) -->
+            <button type="button" class="az-kebab-item highlight-b2b" onclick="window.azararApp.openRegisterVenueModal(); window.azararApp.toggleKebabMenu(false);">
+              <div class="az-kebab-item-icon b2b">🏢</div>
+              <div class="az-kebab-item-info">
+                <strong>Cadastrar Locais</strong>
+                <span>Seja parceiro oficial (1 a 5 estrelas)</span>
+              </div>
+              <span class="az-kebab-badge-b2b">B2B</span>
+            </button>
+
+            <!-- 2. Locais Cadastrados (Destaque Principal) -->
+            <button type="button" class="az-kebab-item highlight-search" onclick="window.azararApp.openRegisteredVenuesSearchModal(); window.azararApp.toggleKebabMenu(false);">
+              <div class="az-kebab-item-icon search">📍</div>
+              <div class="az-kebab-item-info">
+                <strong>Locais Cadastrados</strong>
+                <span>Busca por pessoas, estrelas e distância</span>
+              </div>
+              <span class="az-kebab-badge-search">Busca</span>
+            </button>
+
+            <div class="az-kebab-divider"></div>
+
+            <!-- Outras Funcionalidades do Azarar -->
+            <button type="button" class="az-kebab-item" onclick="window.azararApp.switchTab('radar'); window.azararApp.toggleKebabMenu(false);">
+              <div class="az-kebab-item-icon">🔮</div>
+              <div class="az-kebab-item-info">
+                <strong>Radar & Proximidade</strong>
+                <span>Ver solteiros perto de você</span>
+              </div>
+            </button>
+
+            <button type="button" class="az-kebab-item" onclick="window.azararApp.switchTab('venues'); window.azararApp.toggleKebabMenu(false);">
+              <div class="az-kebab-item-icon">🍸</div>
+              <div class="az-kebab-item-info">
+                <strong>Locais & Bares</strong>
+                <span>Descobrir points da noite</span>
+              </div>
+            </button>
+
+            <button type="button" class="az-kebab-item" onclick="window.azararApp.openVipPlansModal(); window.azararApp.toggleKebabMenu(false);">
+              <div class="az-kebab-item-icon">👑</div>
+              <div class="az-kebab-item-info">
+                <strong>Planos VIP Azarar</strong>
+                <span>Ouro, Platina e alcance máximo</span>
+              </div>
+            </button>
+
+            <button type="button" class="az-kebab-item" onclick="window.azararApp.openFlashBoostModal(); window.azararApp.toggleKebabMenu(false);">
+              <div class="az-kebab-item-icon">⚡</div>
+              <div class="az-kebab-item-info">
+                <strong>Turbinar Perfil (Boost)</strong>
+                <span>Fique no topo da balada por 1h</span>
+              </div>
+            </button>
+
+            <button type="button" class="az-kebab-item" onclick="window.azararApp.openEditProfileModal(); window.azararApp.toggleKebabMenu(false);">
+              <div class="az-kebab-item-icon">✏️</div>
+              <div class="az-kebab-item-info">
+                <strong>Editar Meu Perfil</strong>
+                <span>Fotos, bio, gostos e vibes</span>
+              </div>
+            </button>
+          </div>
+        </div>
 
         <!-- SIDE MENU DRAWER (HAMBURGER ☰) -->
         <div class="az-side-drawer-overlay" id="azSideMenuOverlay" onclick="window.azararApp.toggleSideMenu(false)"></div>
@@ -346,6 +429,19 @@
               <span class="az-drawer-icon">👤</span>
               <span>Meu Perfil</span>
             </button>
+
+            <div class="az-drawer-divider"></div>
+            <div class="az-drawer-section-label">PARCEIROS B2B</div>
+            <button type="button" class="az-drawer-item b2b-gold" onclick="window.azararApp.openRegisterVenueModal(); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">🏢</span>
+              <span>Cadastrar Locais</span>
+              <span class="az-drawer-tag-b2b">1 a 5 ⭐</span>
+            </button>
+            <button type="button" class="az-drawer-item" onclick="window.azararApp.openRegisteredVenuesSearchModal(); window.azararApp.toggleSideMenu(false);">
+              <span class="az-drawer-icon">📍</span>
+              <span>Locais Cadastrados</span>
+            </button>
+
             <div class="az-drawer-divider"></div>
             <button type="button" class="az-drawer-item" onclick="window.azararApp.openEditProfileModal(); window.azararApp.toggleSideMenu(false);">
               <span class="az-drawer-icon">✏️</span>
@@ -1739,6 +1835,389 @@
         <button type="button" class="az-btn-copy-address" id="btnModalCopyAddress" onclick="window.azararApp.copyActiveVenueAddress()">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
           <span>Copiar endereço completo</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: CADASTRAR LOCAIS (ONBOARDING B2B & PLANOS DE ESTRELAS) -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalRegisterVenueB2B" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeRegisterVenueModal()"></div>
+      <div class="modal-card-sheet az-b2b-modal-sheet">
+        <div class="az-b2b-modal-header">
+          <button type="button" class="modal-close-btn" onclick="window.azararApp.closeRegisterVenueModal()">✕</button>
+          <span class="az-b2b-badge">PARCEIROS AZARAR B2B</span>
+          <h3 class="az-b2b-title">Cadastrar Meu Estabelecimento</h3>
+          <p class="az-b2b-subtitle">Coloque seu bar, balada ou restaurante no radar dos solteiros mais ativos da cidade.</p>
+        </div>
+
+        <form id="formRegisterVenueB2B" class="az-b2b-form" onsubmit="window.azararApp.handleRegisterVenueSubmit(event)">
+          <!-- SEÇÃO 1: DADOS DO RESPONSÁVEL E LOCAL -->
+          <div class="az-b2b-section">
+            <span class="az-b2b-section-title">1. Dados do Responsável & Local</span>
+            <div class="az-form-group">
+              <label class="az-form-label">Nome do Responsável / Proprietário *</label>
+              <input type="text" id="venueOwnerName" class="az-form-input" placeholder="Ex: Roberto Alencar" required />
+            </div>
+
+            <div class="az-b2b-grid-2">
+              <div class="az-form-group">
+                <label class="az-form-label">CPF do Responsável *</label>
+                <input type="text" id="venueCpf" class="az-form-input" placeholder="000.000.000-00" maxlength="14" required oninput="window.azararApp.maskCPF(this)" />
+              </div>
+              <div class="az-form-group">
+                <label class="az-form-label">CNPJ do Local *</label>
+                <input type="text" id="venueCnpj" class="az-form-input" placeholder="00.000.000/0000-00" maxlength="18" required oninput="window.azararApp.maskCNPJ(this)" />
+              </div>
+            </div>
+
+            <div class="az-form-group">
+              <label class="az-form-label">Nome do Estabelecimento *</label>
+              <input type="text" id="venueName" class="az-form-input" placeholder="Ex: Boteco Sunset Orla" required />
+            </div>
+
+            <div class="az-b2b-grid-2">
+              <div class="az-form-group">
+                <label class="az-form-label">Categoria *</label>
+                <select id="venueCategory" class="az-form-select" required>
+                  <option value="bar">Bar & Petiscaria 🍸</option>
+                  <option value="nightclub">Balada & Nightclub 🔥</option>
+                  <option value="restaurant">Restaurante & Bistrô 🍽️</option>
+                  <option value="lounge">Lounge VIP ✨</option>
+                  <option value="beach">Praia & Barraca de Orla 🏖️</option>
+                </select>
+              </div>
+              <div class="az-form-group">
+                <label class="az-form-label">Telefone / WhatsApp *</label>
+                <input type="tel" id="venuePhone" class="az-form-input" placeholder="(83) 99999-8888" required oninput="window.azararApp.maskPhone(this)" />
+              </div>
+            </div>
+
+            <div class="az-form-group">
+              <label class="az-form-label">Endereço Completo do Local *</label>
+              <input type="text" id="venueAddress" class="az-form-input" placeholder="Ex: Av. Cabo Branco, 1420 - Cabo Branco, João Pessoa - PB" required />
+            </div>
+
+            <div class="az-form-group">
+              <label class="az-form-label">Instagram do Local (Opcional)</label>
+              <input type="text" id="venueInstagram" class="az-form-input" placeholder="@seuestabelecimento" />
+            </div>
+          </div>
+
+          <!-- SEÇÃO 2: PLANOS POR ESTRELAS (1 A 5 ESTRELAS) -->
+          <div class="az-b2b-section">
+            <span class="az-b2b-section-title">2. Escolha o Plano de Estrelas</span>
+            <p class="az-b2b-section-hint">Cada estrela concede direito a fotos e vídeos de alta visibilidade no radar:</p>
+            
+            <div class="az-b2b-star-plans-grid" id="b2bStarPlansGrid">
+              <!-- Plano 1 Estrela -->
+              <div class="az-star-plan-card" onclick="window.azararApp.selectStarPlan(1)" data-stars="1">
+                <div class="az-plan-radio-circle"></div>
+                <div class="az-star-plan-header">
+                  <span class="az-plan-stars">⭐ 1 Estrela</span>
+                  <span class="az-plan-price">R$ 99<small>/mês</small></span>
+                </div>
+                <div class="az-plan-benefits">
+                  <span>📸 <strong>1 Foto</strong> no perfil do local</span>
+                  <span>🎥 <strong>1 Vídeo</strong> demonstrativo</span>
+                  <span>📍 Presença oficial no radar</span>
+                </div>
+              </div>
+
+              <!-- Plano 2 Estrelas -->
+              <div class="az-star-plan-card" onclick="window.azararApp.selectStarPlan(2)" data-stars="2">
+                <div class="az-plan-radio-circle"></div>
+                <div class="az-star-plan-header">
+                  <span class="az-plan-stars">⭐⭐ 2 Estrelas</span>
+                  <span class="az-plan-price">R$ 179<small>/mês</small></span>
+                </div>
+                <div class="az-plan-benefits">
+                  <span>📸 <strong>2 Fotos</strong> em alta resolução</span>
+                  <span>🎥 <strong>2 Vídeos</strong> de ambiente</span>
+                  <span>🔥 Destaque com badge 2 Estrelas</span>
+                </div>
+              </div>
+
+              <!-- Plano 3 Estrelas -->
+              <div class="az-star-plan-card active" onclick="window.azararApp.selectStarPlan(3)" data-stars="3">
+                <div class="az-plan-popular-tag">MAIS ESCOLHIDO</div>
+                <div class="az-plan-radio-circle"></div>
+                <div class="az-star-plan-header">
+                  <span class="az-plan-stars">⭐⭐⭐ 3 Estrelas</span>
+                  <span class="az-plan-price">R$ 249<small>/mês</small></span>
+                </div>
+                <div class="az-plan-benefits">
+                  <span>📸 <strong>3 Fotos</strong> no carrossel</span>
+                  <span>🎥 <strong>3 Vídeos</strong> interativos</span>
+                  <span>⭐ Prioridade intermediária nas buscas</span>
+                </div>
+              </div>
+
+              <!-- Plano 4 Estrelas -->
+              <div class="az-star-plan-card" onclick="window.azararApp.selectStarPlan(4)" data-stars="4">
+                <div class="az-plan-radio-circle"></div>
+                <div class="az-star-plan-header">
+                  <span class="az-plan-stars">⭐⭐⭐⭐ 4 Estrelas</span>
+                  <span class="az-plan-price">R$ 349<small>/mês</small></span>
+                </div>
+                <div class="az-plan-benefits">
+                  <span>📸 <strong>4 Fotos</strong> profissionais</span>
+                  <span>🎥 <strong>4 Vídeos</strong> em destaque</span>
+                  <span>🥇 Selo Ouro de Parceiro Verificado</span>
+                </div>
+              </div>
+
+              <!-- Plano 5 Estrelas -->
+              <div class="az-star-plan-card is-vip-platinum" onclick="window.azararApp.selectStarPlan(5)" data-stars="5">
+                <div class="az-plan-vip-tag">MÁXIMA VISIBILIDADE</div>
+                <div class="az-plan-radio-circle"></div>
+                <div class="az-star-plan-header">
+                  <span class="az-plan-stars">⭐⭐⭐⭐⭐ 5 Estrelas</span>
+                  <span class="az-plan-price">R$ 499<small>/mês</small></span>
+                </div>
+                <div class="az-plan-benefits">
+                  <span>📸 <strong>5 Fotos</strong> de altíssima qualidade</span>
+                  <span>🎥 <strong>5 Vídeos</strong> da balada e drinks</span>
+                  <span>👑 Topo Absoluto no Radar & Busca</span>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" id="selectedStarsTier" value="3" />
+          </div>
+
+          <!-- SEÇÃO 3: PERIODICIDADE DA ASSINATURA -->
+          <div class="az-b2b-section">
+            <span class="az-b2b-section-title">3. Periodicidade de Cobrança</span>
+            <div class="az-billing-cycles-row">
+              <label class="az-billing-cycle-card" onclick="window.azararApp.selectBillingCycle('monthly')">
+                <input type="radio" name="billingCycleRadio" value="monthly" checked />
+                <div class="az-cycle-content">
+                  <strong>Mensal</strong>
+                  <span>Cobrança a cada 30 dias</span>
+                  <em id="cyclePriceMonthly">R$ 249/mês</em>
+                </div>
+              </label>
+
+              <label class="az-billing-cycle-card" onclick="window.azararApp.selectBillingCycle('semiannual')">
+                <input type="radio" name="billingCycleRadio" value="semiannual" />
+                <div class="az-cycle-content">
+                  <span class="az-cycle-discount-pill">10% OFF</span>
+                  <strong>Semestral</strong>
+                  <span>Renovação a cada 6 meses</span>
+                  <em id="cyclePriceSemiannual">R$ 224/mês</em>
+                </div>
+              </label>
+
+              <label class="az-billing-cycle-card" onclick="window.azararApp.selectBillingCycle('annual')">
+                <input type="radio" name="billingCycleRadio" value="annual" />
+                <div class="az-cycle-content">
+                  <span class="az-cycle-discount-pill highlight">20% OFF</span>
+                  <strong>Anual</strong>
+                  <span>Renovação a cada 12 meses</span>
+                  <em id="cyclePriceAnnual">R$ 199/mês</em>
+                </div>
+              </label>
+            </div>
+            <input type="hidden" id="selectedBillingCycle" value="monthly" />
+
+            <!-- ALERTA DE BLOQUEIO POR INADIMPLÊNCIA CONFORME ESPECIFICADO NO ÁUDIO -->
+            <div class="az-b2b-warning-box">
+              <div class="az-warning-icon">⚠️</div>
+              <div class="az-warning-text">
+                <strong>Regra de Vencimento e Bloqueio:</strong>
+                <span>Na data de renovação da assinatura, o pagamento da próxima recorrência deve ser confirmado. Caso contrário, o acesso do estabelecimento ao Azarar será <strong>bloqueado</strong> e o local <strong>deixará de aparecer imediatamente</strong> no radar e nas buscas até a regularização.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SEÇÃO 4: PAGAMENTO COM CARTÃO DE CRÉDITO -->
+          <div class="az-b2b-section">
+            <span class="az-b2b-section-title">4. Pagamento com Cartão de Crédito</span>
+            
+            <!-- Cartão Virtual Dinâmico -->
+            <div class="az-virtual-card-preview">
+              <div class="az-vcard-chip"></div>
+              <div class="az-vcard-brand" id="vcardBrand">VISA</div>
+              <div class="az-vcard-number" id="vcardNumber">•••• •••• •••• ••••</div>
+              <div class="az-vcard-footer">
+                <div>
+                  <small>TITULAR DO CARTÃO</small>
+                  <strong id="vcardHolder">SEU NOME AQUI</strong>
+                </div>
+                <div>
+                  <small>VALIDADE</small>
+                  <strong id="vcardExpiry">MM/AA</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="az-form-group">
+              <label class="az-form-label">Número do Cartão *</label>
+              <input type="text" id="cardInputNumber" class="az-form-input" placeholder="0000 0000 0000 0000" maxlength="19" required oninput="window.azararApp.handleCardNumberInput(this)" />
+            </div>
+
+            <div class="az-form-group">
+              <label class="az-form-label">Nome Impresso no Cartão *</label>
+              <input type="text" id="cardInputHolder" class="az-form-input" placeholder="Ex: ROBERTO M ALENCAR" required oninput="window.azararApp.handleCardHolderInput(this)" />
+            </div>
+
+            <div class="az-b2b-grid-2">
+              <div class="az-form-group">
+                <label class="az-form-label">Validade (MM/AA) *</label>
+                <input type="text" id="cardInputExpiry" class="az-form-input" placeholder="MM/AA" maxlength="5" required oninput="window.azararApp.handleCardExpiryInput(this)" />
+              </div>
+              <div class="az-form-group">
+                <label class="az-form-label">Código CVV *</label>
+                <input type="password" id="cardInputCvv" class="az-form-input" placeholder="123" maxlength="4" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- SEÇÃO 5: UPLOAD DE MÍDIAS CONFORME O PLANO -->
+          <div class="az-b2b-section">
+            <div class="az-b2b-media-header">
+              <span class="az-b2b-section-title">5. Fotos e Vídeos do Estabelecimento</span>
+              <span class="az-b2b-quota-badge" id="b2bMediaQuotaBadge">Limite: 3 Fotos / 3 Vídeos</span>
+            </div>
+
+            <!-- MENSAGEM OBRIGATÓRIA DESTACADA DO ÁUDIO -->
+            <div class="az-b2b-notice-banner">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <span><strong>Aviso:</strong> Você pode alterar as fotos e os vídeos a qualquer momento no painel do local.</span>
+            </div>
+
+            <div class="az-b2b-media-slots-container" id="b2bMediaSlotsContainer">
+              <!-- Gerado dinamicamente pelo JS de acordo com a quantidade de estrelas -->
+            </div>
+          </div>
+
+          <!-- BOTÃO FINALIZAR -->
+          <button type="submit" class="az-btn-submit-b2b" id="btnSubmitRegisterB2B">
+            <span>Aderir ao Plano e Ativar Local</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: LOCAIS CADASTRADOS & BUSCA MULTI-CRITÉRIO -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalRegisteredVenuesSearch" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeRegisteredVenuesSearchModal()"></div>
+      <div class="modal-card-sheet az-registered-venues-sheet">
+        <div class="az-venues-search-header">
+          <button type="button" class="modal-close-btn" onclick="window.azararApp.closeRegisteredVenuesSearchModal()">✕</button>
+          <span class="az-venues-badge">LOCAIS CADASTRADOS</span>
+          <h3 class="az-venues-title">Estabelecimentos no Azarar</h3>
+          <p class="az-venues-subtitle">Busca inteligente com algoritmo dinâmico de ordenação multi-critério.</p>
+        </div>
+
+        <!-- PAINEL DO ALGORITMO DE ORDENAÇÃO POR ORDEM -->
+        <div class="az-algorithm-sort-box">
+          <div class="az-algorithm-box-header">
+            <span class="az-algorithm-label">⚙️ Algoritmo de Prioridade na Busca:</span>
+            <span class="az-algorithm-hint">Escolha a ordem de prioridade dos 3 critérios</span>
+          </div>
+
+          <!-- Fila de 3 Critérios Ordenáveis -->
+          <div class="az-priority-order-row">
+            <div class="az-priority-slot">
+              <span class="az-priority-num">1º Lugar</span>
+              <select id="selectPriority1" class="az-priority-select" onchange="window.azararApp.onPriorityOrderChange()">
+                <option value="stars" selected>⭐ Estrelas</option>
+                <option value="people">👥 Pessoas no Local</option>
+                <option value="distance">📍 Distância</option>
+              </select>
+            </div>
+
+            <div class="az-priority-arrow">➔</div>
+
+            <div class="az-priority-slot">
+              <span class="az-priority-num">2º Lugar</span>
+              <select id="selectPriority2" class="az-priority-select" onchange="window.azararApp.onPriorityOrderChange()">
+                <option value="stars">⭐ Estrelas</option>
+                <option value="people" selected>👥 Pessoas no Local</option>
+                <option value="distance">📍 Distância</option>
+              </select>
+            </div>
+
+            <div class="az-priority-arrow">➔</div>
+
+            <div class="az-priority-slot">
+              <span class="az-priority-num">3º Lugar</span>
+              <select id="selectPriority3" class="az-priority-select" onchange="window.azararApp.onPriorityOrderChange()">
+                <option value="stars">⭐ Estrelas</option>
+                <option value="people">👥 Pessoas no Local</option>
+                <option value="distance" selected>📍 Distância</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Atalhos Rápidos para Combinações do Áudio -->
+          <div class="az-quick-order-presets">
+            <span style="font-size: 10px; color: #94a3b8; font-weight: 700;">Atalhos:</span>
+            <button type="button" class="az-order-preset-btn active" onclick="window.azararApp.applyOrderPreset(['stars', 'people', 'distance'])">
+              ⭐ Estrelas > 👥 Pessoas > 📍 Distância
+            </button>
+            <button type="button" class="az-order-preset-btn" onclick="window.azararApp.applyOrderPreset(['distance', 'people', 'stars'])">
+              📍 Distância > 👥 Pessoas > ⭐ Estrelas
+            </button>
+            <button type="button" class="az-order-preset-btn" onclick="window.azararApp.applyOrderPreset(['people', 'stars', 'distance'])">
+              👥 Pessoas > ⭐ Estrelas > 📍 Distância
+            </button>
+          </div>
+        </div>
+
+        <!-- BARRA DE BUSCA POR TEXTO & RAIO -->
+        <div class="az-venues-filter-toolbar">
+          <div class="az-search-input-wrap">
+            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#94a3b8" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="inputSearchRegisteredVenues" class="az-venues-search-input" placeholder="Buscar por nome, bairro ou estilo..." oninput="window.azararApp.onSearchRegisteredVenuesInput(this.value)" />
+          </div>
+
+          <div class="az-radius-pills-wrap">
+            <button type="button" class="az-radius-pill-btn" onclick="window.azararApp.setRegisteredSearchRadius(1000)">1 km</button>
+            <button type="button" class="az-radius-pill-btn" onclick="window.azararApp.setRegisteredSearchRadius(3000)">3 km</button>
+            <button type="button" class="az-radius-pill-btn active" onclick="window.azararApp.setRegisteredSearchRadius(5000)">5 km</button>
+            <button type="button" class="az-radius-pill-btn" onclick="window.azararApp.setRegisteredSearchRadius(15000)">15 km</button>
+            <button type="button" class="az-radius-pill-btn" onclick="window.azararApp.setRegisteredSearchRadius(30000)">30 km</button>
+          </div>
+        </div>
+
+        <!-- LISTAGEM DE RESULTADOS COM LAYOUT ESPECIFICADO NO ÁUDIO -->
+        <div class="az-registered-venues-results-list" id="registeredVenuesResultsContainer">
+          <!-- Injetado dinamicamente via JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- MODAL: EDITAR FOTOS E VÍDEOS DO LOCAL -->
+    <!-- ============================================ -->
+    <div class="app-modal" id="modalEditVenueMedia" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" onclick="window.azararApp.closeEditVenueMediaModal()"></div>
+      <div class="modal-card-sheet az-edit-media-sheet">
+        <div class="az-b2b-modal-header">
+          <button type="button" class="modal-close-btn" onclick="window.azararApp.closeEditVenueMediaModal()">✕</button>
+          <span class="az-b2b-badge">GERENCIAR MÍDIAS</span>
+          <h3 class="az-b2b-title" id="editMediaVenueName">Bar do Cuscuz</h3>
+          <p class="az-b2b-subtitle" id="editMediaVenueTier">Plano 3 Estrelas · 3 Fotos e 3 Vídeos</p>
+        </div>
+
+        <!-- AVISO OBRIGATÓRIO DO ÁUDIO -->
+        <div class="az-b2b-notice-banner" style="margin-bottom: 14px;">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#38bdf8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span><strong>Você pode alterar as fotos e os vídeos a qualquer momento.</strong></span>
+        </div>
+
+        <div id="editMediaSlotsContainer" class="az-edit-media-slots-grid">
+          <!-- Injetado dinamicamente -->
+        </div>
+
+        <button type="button" class="az-btn-save-profile" style="margin-top: 16px;" onclick="window.azararApp.saveVenueMediaChanges()">
+          Salvar Alterações de Mídia
         </button>
       </div>
     </div>

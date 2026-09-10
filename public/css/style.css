@@ -8119,3 +8119,1129 @@ html, body {
   background: rgba(255, 255, 255, 0.1);
   color: #cbd5e1;
 }
+
+/* ==========================================================================
+   B2B VENUE SYSTEM: KEBAB MENU, ONBOARDING (1-5 STARS), AND SEARCH PIPELINE
+   ========================================================================== */
+.az-topbar-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.az-topbar-btn-kebab {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(16, 24, 48, 0.8);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.az-topbar-btn-kebab:hover {
+  border-color: #ec4899;
+  background: rgba(236, 72, 153, 0.15);
+  color: #ec4899;
+}
+
+.az-kebab-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  display: none;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.az-kebab-backdrop.active {
+  display: block;
+}
+
+.az-kebab-menu-dropdown {
+  position: fixed;
+  top: 56px;
+  right: 12px;
+  width: 290px;
+  max-width: calc(100vw - 24px);
+  background: rgba(13, 17, 34, 0.96);
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.75), 0 0 20px rgba(236, 72, 153, 0.25);
+  border-radius: 18px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: azKebabDropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.az-kebab-menu-dropdown.active {
+  display: flex;
+}
+
+@keyframes azKebabDropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.az-kebab-menu-header {
+  padding: 10px 14px 6px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.az-kebab-menu-items {
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.az-kebab-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: #ffffff;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.az-kebab-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(2px);
+}
+
+.az-kebab-item.highlight-b2b {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.az-kebab-item.highlight-b2b:hover {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25) 0%, rgba(236, 72, 153, 0.25) 100%);
+  border-color: #f59e0b;
+}
+
+.az-kebab-item.highlight-search {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.az-kebab-item.highlight-search:hover {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(139, 92, 246, 0.25) 100%);
+  border-color: #38bdf8;
+}
+
+.az-kebab-item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.az-kebab-item-icon.b2b {
+  background: rgba(245, 158, 11, 0.25);
+}
+
+.az-kebab-item-icon.search {
+  background: rgba(56, 189, 248, 0.25);
+}
+
+.az-kebab-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.az-kebab-item-info strong {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.az-kebab-item-info span {
+  font-size: 10.5px;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.az-kebab-badge-b2b {
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #f59e0b;
+  color: #1a1100;
+  letter-spacing: 0.5px;
+}
+
+.az-kebab-badge-search {
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #38bdf8;
+  color: #032030;
+  letter-spacing: 0.5px;
+}
+
+.az-kebab-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 6px;
+}
+
+.az-drawer-section-label {
+  padding: 8px 16px 4px;
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.az-drawer-item.b2b-gold {
+  border-left: 3px solid #f59e0b;
+}
+
+.az-drawer-tag-b2b {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+/* Modal 1: Register Venue B2B Sheet */
+.az-b2b-modal-sheet {
+  background: linear-gradient(180deg, #130722 0%, #080210 100%) !important;
+  border-top: 1px solid rgba(245, 158, 11, 0.4) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 24px 24px 0 0 !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(245, 158, 11, 0.2) !important;
+  padding: 22px 20px calc(var(--safe-bottom) + 20px) !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.az-b2b-modal-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 32px;
+}
+
+.az-b2b-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 2px;
+}
+
+.az-b2b-title {
+  font-size: 19px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.3px;
+}
+
+.az-b2b-subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.az-b2b-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.az-b2b-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.az-b2b-section-title {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.az-b2b-section-hint {
+  font-size: 11px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.az-b2b-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Star Plans Grid (1 to 5 Stars) */
+.az-b2b-star-plans-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.az-star-plan-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.az-star-plan-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.az-star-plan-card.active {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: #f59e0b;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.25);
+}
+
+.az-star-plan-card.is-vip-platinum.active {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: #c084fc;
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.35);
+}
+
+.az-plan-popular-tag {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  background: #f59e0b;
+  color: #1a1100;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.az-plan-vip-tag {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+.az-star-plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.az-plan-stars {
+  font-size: 14px;
+  font-weight: 900;
+  color: #fde047;
+}
+
+.az-plan-price {
+  font-size: 15px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.az-plan-price small {
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.az-plan-benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.az-plan-benefits span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* Billing cycles */
+.az-billing-cycles-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.az-billing-cycle-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+  padding: 10px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.az-billing-cycle-card input {
+  display: none;
+}
+
+.az-billing-cycle-card:has(input:checked) {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+}
+
+.az-cycle-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+}
+
+.az-cycle-content strong {
+  font-size: 12px;
+  color: #ffffff;
+}
+
+.az-cycle-content span {
+  font-size: 9.5px;
+  color: #94a3b8;
+}
+
+.az-cycle-content em {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-top: 3px;
+}
+
+.az-cycle-discount-pill {
+  position: absolute;
+  top: -7px;
+  background: #10b981;
+  color: #ffffff;
+  font-size: 8.5px;
+  font-weight: 900;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.az-cycle-discount-pill.highlight {
+  background: #f43f5e;
+}
+
+/* Warning box for billing expiration */
+.az-b2b-warning-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  margin-top: 4px;
+}
+
+.az-warning-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.az-warning-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #e2e8f0;
+}
+
+.az-warning-text strong {
+  color: #f59e0b;
+}
+
+/* Virtual Card Preview */
+.az-virtual-card-preview {
+  position: relative;
+  height: 140px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #1e1b4b 0%, #311042 50%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  margin-bottom: 8px;
+}
+
+.az-vcard-chip {
+  width: 32px;
+  height: 24px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #ffd700, #b8860b);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.az-vcard-brand {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #ffffff;
+}
+
+.az-vcard-number {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.az-vcard-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.az-vcard-footer small {
+  display: block;
+  font-size: 8px;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+}
+
+.az-vcard-footer strong {
+  font-size: 11px;
+  color: #ffffff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Media Notice Banner */
+.az-b2b-notice-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px dashed rgba(56, 189, 248, 0.35);
+  font-size: 11px;
+  color: #e0f2fe;
+  line-height: 1.35;
+}
+
+.az-b2b-media-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.az-b2b-quota-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fde047;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.az-b2b-media-slots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.az-b2b-slot-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.az-b2b-slot-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.az-b2b-slots-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 8px;
+}
+
+.az-b2b-slot-card {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.az-b2b-slot-card:hover {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.az-b2b-slot-card.has-media {
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.az-b2b-slot-card img, .az-b2b-slot-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.az-b2b-slot-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  font-size: 8px;
+  font-weight: 900;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+}
+
+/* Submit button */
+.az-btn-submit-b2b {
+  width: 100%;
+  height: 48px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f59e0b 0%, #ec4899 50%, #8b5cf6 100%);
+  border: none;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.4);
+  transition: all 0.2s ease;
+}
+
+.az-btn-submit-b2b:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.6);
+}
+
+/* Modal 2: Registered Venues Search Sheet */
+.az-registered-venues-sheet {
+  background: linear-gradient(180deg, #10061e 0%, #06020c 100%) !important;
+  border-top: 1px solid rgba(56, 189, 248, 0.4) !important;
+  border-radius: 24px 24px 0 0 !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(56, 189, 248, 0.2) !important;
+  padding: 22px 20px calc(var(--safe-bottom) + 20px) !important;
+  max-height: 92vh !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+.az-venues-search-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-right: 32px;
+}
+
+.az-venues-badge {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 9.5px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 2px;
+}
+
+.az-venues-title {
+  font-size: 19px;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0;
+}
+
+.az-venues-subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Algorithm Sorting Pipeline Box */
+.az-algorithm-sort-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.az-algorithm-box-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.az-algorithm-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.3px;
+}
+
+.az-algorithm-hint {
+  font-size: 10.5px;
+  color: #94a3b8;
+}
+
+.az-priority-order-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: space-between;
+}
+
+.az-priority-slot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.az-priority-num {
+  font-size: 9.5px;
+  font-weight: 900;
+  color: #38bdf8;
+  text-transform: uppercase;
+}
+
+.az-priority-select {
+  width: 100%;
+  height: 36px;
+  background: rgba(16, 24, 48, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 8px;
+  outline: none;
+  cursor: pointer;
+}
+
+.az-priority-arrow {
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.az-quick-order-presets {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.az-order-preset-btn {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.az-order-preset-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.az-order-preset-btn.active {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+/* Toolbar search and radius */
+.az-venues-filter-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.az-search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.az-search-input-wrap svg {
+  position: absolute;
+  left: 12px;
+}
+
+.az-venues-search-input {
+  width: 100%;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 12px 0 36px;
+  color: #ffffff;
+  font-size: 12px;
+  outline: none;
+}
+
+.az-venues-search-input:focus {
+  border-color: #38bdf8;
+}
+
+.az-radius-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.az-radius-pill-btn {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.az-radius-pill-btn:hover, .az-radius-pill-btn.active {
+  background: rgba(56, 189, 248, 0.25);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* Venue Results Cards (Exact Match to Audio Specification) */
+.az-registered-venues-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+.az-b2b-venue-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+
+.az-b2b-venue-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.az-b2b-card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.az-b2b-card-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+/* Name in pure white */
+.az-b2b-venue-name {
+  font-size: 15px;
+  font-weight: 900;
+  color: #ffffff !important;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.az-b2b-venue-address {
+  font-size: 11.5px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.az-b2b-meta-chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+.az-b2b-people-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #f43f5e;
+  background: rgba(244, 63, 94, 0.12);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.az-b2b-dist-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+/* Top Right Stars */
+.az-b2b-card-right-stars {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.az-b2b-stars-row {
+  font-size: 13px;
+  color: #fde047;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(253, 224, 71, 0.5);
+}
+
+.az-b2b-stars-label {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #cbd5e1;
+}
+
+/* Media Carousel in Venue Card */
+.az-b2b-media-carousel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 0 6px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.az-b2b-media-item {
+  position: relative;
+  width: 96px;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  cursor: pointer;
+}
+
+.az-b2b-media-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.az-b2b-media-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.az-b2b-media-type-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #ffffff;
+}
+
+.az-b2b-video-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Card bottom actions */
+.az-b2b-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.az-b2b-edit-media-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.az-b2b-edit-media-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+/* Edit Venue Media Modal */
+.az-edit-media-sheet {
+  background: linear-gradient(180deg, #140726 0%, #07020e 100%) !important;
+  border-top: 1px solid rgba(236, 72, 153, 0.4) !important;
+  border-radius: 24px 24px 0 0 !important;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.85) !important;
+  padding: 22px 20px calc(var(--safe-bottom) + 20px) !important;
+  max-height: 88vh !important;
+  overflow-y: auto !important;
+}
+
+.az-edit-media-slots-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}

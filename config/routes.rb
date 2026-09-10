@@ -25,9 +25,14 @@ Rails.application.routes.draw do
   resource :face_verification, only: [:create, :destroy]
 
   resources :subscriptions, only: [:index, :create]
-  resources :venues, only: [:index, :show] do
+  resources :venues, only: [:index, :show, :create] do
+    collection do
+      post :register_b2b
+      get :search_registered
+    end
     member do
       post :checkin
+      patch :update_media
     end
   end
 
@@ -42,8 +47,11 @@ Rails.application.routes.draw do
       get "subscriptions", to: "/subscriptions#index"
       get "nearby_users", to: "/locations#nearby"
       get "venues", to: "/venues#index"
+      get "venues/search_registered", to: "/venues#search_registered"
+      post "venues/register_b2b", to: "/venues#register_b2b"
       get "venues/:id", to: "/venues#show"
       post "venues/:id/checkin", to: "/venues#checkin"
+      patch "venues/:id/update_media", to: "/venues#update_media"
     end
   end
 end
