@@ -32,7 +32,7 @@
       <!-- ============================================ -->
       <!-- VIEW 1: HOME / LANDING SCREEN (Logged Out)  -->
       <!-- ============================================ -->
-      <section class="app-view view-home <%= (@user_json || current_user) ? '' : 'active' %>" id="viewHome" style="<%= (@user_json || current_user) ? 'display: none !important;' : 'display: flex !important;' %>">
+      <section class="app-view view-home <%= (@user_json || current_user) ? '' : 'active' %>" id="viewHome">
 
         <!-- Top Branding Section -->
         <header class="app-header">
@@ -97,7 +97,7 @@
       <!-- ============================================ -->
       <!-- VIEW 2: CRIAR CONTA (Logged Out)             -->
       <!-- ============================================ -->
-      <section class="app-view view-register" id="viewRegister" style="display: none;" aria-labelledby="regScreenTitle">
+      <section class="app-view view-register" id="viewRegister" aria-labelledby="regScreenTitle">
         <nav class="view-navbar">
           <button class="nav-back-btn" type="button" onclick="window.azararApp.showView('home')" aria-label="Voltar">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -209,7 +209,7 @@
       <!-- ============================================ -->
       <!-- VIEW 3: LOGIN (Logged Out)                   -->
       <!-- ============================================ -->
-      <section class="app-view view-login" id="viewLogin" style="display: none;" aria-labelledby="loginScreenTitle">
+      <section class="app-view view-login" id="viewLogin" aria-labelledby="loginScreenTitle">
         <nav class="view-navbar">
           <button class="nav-back-btn" type="button" onclick="window.azararApp.showView('home')" aria-label="Voltar">
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -282,6 +282,12 @@
               <span class="badge-face-id">Face ID</span>
             </button>
 
+            <div style="margin-top: 14px; text-align: center;">
+              <button type="button" class="az-btn-demo-fill" onclick="document.getElementById('loginUser').value='luis'; document.getElementById('loginPass').value='123456'; window.azararApp.handleLoginSubmit();" style="background: rgba(255, 255, 255, 0.05); border: 1px dashed rgba(255, 255, 255, 0.2); color: #94a3b8; font-size: 12px; padding: 8px 14px; border-radius: 10px; cursor: pointer; transition: all 0.2s;">
+                ⚡ Entrar rápido como Luis (Conta Demo)
+              </button>
+            </div>
+
           </form>
 
           <p class="form-switch-prompt">
@@ -293,110 +299,24 @@
       <!-- ============================================ -->
       <!-- VIEW 4: APP SHELL (Logged In Experience)     -->
       <!-- ============================================ -->
-      <section class="app-view view-app-shell <%= (@user_json || current_user) ? 'active' : '' %>" id="viewAppShell" style="<%= (@user_json || current_user) ? 'display: flex !important;' : 'display: none !important;' %>">
+      <section class="app-view view-app-shell <%= (@user_json || current_user) ? 'active' : '' %>" id="viewAppShell">
         
-        <!-- App Top Header (Matching Image: Hamburger | AZARAR Gradient Logo | Right Actions: Bell + 3-Dots Kebab Menu) -->
+        <!-- App Top Header (Brand on Left, Unified Menu Button on Top Right) -->
         <header class="az-topbar">
-          <button type="button" class="az-topbar-btn-menu" onclick="window.azararApp.toggleSideMenu()" aria-label="Menu Principal">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
-          </button>
-          
           <div class="az-topbar-brand">
             <span class="az-logo-text">AZARAR</span>
           </div>
           
-          <div class="az-topbar-right-actions">
-            <button type="button" class="az-topbar-btn-bell" onclick="window.azararApp.switchTab('messages')" aria-label="Notificações">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-              <span class="az-bell-badge">5</span>
-            </button>
-
-            <!-- KEBAB MENU BUTTON (⋮ TRÊS PONTINHOS NO TOPO DIREITO DE TODAS AS TELAS) -->
-            <button type="button" class="az-topbar-btn-kebab" id="btnTopbarKebab" onclick="window.azararApp.toggleKebabMenu()" aria-label="Mais opções">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
-                <circle cx="12" cy="5" r="2.2"></circle>
-                <circle cx="12" cy="12" r="2.2"></circle>
-                <circle cx="12" cy="19" r="2.2"></circle>
-              </svg>
+          <div class="az-topbar-right">
+            <button type="button" class="az-topbar-btn-menu" id="btnTopbarMenu" onclick="window.azararApp.toggleSideMenu()" aria-label="Menu Principal" title="Abrir Menu">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
             </button>
           </div>
         </header>
 
-        <!-- KEBAB DROPDOWN MENU (POPOVER) -->
-        <div class="az-kebab-backdrop" id="azKebabBackdrop" onclick="window.azararApp.toggleKebabMenu(false)"></div>
-        <div class="az-kebab-menu-dropdown" id="azKebabMenuDropdown" aria-hidden="true">
-          <div class="az-kebab-menu-header">
-            <span>Estabelecimentos & Opções</span>
-          </div>
-          <div class="az-kebab-menu-items">
-            <!-- 1. Cadastrar Locais (Destaque Principal) -->
-            <button type="button" class="az-kebab-item highlight-b2b" onclick="window.azararApp.openRegisterVenueModal(); window.azararApp.toggleKebabMenu(false);">
-              <div class="az-kebab-item-icon b2b">🏢</div>
-              <div class="az-kebab-item-info">
-                <strong>Cadastrar Locais</strong>
-                <span>Seja parceiro oficial (1 a 5 estrelas)</span>
-              </div>
-              <span class="az-kebab-badge-b2b">B2B</span>
-            </button>
-
-            <!-- 2. Locais Cadastrados (Destaque Principal) -->
-            <button type="button" class="az-kebab-item highlight-search" onclick="window.azararApp.openRegisteredVenuesSearchModal(); window.azararApp.toggleKebabMenu(false);">
-              <div class="az-kebab-item-icon search">📍</div>
-              <div class="az-kebab-item-info">
-                <strong>Locais Cadastrados</strong>
-                <span>Busca por pessoas, estrelas e distância</span>
-              </div>
-              <span class="az-kebab-badge-search">Busca</span>
-            </button>
-
-            <div class="az-kebab-divider"></div>
-
-            <!-- Outras Funcionalidades do Azarar -->
-            <button type="button" class="az-kebab-item" onclick="window.azararApp.switchTab('radar'); window.azararApp.toggleKebabMenu(false);">
-              <div class="az-kebab-item-icon">🔮</div>
-              <div class="az-kebab-item-info">
-                <strong>Radar & Proximidade</strong>
-                <span>Ver solteiros perto de você</span>
-              </div>
-            </button>
-
-            <button type="button" class="az-kebab-item" onclick="window.azararApp.switchTab('venues'); window.azararApp.toggleKebabMenu(false);">
-              <div class="az-kebab-item-icon">🍸</div>
-              <div class="az-kebab-item-info">
-                <strong>Locais & Bares</strong>
-                <span>Descobrir points da noite</span>
-              </div>
-            </button>
-
-            <button type="button" class="az-kebab-item" onclick="window.azararApp.openVipPlansModal(); window.azararApp.toggleKebabMenu(false);">
-              <div class="az-kebab-item-icon">👑</div>
-              <div class="az-kebab-item-info">
-                <strong>Planos VIP Azarar</strong>
-                <span>Ouro, Platina e alcance máximo</span>
-              </div>
-            </button>
-
-            <button type="button" class="az-kebab-item" onclick="window.azararApp.openFlashBoostModal(); window.azararApp.toggleKebabMenu(false);">
-              <div class="az-kebab-item-icon">⚡</div>
-              <div class="az-kebab-item-info">
-                <strong>Turbinar Perfil (Boost)</strong>
-                <span>Fique no topo da balada por 1h</span>
-              </div>
-            </button>
-
-            <button type="button" class="az-kebab-item" onclick="window.azararApp.openEditProfileModal(); window.azararApp.toggleKebabMenu(false);">
-              <div class="az-kebab-item-icon">✏️</div>
-              <div class="az-kebab-item-info">
-                <strong>Editar Meu Perfil</strong>
-                <span>Fotos, bio, gostos e vibes</span>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- SIDE MENU DRAWER (HAMBURGER ☰) -->
+        <!-- SIDE MENU DRAWER (SLIDES IN FROM THE RIGHT) -->
         <div class="az-side-drawer-overlay" id="azSideMenuOverlay" onclick="window.azararApp.toggleSideMenu(false)"></div>
-        <aside class="az-side-drawer" id="azSideMenuDrawer" aria-label="Menu Lateral">
+        <aside class="az-side-drawer az-side-drawer-right" id="azSideMenuDrawer" aria-label="Menu Principal">
           <div class="az-drawer-header">
             <div class="az-drawer-user-info">
               <img src="/images/avatars/luisarlindo.jpg" id="azDrawerAvatar" alt="Perfil" class="az-drawer-avatar" />
@@ -409,6 +329,7 @@
           </div>
 
           <nav class="az-drawer-nav">
+            <div class="az-drawer-section-label">NAVEGAÇÃO</div>
             <button type="button" class="az-drawer-item active" id="drawerNavRadar" onclick="window.azararApp.switchTab('radar'); window.azararApp.toggleSideMenu(false);">
               <span class="az-drawer-icon">🔮</span>
               <span>Radar de Conexões</span>
@@ -423,7 +344,7 @@
             </button>
             <button type="button" class="az-drawer-item" id="drawerNavMessages" onclick="window.azararApp.switchTab('messages'); window.azararApp.toggleSideMenu(false);">
               <span class="az-drawer-icon">💬</span>
-              <span>Mensagens Privadas</span>
+              <span>Mensagens & Notificações</span>
             </button>
             <button type="button" class="az-drawer-item" id="drawerNavProfile" onclick="window.azararApp.switchTab('profile'); window.azararApp.toggleSideMenu(false);">
               <span class="az-drawer-icon">👤</span>
@@ -431,7 +352,7 @@
             </button>
 
             <div class="az-drawer-divider"></div>
-            <div class="az-drawer-section-label">PARCEIROS B2B</div>
+            <div class="az-drawer-section-label">ESTABELECIMENTOS & PARCEIROS</div>
             <button type="button" class="az-drawer-item b2b-gold" onclick="window.azararApp.openRegisterVenueModal(); window.azararApp.toggleSideMenu(false);">
               <span class="az-drawer-icon">🏢</span>
               <span>Cadastrar Locais</span>
@@ -443,6 +364,7 @@
             </button>
 
             <div class="az-drawer-divider"></div>
+            <div class="az-drawer-section-label">RECURSOS & VIP</div>
             <button type="button" class="az-drawer-item" onclick="window.azararApp.openEditProfileModal(); window.azararApp.toggleSideMenu(false);">
               <span class="az-drawer-icon">✏️</span>
               <span>Editar Perfil</span>
@@ -459,16 +381,18 @@
               <span class="az-drawer-icon">🛡️</span>
               <span>Verificação Facial</span>
             </button>
+
             <div class="az-drawer-divider"></div>
-            <button type="button" class="az-drawer-item" onclick="window.azararApp.handleLogout();" style="color: #f43f5e;">
+            <!-- OPÇÃO SAIR / DESLOGAR -->
+            <button type="button" class="az-drawer-item az-drawer-item-logout" onclick="window.azararApp.handleLogout();" aria-label="Sair da Conta">
               <span class="az-drawer-icon">🚪</span>
-              <span>Sair da Conta</span>
+              <span class="az-logout-text">Sair da Conta (Deslogar)</span>
             </button>
           </nav>
 
           <div class="az-drawer-footer">
             AZARAR Social Network © 2026<br>
-            Versão 2.4.0 • João Pessoa, PB
+            Versão 2.4.0 • Conexões Reais
           </div>
         </aside>
 

@@ -135,13 +135,20 @@ class SessionsController < ApplicationController
     end
   end
 
-  def destroy
-    if current_user
-      current_user.update(online_now: false)
-    end
-    session[:user_id] = nil
-    cookies.delete(:user_id)
-    flash[:notice] = "Você saiu da sua conta."
-    redirect_to root_path
+def destroy
+  if current_user
+    current_user.update(online_now: false)
   end
+  session[:user_id] = nil
+  cookies.delete(:user_id)
+  respond_to do |format|
+    format.html do
+      flash[:notice] = "Você saiu da sua conta."
+      redirect_to root_path
+    end
+    format.json do
+      render json: { success: true, message: "Você saiu da sua conta." }
+    end
+  end
+end
 end

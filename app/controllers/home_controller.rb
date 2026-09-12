@@ -1,8 +1,7 @@
 class HomeController < ApplicationController
   def index
-    @user = current_user || User.first || User.new
-    target_user = current_user || User.first
-    @user_json = target_user ? user_payload(target_user) : nil
+    @user = current_user
+    @user_json = @user ? user_payload(@user) : nil
   end
 
   private

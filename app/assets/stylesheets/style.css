@@ -6238,14 +6238,20 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px 10px;
+  padding: 12px 18px;
   background: rgba(7, 10, 20, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   position: sticky;
   top: 0;
   z-index: 80;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.az-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .az-topbar-btn-menu {
@@ -7296,15 +7302,17 @@ html, body {
 .az-side-drawer {
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0 !important;
+  left: auto !important;
   bottom: 0;
-  width: 290px;
-  max-width: 84vw;
+  width: 300px;
+  max-width: 86vw;
   background: linear-gradient(180deg, #0d1224 0%, #060813 100%);
-  border-right: 1px solid rgba(59, 130, 246, 0.3);
-  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.85);
+  border-left: 1px solid rgba(236, 72, 153, 0.35);
+  border-right: none;
+  box-shadow: -12px 0 40px rgba(0, 0, 0, 0.85);
   z-index: 9995;
-  transform: translateX(-100%);
+  transform: translateX(100%) !important;
   transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
@@ -7313,7 +7321,32 @@ html, body {
 }
 
 .az-side-drawer.active {
-  transform: translateX(0);
+  transform: translateX(0) !important;
+}
+
+/* Logout Button In Drawer */
+.az-drawer-item-logout {
+  color: #f43f5e !important;
+  border: 1px solid rgba(244, 63, 94, 0.25) !important;
+  background: rgba(244, 63, 94, 0.08) !important;
+  margin-top: 6px;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s ease !important;
+}
+
+.az-drawer-item-logout:hover,
+.az-drawer-item-logout:active {
+  background: rgba(244, 63, 94, 0.22) !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.45) !important;
+  color: #ffffff !important;
+  transform: translateX(-3px) !important;
+}
+
+.az-drawer-item-logout .az-logout-text {
+  font-weight: 700;
+  letter-spacing: 0.2px;
 }
 
 .az-drawer-header {

@@ -2,6 +2,8 @@ Rails.application.routes.draw do
   root "home#index"
 
   resource :registration, only: [:create]
+  get "logout", to: "sessions#destroy"
+  delete "logout", to: "sessions#destroy"
   resource :session, only: [:create, :destroy] do
     post :face_login
   end

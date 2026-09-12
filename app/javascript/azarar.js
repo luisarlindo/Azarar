@@ -245,22 +245,7 @@
           }
         } catch(e) {}
       }
-      return {
-        id: 'usr_luis',
-        name: 'Luis Arlindo',
-        username: 'luisarlindo',
-        emailPhone: 'luisarlindo2@gmail.com',
-        age: 28,
-        avatar: '/images/avatars/luisarlindo.jpg',
-        intent: 'Conexões reais',
-        bio: 'Apaixonado por tecnologia, viagens e música 🎸',
-        location: 'Sousa, PB',
-        isOnline: true,
-        plan: 'free',
-        followersCount: 320,
-        followingCount: 180,
-        photos: ['/images/avatars/luisarlindo.jpg']
-      };
+      return null;
     },
     saveCurrentUser(user) {
       localStorage.setItem('azarar_current_user', JSON.stringify(user));
@@ -409,12 +394,11 @@
     ['viewHome', 'viewRegister', 'viewLogin', 'viewAppShell'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) {
+        el.style.removeProperty('display');
         if (id === targetId) {
           el.classList.add('active');
-          el.style.display = 'flex';
         } else {
           el.classList.remove('active');
-          el.style.display = 'none';
         }
       }
     });
@@ -434,9 +418,9 @@
   });
 
   // ==========================================================================
-  // 4. AUTHENTICATION (REGISTER & LOGIN)
+  // 4. AUTHENTICATION (REGISTER & LOGIN & LOGOUT)
   // ==========================================================================
-  function handleRegisterSubmit() {
+  async function handleRegisterSubmit() {
     const fullName = document.getElementById('regFullName')?.value.trim();
     const birthDate = document.getElementById('regBirthDate')?.value;
     const username = document.getElementById('regUsername')?.value.trim().toLowerCase().replace('@', '');
@@ -446,118 +430,258 @@
     const activeChip = document.querySelector('#regIntentChips .intent-chip.active');
     const intent = activeChip ? activeChip.getAttribute('data-intent') : 'Relacionamento Sério';
 
+    if (!fullName || !birthDate || !username || !emailPhone || !password) {
+      showToast('⚠️ Preencha todos os campos obrigatórios!');
+      return;
+    }
+
     if (password !== confirmPassword) {
       showToast('⚠️ As senhas digitadas não coincidem!');
       document.getElementById('regPasswordConfirm')?.focus();
       return;
     }
 
-    const users = Storage.getUsers();
-    if (users.some(u => u.username === username)) {
-      showToast('⚠️ Este @usuario já está em uso. Escolha outro!');
-      document.getElementById('regUsername')?.focus();
+    if (password.length < 6) {
+      showToast('⚠️ A senha deve conter pelo menos 6 caracteres.');
+      document.getElementById('regPassword')?.focus();
       return;
     }
 
-    const newUser = {
-      id: 'usr_' + Date.now(),
-      name: fullName,
-      username: username,
-      emailPhone: emailPhone,
-      password: password,
-      birthDate: birthDate,
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
-      intent: intent,
-      bio: `Novo(a) no Azarar! Buscando conexões de ${intent}.`,
-      location: 'São Paulo, SP',
-      distance: 0,
-      isOnline: true,
-      followersCount: 0,
-      followingCount: 0,
-      postsCount: 0,
-      photos: [
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80'
-      ]
-    };
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
-    users.push(newUser);
-    Storage.saveUsers(users);
-    Storage.saveCurrentUser(newUser);
-    currentUser = newUser;
+    try {
+      const response = await fetch('/registration.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          user: {
+            name: fullName,
+            username: username,
+            email_or_phone: emailPhone,
+            birthdate: birthDate,
+            password: password,
+            password_confirmation: confirmPassword,
+            intentions: intent
+          }
+        })
+      });
 
-    showToast(`💖 Bem-vindo(a), ${fullName.split(' ')[0]}!`);
-    setTimeout(() => {
-      showView('appShell');
-    }, 800);
-  }
+      const data = await response.json();
 
-  function handleLoginSubmit() {
-    const userOrEmail = document.getElementById('loginUser')?.value.trim().toLowerCase().replace('@', '');
-    const password = document.getElementById('loginPass')?.value;
+      if (response.ok && data.success && data.user) {
+        currentUser = data.user;
+        currentUser.avatar = currentUser.avatar || '/images/avatars/luisarlindo.jpg';
+        Storage.saveCurrentUser(currentUser);
 
-    if (userOrEmail === 'luisarlindo2@gmail.com' || userOrEmail === 'luisarlindo' || userOrEmail === 'luis') {
-      currentUser = {
-        id: 'usr_luis',
-        name: 'Luis Arlindo',
-        username: 'luisarlindo',
-        emailPhone: 'luisarlindo2@gmail.com',
-        age: 28,
+        const users = Storage.getUsers();
+        users.push(currentUser);
+        Storage.saveUsers(users);
+
+        showToast(`💖 Bem-vindo(a), ${fullName.split(' ')[0]}!`);
+        setTimeout(() => {
+          showView('appShell');
+        }, 500);
+        return;
+      } else {
+        showToast(`⚠️ ${data.message || 'Erro ao criar conta. Verifique os dados.'}`);
+        return;
+      }
+    } catch (err) {
+      console.warn('Registration fetch error, using local fallback:', err);
+      const users = Storage.getUsers();
+      if (users.some(u => u.username === username)) {
+        showToast('⚠️ Este @usuario já está em uso. Escolha outro!');
+        document.getElementById('regUsername')?.focus();
+        return;
+      }
+
+      const newUser = {
+        id: 'usr_' + Date.now(),
+        name: fullName,
+        username: username,
+        emailPhone: emailPhone,
+        password: password,
+        birthDate: birthDate,
         avatar: '/images/avatars/luisarlindo.jpg',
-        intent: 'Conexões reais',
-        bio: 'Apaixonado por tecnologia, viagens e música 🎸',
+        intent: intent,
+        bio: `Novo(a) no Azarar! Buscando conexões de ${intent}.`,
         location: 'Sousa, PB',
+        distance: 0,
         isOnline: true,
-        followersCount: 320,
-        followingCount: 180,
+        plan: 'free',
+        followersCount: 0,
+        followingCount: 0,
+        postsCount: 0,
         photos: ['/images/avatars/luisarlindo.jpg']
       };
-      Storage.saveCurrentUser(currentUser);
-      showToast(`✨ Olá, Luis!`);
-      setTimeout(() => {
-        showView('appShell');
-      }, 700);
-      return;
-    }
 
-    const users = Storage.getUsers();
-    const found = users.find(u => 
-      (u.username === userOrEmail || (u.emailPhone && u.emailPhone.toLowerCase() === userOrEmail)) &&
-      (!u.password || u.password === password)
-    );
+      users.push(newUser);
+      Storage.saveUsers(users);
+      Storage.saveCurrentUser(newUser);
+      currentUser = newUser;
 
-    if (found) {
-      currentUser = found;
-      Storage.saveCurrentUser(currentUser);
-      showToast(`✨ Olá, ${currentUser.name.split(' ')[0]}!`);
+      showToast(`💖 Bem-vindo(a), ${fullName.split(' ')[0]}!`);
       setTimeout(() => {
         showView('appShell');
-      }, 700);
-    } else {
-      const demoUser = users[0] || {
-        id: 'usr_me',
-        name: userOrEmail,
-        username: userOrEmail,
-        avatar: '/images/avatars/luisarlindo.jpg',
-        intent: 'Relacionamento Sério',
-        bio: 'Buscando conexões de verdade.',
-        location: 'Sousa, PB',
-        isOnline: true,
-        photos: []
-      };
-      currentUser = demoUser;
-      Storage.saveCurrentUser(currentUser);
-      showToast(`🎉 Conectado com sucesso!`);
-      setTimeout(() => {
-        showView('appShell');
-      }, 700);
+      }, 500);
     }
   }
 
-  function handleLogout() {
+  async function handleLoginSubmit() {
+    const userOrEmail = document.getElementById('loginUser')?.value.trim();
+    const password = document.getElementById('loginPass')?.value;
+
+    if (!userOrEmail || !password) {
+      showToast('⚠️ Por favor preencha seu usuário/e-mail e senha.');
+      return;
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    try {
+      const response = await fetch('/session.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({
+          identifier: userOrEmail,
+          password: password
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success && data.user) {
+        currentUser = data.user;
+        currentUser.avatar = currentUser.avatar || '/images/avatars/luisarlindo.jpg';
+        Storage.saveCurrentUser(currentUser);
+        showToast(`✨ Bem-vindo(a) de volta, ${currentUser.name.split(' ')[0]}!`);
+        setTimeout(() => {
+          showView('appShell');
+        }, 500);
+        return;
+      } else {
+        // Fallback for local demo or local storage user
+        const cleanUser = userOrEmail.toLowerCase().replace('@', '');
+        if (cleanUser === 'luis' || cleanUser === 'luisarlindo' || cleanUser === 'luisarlindo2@gmail.com') {
+          currentUser = {
+            id: 'usr_luis',
+            name: 'Luis Arlindo',
+            username: 'luisarlindo',
+            emailPhone: 'luisarlindo2@gmail.com',
+            age: 28,
+            avatar: '/images/avatars/luisarlindo.jpg',
+            intent: 'Conexões reais',
+            bio: 'Apaixonado por tecnologia, viagens e música 🎸',
+            location: 'Sousa, PB',
+            isOnline: true,
+            plan: 'free',
+            followersCount: 320,
+            followingCount: 180,
+            photos: ['/images/avatars/luisarlindo.jpg']
+          };
+          Storage.saveCurrentUser(currentUser);
+          showToast(`✨ Olá, Luis! Entrando...`);
+          setTimeout(() => {
+            showView('appShell');
+          }, 500);
+          return;
+        }
+
+        const localUsers = Storage.getUsers();
+        const found = localUsers.find(u => 
+          (u.username === cleanUser || (u.emailPhone && u.emailPhone.toLowerCase() === cleanUser)) &&
+          (!u.password || u.password === password)
+        );
+
+        if (found) {
+          currentUser = found;
+          Storage.saveCurrentUser(currentUser);
+          showToast(`✨ Bem-vindo(a) de volta, ${currentUser.name.split(' ')[0]}!`);
+          setTimeout(() => {
+            showView('appShell');
+          }, 500);
+          return;
+        }
+
+        showToast(`⚠️ ${data.message || 'E-mail, usuário ou senha incorretos.'}`);
+      }
+    } catch (err) {
+      console.warn('Login request error, using fallback:', err);
+      const cleanUser = userOrEmail.toLowerCase().replace('@', '');
+      if (cleanUser === 'luis' || cleanUser === 'luisarlindo' || cleanUser === 'luisarlindo2@gmail.com') {
+        currentUser = {
+          id: 'usr_luis',
+          name: 'Luis Arlindo',
+          username: 'luisarlindo',
+          emailPhone: 'luisarlindo2@gmail.com',
+          age: 28,
+          avatar: '/images/avatars/luisarlindo.jpg',
+          intent: 'Conexões reais',
+          bio: 'Apaixonado por tecnologia, viagens e música 🎸',
+          location: 'Sousa, PB',
+          isOnline: true,
+          plan: 'free'
+        };
+        Storage.saveCurrentUser(currentUser);
+        showToast(`✨ Olá, Luis! Entrando...`);
+        setTimeout(() => {
+          showView('appShell');
+        }, 500);
+      } else {
+        const localUsers = Storage.getUsers();
+        const found = localUsers.find(u => 
+          (u.username === cleanUser || (u.emailPhone && u.emailPhone.toLowerCase() === cleanUser)) &&
+          (!u.password || u.password === password)
+        );
+
+        if (found) {
+          currentUser = found;
+          Storage.saveCurrentUser(currentUser);
+          showToast(`✨ Bem-vindo(a) de volta, ${currentUser.name.split(' ')[0]}!`);
+          setTimeout(() => {
+            showView('appShell');
+          }, 500);
+        } else {
+          showToast('⚠️ E-mail, usuário ou senha incorretos.');
+        }
+      }
+    }
+  }
+
+  async function handleLogout() {
+    toggleSideMenu(false);
+    if (navigator.vibrate) navigator.vibrate(20);
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    try {
+      await fetch('/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-Token': csrfToken
+        },
+        body: JSON.stringify({ _method: 'delete' })
+      });
+    } catch (err) {
+      console.warn('Logout request warning:', err);
+    }
+
     Storage.clearCurrentUser();
     currentUser = null;
-    showToast('👋 Sessão encerrada.');
-    showView('home');
+    showToast('👋 Você saiu da sua conta com sucesso.');
+    setTimeout(() => {
+      showView('home');
+    }, 400);
   }
 
   // ==========================================================================
@@ -2216,23 +2340,7 @@
   ];
 
   function toggleKebabMenu(forceState) {
-    const dropdown = document.getElementById('azKebabMenuDropdown');
-    const backdrop = document.getElementById('azKebabBackdrop');
-    const btn = document.getElementById('btnTopbarKebab');
-    if (!dropdown) return;
-    const isOpen = dropdown.classList.contains('active');
-    const shouldOpen = forceState !== undefined ? forceState : !isOpen;
-    if (shouldOpen) {
-      dropdown.classList.add('active');
-      dropdown.setAttribute('aria-hidden', 'false');
-      if (backdrop) backdrop.classList.add('active');
-      if (btn) btn.classList.add('active');
-    } else {
-      dropdown.classList.remove('active');
-      dropdown.setAttribute('aria-hidden', 'true');
-      if (backdrop) backdrop.classList.remove('active');
-      if (btn) btn.classList.remove('active');
-    }
+    toggleSideMenu(forceState);
   }
 
   function openRegisterVenueModal() {
@@ -4543,7 +4651,12 @@
   }
 
   function openRadarPreview() {
-    showView('register');
+    if (currentUser) {
+      showView('appShell');
+      switchTab('radar');
+    } else {
+      showView('register');
+    }
   }
 
   // Floating Romantic Particles
