@@ -4659,12 +4659,12 @@
     }
   }
 
-  // Floating Romantic Particles
+  // Floating Romantic Particles with Logo Emission Synergy
   const canvas = document.getElementById('particlesCanvas');
   if (canvas) {
     const ctx = canvas.getContext('2d');
     let particles = [];
-    const particleCount = 22;
+    const particleCount = 38;
 
     function resizeCanvas() {
       const parent = canvas.parentElement || document.body;
@@ -4675,33 +4675,54 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
+    const particleColors = ['#ff2a7a', '#ec4899', '#d8b4fe', '#f43f5e', '#c084fc'];
+
     class Particle {
-      constructor() { this.reset(); }
-      reset() {
-        this.x = Math.random() * (canvas.width || 360);
-        this.y = Math.random() * (canvas.height || 640);
-        this.size = Math.random() * 2.0 + 0.6;
-        this.speedY = -(Math.random() * 0.3 + 0.1);
-        this.speedX = (Math.random() - 0.5) * 0.2;
-        this.alpha = Math.random() * 0.4 + 0.2;
-        this.alphaChange = (Math.random() * 0.008 + 0.003) * (Math.random() > 0.5 ? 1 : -1);
-        this.color = Math.random() > 0.4 ? '#ff2a7a' : '#d8b4fe';
+      constructor() { this.reset(true); }
+
+      reset(initial = false) {
+        const logoEl = document.getElementById('homeBrandLogo');
+        const nearLogo = Math.random() < 0.45;
+
+        if (nearLogo && logoEl) {
+          const rect = logoEl.getBoundingClientRect();
+          const centerX = rect.left + rect.width * 0.5;
+          const centerY = rect.top + rect.height * 0.45;
+          this.x = centerX + (Math.random() - 0.5) * (rect.width * 0.9 || 200);
+          this.y = centerY + (Math.random() - 0.5) * (rect.height * 0.7 || 100);
+          this.size = Math.random() * 2.4 + 0.8;
+          this.speedY = -(Math.random() * 0.42 + 0.14);
+          this.speedX = (Math.random() - 0.5) * 0.35;
+          this.alpha = Math.random() * 0.55 + 0.35;
+          this.alphaChange = (Math.random() * 0.01 + 0.003) * (Math.random() > 0.5 ? 1 : -1);
+          this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+        } else {
+          this.x = Math.random() * (canvas.width || 360);
+          this.y = initial ? Math.random() * (canvas.height || 640) : (canvas.height + 10);
+          this.size = Math.random() * 2.0 + 0.6;
+          this.speedY = -(Math.random() * 0.3 + 0.1);
+          this.speedX = (Math.random() - 0.5) * 0.2;
+          this.alpha = Math.random() * 0.4 + 0.2;
+          this.alphaChange = (Math.random() * 0.008 + 0.003) * (Math.random() > 0.5 ? 1 : -1);
+          this.color = particleColors[Math.floor(Math.random() * particleColors.length)];
+        }
       }
+
       update() {
         this.y += this.speedY;
         this.x += this.speedX;
         this.alpha += this.alphaChange;
-        if (this.alpha <= 0.1 || this.alpha >= 0.7) this.alphaChange = -this.alphaChange;
-        if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
-          this.reset();
-          this.y = canvas.height + 10;
+        if (this.alpha <= 0.08 || this.alpha >= 0.85) this.alphaChange = -this.alphaChange;
+        if (this.y < -12 || this.x < -15 || this.x > (canvas.width || 360) + 15) {
+          this.reset(false);
         }
       }
+
       draw() {
         ctx.save();
-        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.globalAlpha = Math.max(0, Math.min(1, this.alpha));
         ctx.fillStyle = this.color;
-        ctx.shadowBlur = this.size * 4;
+        ctx.shadowBlur = this.size * 5;
         ctx.shadowColor = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
