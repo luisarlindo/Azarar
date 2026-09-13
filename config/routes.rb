@@ -38,8 +38,11 @@ Rails.application.routes.draw do
     end
   end
 
+  post "upload_media", to: "api/v1/media#create"
+
   namespace :api do
     namespace :v1 do
+      post "upload_media", to: "media#create"
       post "verify_face", to: "/face_verifications#create"
       delete "reset_face", to: "/face_verifications#destroy"
       post "face_login", to: "/sessions#face_login"

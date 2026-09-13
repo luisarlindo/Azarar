@@ -5,6 +5,9 @@ class Venue < ApplicationRecord
   has_many :checkins, dependent: :destroy
   has_many :users, through: :checkins
 
+  has_many_attached :venue_photos
+  has_many_attached :venue_videos
+
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true
 
@@ -63,6 +66,56 @@ class Venue < ApplicationRecord
     when "restaurant" then "Restaurante 🍽️"
     when "lounge" then "Lounge VIP ✨"
     else "Local & Point 📍"
+    end
+  end
+
+  def photo_urls
+    urls = []
+    if venue_photos.attached?
+      urls += venue_photos.map { |p| Rails.application.routes.url_helpers.rails_blob_path(p, only_path: true) rescue nil }.compact
+    end
+    if gallery_images.present?
+      urls += Array(gallery_images)
+    end
+    urls.uniq.first(max_photos || stars_tier || 1)
+  end
+
+  def video_urls
+    urls = []
+    if venue_videos.attached?
+      urls += venue_videos.map { |v| Rails.application.routes.url_helpers.rails_blob_path(v, only_path: true) rescue nil }.compact
+    end
+    if gallery_videos.present?
+      urls += Array(gallery_videos)
+    end
+    urls.uniq.first(max_videos || stars_tier || 1)
+  end
+
+  def attach_media!(type, data_or_file, filename: nil)
+    attachment_assoc = (type.to_s == "video" ? venue_videos : venue_photos)
+
+    if data_or_file.is_a?(ActionDispatch::Http::UploadedFile) || data_or_file.is_a?(Rack::Test::UploadedFile)
+      attachment_assoc.attach(data_or_file)
+    elsif data_or_file.is_a?(String) && data_or_file.start_with?("data:")
+      content_type = data_or_file[/data:(.*?);base64,/, 1] || (type.to_s == "video" ? "video/mp4" : "image/jpeg")
+      ext = content_type.split("/").last.presence || (type.to_s == "video" ? "mp4" : "jpg")
+      ext = "jpg" if ext == "jpeg"
+      base64_data = data_or_file.sub(/data:.*?;base64,/, "")
+      decoded_data = Base64.decode64(base64_data)
+      fname = filename || "venue_#{type}_#{Time.current.to_i}_#{rand(1000)}.#{ext}"
+
+      attachment_assoc.attach(
+        io: StringIO.new(decoded_data),
+        filename: fname,
+        content_type: content_type
+      )
+    elsif data_or_file.is_a?(String) && (data_or_file.start_with?("http://", "https://", "/"))
+      if type.to_s == "video"
+        self.gallery_videos = (Array(gallery_videos) + [data_or_file]).uniq.first(max_videos || stars_tier || 1)
+      else
+        self.gallery_images = (Array(gallery_images) + [data_or_file]).uniq.first(max_photos || stars_tier || 1)
+      end
+      save if persisted?
     end
   end
 

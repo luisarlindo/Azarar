@@ -2,7 +2,7 @@ class VenuesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    venues = Venue.visible_in_app
+    venues = Venue.visible_in_app.with_attached_venue_photos.with_attached_venue_videos
     
     # Optional category filter
     if params[:category].present? && params[:category] != "all"
@@ -128,6 +128,21 @@ class VenuesController < ApplicationController
     max_p = venue.max_photos || venue.stars_tier || 1
     max_v = venue.max_videos || venue.stars_tier || 1
 
+    # Check for direct file or data_url attachments
+    if params[:photos].present? || params.dig(:venue, :photos).present?
+      items = Array(params[:photos].presence || params.dig(:venue, :photos))
+      items.first(max_p).each do |p|
+        venue.attach_media!(:photo, p)
+      end
+    end
+
+    if params[:videos].present? || params.dig(:venue, :videos).present?
+      items = Array(params[:videos].presence || params.dig(:venue, :videos))
+      items.first(max_v).each do |v|
+        venue.attach_media!(:video, v)
+      end
+    end
+
     if (params[:venue]&.dig(:gallery_images) || params[:gallery_images]).present?
       venue.gallery_images = Array((params[:venue]&.dig(:gallery_images) || params[:gallery_images])).first(max_p)
       venue.cover_image_url = venue.gallery_images.first if venue.gallery_images.any?
@@ -183,7 +198,7 @@ class VenuesController < ApplicationController
       longitude: v.longitude,
       is_partner: v.is_partner,
       partner_tier: v.partner_tier,
-      cover_image_url: v.cover_image_url,
+      cover_image_url: v.cover_image_url.presence || v.photo_urls.first || "https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1000",
       logo_url: v.logo_url,
       description: v.description,
       instagram: v.instagram,
@@ -204,8 +219,8 @@ class VenuesController < ApplicationController
       subscription_status: v.subscription_status || "active",
       next_billing_at: v.next_billing_at,
       is_blocked: v.blocked?,
-      gallery_images: v.gallery_images || [],
-      gallery_videos: v.gallery_videos || []
+      gallery_images: v.photo_urls,
+      gallery_videos: v.video_urls
     }
 
     u_lat = user_lat || params[:latitude].presence || current_user&.latitude

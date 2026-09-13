@@ -25,3 +25,12 @@ local:
 #   service: Mirror
 #   primary: local
 #   mirrors: [ amazon, google, microsoft ]
+
+cloudflare_r2:
+  service: S3
+  access_key_id: <%= ENV["R2_ACCESS_KEY_ID"] || Rails.application.credentials.dig(:r2, :access_key_id) %>
+  secret_access_key: <%= ENV["R2_SECRET_ACCESS_KEY"] || Rails.application.credentials.dig(:r2, :secret_access_key) %>
+  region: auto
+  bucket: <%= ENV["R2_BUCKET_NAME"] || "azarar-media" %>
+  endpoint: <%= ENV["R2_ENDPOINT"] || "https://auto.r2.cloudflarestorage.com" %>
+  force_path_style: true

@@ -35,7 +35,13 @@ class ProfilesController < ApplicationController
     @user.acompanhado = params[:acompanhado] if params[:acompanhado].present?
     @user.procuro = params[:procuro] if params[:procuro].present?
 
-    if @user.update(permitted.except(:preferences))
+    # Handle avatar file or Base64 DataURL
+    avatar_input = params[:avatar] || params[:avatar_image] || params.dig(:user, :avatar) || params.dig(:user, :avatar_image) || params.dig(:user, :avatar_url)
+    if avatar_input.present?
+      @user.attach_avatar!(avatar_input)
+    end
+
+    if @user.update(permitted.except(:preferences, :avatar, :avatar_image))
       respond_to do |format|
         format.html do
           flash[:notice] = "Perfil atualizado com sucesso!"
@@ -79,9 +85,9 @@ class ProfilesController < ApplicationController
 
   def profile_params
     if params[:user].present? && params[:user].is_a?(ActionController::Parameters)
-      params.require(:user).permit(:name, :bio, :avatar_url, :intentions, :radius_meters, :birthdate, :vibe)
+      params.require(:user).permit(:name, :bio, :avatar_url, :avatar, :avatar_image, :intentions, :radius_meters, :birthdate, :vibe)
     else
-      params.permit(:name, :bio, :avatar_url, :intentions, :radius_meters, :birthdate, :vibe)
+      params.permit(:name, :bio, :avatar_url, :avatar, :avatar_image, :intentions, :radius_meters, :birthdate, :vibe)
     end
   end
 

@@ -14,6 +14,9 @@ class User < ApplicationRecord
   has_many :checkins, dependent: :destroy
   has_many :visited_venues, through: :checkins, source: :venue
 
+  has_one_attached :avatar_image
+  has_many_attached :profile_photos
+
   PLANS = {
     "free" => { name: "Grátis", max_radius_meters: 5_000, price_cents: 0, badge: "Grátis" },
     "bronze" => { name: "Bronze", max_radius_meters: 15_000, price_cents: 990, badge: "Bronze 🥉" },
@@ -67,7 +70,41 @@ class User < ApplicationRecord
   end
 
   def display_avatar
+    if avatar_image.attached?
+      Rails.application.routes.url_helpers.rails_blob_path(avatar_image, only_path: true)
+    else
+      avatar_url.presence || "/images/avatars/luisarlindo.jpg"
+    end
+  rescue => e
     avatar_url.presence || "/images/avatars/luisarlindo.jpg"
+  end
+
+  def attach_avatar!(data_or_file, filename: nil)
+    return unless data_or_file.present?
+
+    if data_or_file.is_a?(ActionDispatch::Http::UploadedFile) || data_or_file.is_a?(Rack::Test::UploadedFile)
+      avatar_image.attach(data_or_file)
+      self.avatar_url = Rails.application.routes.url_helpers.rails_blob_path(avatar_image, only_path: true) rescue nil
+      save if persisted?
+    elsif data_or_file.is_a?(String) && data_or_file.start_with?("data:")
+      content_type = data_or_file[/data:(.*?);base64,/, 1] || "image/jpeg"
+      ext = content_type.split("/").last.presence || "jpg"
+      ext = "jpg" if ext == "jpeg"
+      base64_data = data_or_file.sub(/data:.*?;base64,/, "")
+      decoded_data = Base64.decode64(base64_data)
+      fname = filename || "avatar_#{id || Time.current.to_i}.#{ext}"
+
+      avatar_image.attach(
+        io: StringIO.new(decoded_data),
+        filename: fname,
+        content_type: content_type
+      )
+      self.avatar_url = Rails.application.routes.url_helpers.rails_blob_path(avatar_image, only_path: true) rescue nil
+      save if persisted?
+    elsif data_or_file.is_a?(String) && (data_or_file.start_with?("http://", "https://", "/"))
+      self.avatar_url = data_or_file
+      save if persisted?
+    end
   end
 
   def formatted_username

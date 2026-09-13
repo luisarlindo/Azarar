@@ -349,8 +349,9 @@
   let currentRadius = 5000;
   let isOnlineNow = currentUser ? (currentUser.isOnline ?? true) : true;
   let currentActiveTab = 'radar';
-  let activeChatUserId = null;
   let selectedNewPostPhoto = PRESET_SAMPLE_PHOTOS[0];
+  let pendingPostImageDataUrl = null;
+  let activeB2BSlot = null;
 
   const screenContainer = document.getElementById('screenContainer');
   const views = {
@@ -2701,16 +2702,64 @@
   }
 
   function triggerMediaUpload(type, index) {
+    activeB2BSlot = { type, index };
     if (type === 'photo') {
-      const nextPhoto = SAMPLE_VENUE_PHOTOS[(index + 1) % SAMPLE_VENUE_PHOTOS.length];
-      b2bPhotos[index] = nextPhoto;
-      renderB2BMediaSlots(selectedB2BStars);
-      showToast(`📸 Foto ${index + 1} atualizada!`);
+      const input = document.getElementById('b2bUploadPhotoInput');
+      if (input) {
+        input.value = '';
+        input.click();
+      }
     } else {
-      const nextVideo = SAMPLE_VENUE_VIDEOS[(index + 1) % SAMPLE_VENUE_VIDEOS.length];
-      b2bVideos[index] = nextVideo;
-      renderB2BMediaSlots(selectedB2BStars);
-      showToast(`🎥 Vídeo ${index + 1} atualizado!`);
+      const input = document.getElementById('b2bUploadVideoInput');
+      if (input) {
+        input.value = '';
+        input.click();
+      }
+    }
+  }
+
+  async function handleB2BFileInput(type, input) {
+    if (!input || !input.files || !input.files[0] || !activeB2BSlot) return;
+    const file = input.files[0];
+    const slotIdx = activeB2BSlot.index;
+
+    showToast(`⏳ Enviando ${type === 'video' ? 'vídeo' : 'foto'}...`);
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('type', type === 'video' ? 'venue_video' : 'venue_photo');
+
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+      const res = await fetch('/api/v1/upload_media', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': csrfToken || '',
+          'Accept': 'application/json'
+        },
+        body: formData
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.url) {
+          if (type === 'photo') {
+            b2bPhotos[slotIdx] = data.url;
+            showToast(`📸 Foto ${slotIdx + 1} enviada com sucesso!`);
+          } else {
+            b2bVideos[slotIdx] = data.url;
+            showToast(`🎥 Vídeo ${slotIdx + 1} enviado com sucesso!`);
+          }
+          renderB2BMediaSlots(selectedB2BStars);
+        } else {
+          showToast('⚠️ Falha ao obter link da mídia');
+        }
+      } else {
+        showToast('⚠️ Erro ao enviar arquivo para o servidor');
+      }
+    } catch (err) {
+      console.error('Erro no upload B2B:', err);
+      showToast('⚠️ Erro de conexão durante o upload.');
     }
   }
 
@@ -3813,13 +3862,77 @@
     renderFeedPosts();
   }
 
+  function handleNewPostFileInput(input) {
+    if (!input || !input.files || !input.files[0]) return;
+    const file = input.files[0];
+    if (!file.type.startsWith('image/')) {
+      showToast('⚠️ Selecione uma imagem válida.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const maxDim = 1200;
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxDim) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          }
+        } else {
+          if (height > maxDim) {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
+
+        pendingPostImageDataUrl = compressedDataUrl;
+        const previewWrap = document.getElementById('postImagePreviewContainer');
+        const previewImg = document.getElementById('postImagePreview');
+        if (previewImg) previewImg.src = compressedDataUrl;
+        if (previewWrap) previewWrap.style.display = 'block';
+
+        document.querySelectorAll('.preset-thumb-btn').forEach(b => b.classList.remove('active'));
+        const urlInput = document.getElementById('txtPostImageUrl');
+        if (urlInput) urlInput.value = '';
+
+        showToast('📸 Foto pronta para publicação!');
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    input.value = '';
+  }
+
+  function removeNewPostImage() {
+    pendingPostImageDataUrl = null;
+    const previewWrap = document.getElementById('postImagePreviewContainer');
+    const previewImg = document.getElementById('postImagePreview');
+    if (previewWrap) previewWrap.style.display = 'none';
+    if (previewImg) previewImg.src = '';
+    const cam = document.getElementById('postPhotoCamera');
+    const gal = document.getElementById('postPhotoGallery');
+    if (cam) cam.value = '';
+    if (gal) gal.value = '';
+  }
+
   function openNewPostModal() {
+    removeNewPostImage();
     const modal = document.getElementById('modalNewPost');
     const photosRow = document.getElementById('presetPhotosRow');
     
     if (photosRow) {
       photosRow.innerHTML = PRESET_SAMPLE_PHOTOS.map((url, i) => `
-        <div class="preset-thumb-btn ${url === selectedNewPostPhoto ? 'active' : ''}" onclick="window.azararApp.selectPresetPhoto('${url}', this)">
+        <div class="preset-thumb-btn ${url === selectedNewPostPhoto && !pendingPostImageDataUrl ? 'active' : ''}" onclick="window.azararApp.selectPresetPhoto('${url}', this)">
           <img src="${url}" alt="Amostra ${i}" class="preset-thumb-img" />
         </div>
       `).join('');
@@ -3830,9 +3943,11 @@
 
   function closeNewPostModal() {
     document.getElementById('modalNewPost')?.classList.remove('active');
+    removeNewPostImage();
   }
 
   function selectPresetPhoto(url, btn) {
+    removeNewPostImage();
     selectedNewPostPhoto = url;
     document.querySelectorAll('.preset-thumb-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -3840,12 +3955,54 @@
     if (input) input.value = '';
   }
 
-  function handleCreatePostSubmit() {
+  async function handleCreatePostSubmit() {
     const customUrl = document.getElementById('txtPostImageUrl')?.value.trim();
     const caption = document.getElementById('txtPostCaption')?.value.trim();
     const location = document.getElementById('txtPostLocation')?.value.trim() || 'No seu raio';
 
-    const finalImage = customUrl || selectedNewPostPhoto;
+    if (!caption) {
+      showToast('⚠️ Escreva uma legenda para a sua foto.');
+      return;
+    }
+
+    const finalImage = pendingPostImageDataUrl || customUrl || selectedNewPostPhoto;
+
+    if (!finalImage) {
+      showToast('⚠️ Selecione ou tire uma foto para publicar.');
+      return;
+    }
+
+    showToast('⏳ Publicando no feed...');
+
+    let savedImageUrl = finalImage;
+
+    // Send to Rails backend ActiveStorage
+    try {
+      const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+      const res = await fetch('/posts.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken || '',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          post: {
+            caption: caption,
+            image: finalImage
+          }
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.post && data.post.image) {
+          savedImageUrl = data.post.image;
+        }
+      }
+    } catch (err) {
+      console.warn('Post salvo localmente, erro ao sincronizar com backend:', err);
+    }
 
     const newPost = {
       id: 'post_' + Date.now(),
@@ -3854,7 +4011,7 @@
       authorUsername: currentUser ? currentUser.username : 'meu_usuario',
       authorAvatar: currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
       location: location,
-      image: finalImage,
+      image: savedImageUrl,
       caption: caption,
       likes: 1,
       likedByMe: true,
@@ -3867,7 +4024,7 @@
 
     if (currentUser) {
       currentUser.photos = currentUser.photos || [];
-      currentUser.photos.unshift(finalImage);
+      currentUser.photos.unshift(savedImageUrl);
       Storage.saveCurrentUser(currentUser);
     }
 
@@ -4394,6 +4551,10 @@
       if (res.ok) {
         const data = await res.json();
         console.log('✅ Perfil persistido com sucesso no banco de dados:', data);
+        if (data.user && data.user.avatar) {
+          currentUser.avatar = data.user.avatar;
+          Storage.saveCurrentUser(currentUser);
+        }
       } else {
         console.warn('Backend returned non-ok status on /profile:', res.status);
       }
@@ -5013,8 +5174,12 @@
     handleLoginSubmit,
     handleLogout,
     handleCreatePostSubmit,
+    handleNewPostFileInput,
+    removeNewPostImage,
     handleEditProfileSubmit,
     handlePhotoFileInput,
+    handleB2BFileInput,
+    triggerMediaUpload,
     sendMuralMessage,
     sendDirectChatMessage,
     sendQuickIcebreaker,
