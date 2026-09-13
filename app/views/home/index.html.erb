@@ -442,7 +442,12 @@
                       <span class="az-card-icon-spin">🔮</span>
                       <h4 class="az-card-title-text">RADAR DE CONEXÕES</h4>
                     </div>
-                    <span class="az-radius-pill-badge" id="lblRadarRadiusPill" onclick="window.azararApp.openVipPlansModal()" title="Ajustar Raio">RAIO: 2 KM</span>
+                    <div style="display: flex; align-items: center; gap: 5px;">
+                      <button type="button" class="az-gps-recalibrate-btn" id="btnGpsRecalibrate" onclick="window.azararApp.recalibrateGPS()" title="Recalibrar GPS em tempo real">
+                        <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="7"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="1" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="23" y2="12"/></svg>
+                      </button>
+                      <span class="az-radius-pill-badge" id="lblRadarRadiusPill" onclick="window.azararApp.openVipPlansModal()" title="Ajustar Raio">RAIO: 2 KM</span>
+                    </div>
                   </div>
 
                   <!-- RADAR SCOPE -->
@@ -467,68 +472,68 @@
                       </div>
                     </div>
                   </div>
+
+                  <!-- Proximity Checkin Alert (shown when within 150m of a venue) -->
+                  <div id="proximityCheckinAlert" class="az-proximity-alert" style="display: none;">
+                    <div class="az-proximity-icon">📍</div>
+                    <div class="az-proximity-info">
+                      <strong id="proxVenueName">Bar do Cuscuz</strong>
+                      <span id="proxVenueSub">Você está a <strong id="proxVenueDist">85 m</strong> deste point!</span>
+                    </div>
+                    <button type="button" class="az-btn-quick-checkin" id="btnProximityCheckin" onclick="window.azararApp.doProximityCheckin()">
+                      Check-in 🥂
+                    </button>
+                  </div>
+
+                  <!-- Radar Controls Panel: GPS Status + Quick Radius Chips -->
+                  <div class="az-radar-controls-panel">
+                    <div class="az-gps-status-row">
+                      <span class="az-gps-badge" id="lblGpsStatus">
+                        <span class="az-gps-pulse-dot"></span>
+                        <span id="lblGpsText">GPS: Buscando sinal...</span>
+                      </span>
+                      <span class="az-gps-coords-preview" id="lblGpsCity">Localizando...</span>
+                    </div>
+
+                    <div class="az-radius-chips-bar" id="radarRadiusChips">
+                      <button type="button" class="az-radius-chip" data-meters="500" onclick="window.azararApp.setRadarRadius(500)">500m</button>
+                      <button type="button" class="az-radius-chip" data-meters="1000" onclick="window.azararApp.setRadarRadius(1000)">1km</button>
+                      <button type="button" class="az-radius-chip active" data-meters="2000" onclick="window.azararApp.setRadarRadius(2000)">2km</button>
+                      <button type="button" class="az-radius-chip" data-meters="5000" onclick="window.azararApp.setRadarRadius(5000)">5km</button>
+                      <button type="button" class="az-radius-chip" data-meters="15000" onclick="window.azararApp.setRadarRadius(15000)">15km</button>
+                      <button type="button" class="az-radius-chip" data-meters="50000" onclick="window.azararApp.setRadarRadius(50000)">50km</button>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- 3. PESSOAS POR PERTO CARD -->
                 <div class="az-card az-nearby-card">
                   <div class="az-card-header">
-                    <h4 class="az-card-title-text" style="font-size: 8.5px;">PESSOAS POR PERTO</h4>
+                    <h4 class="az-card-title-text" style="font-size: 8.5px;">PESSOAS POR PERTO (<span id="countOnlineUsers">4</span>)</h4>
+                    <span id="lblNearbyScopeSubtitle" style="font-size: 7.5px; color: #ff5294; font-weight: 700;">até 2 km</span>
                   </div>
 
                   <div class="az-nearby-vertical-list" id="nearbyUsersList">
                     <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_1')">
                       <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Juliana" />
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Carolina" />
                         <span class="az-nearby-green-dot"></span>
                       </div>
                       <div class="az-nearby-info">
-                        <span class="az-nearby-name">Juliana, 26 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
+                        <span class="az-nearby-name">Carolina, 26 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
                       </div>
-                      <span class="az-nearby-dist">150 m ›</span>
+                      <span class="az-nearby-dist">299 m ›</span>
                     </div>
 
                     <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_2')">
                       <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" alt="Marina" />
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" alt="Gabriel" />
                         <span class="az-nearby-green-dot"></span>
                       </div>
                       <div class="az-nearby-info">
-                        <span class="az-nearby-name">Marina, 24 <span class="az-status-dot pink">●</span> <span class="az-status-text">Curtiu você 💖</span></span>
+                        <span class="az-nearby-name">Gabriel, 28 <span class="az-status-dot pink">●</span> <span class="az-status-text">Curtiu você 💖</span></span>
                       </div>
-                      <span class="az-nearby-dist">320 m ›</span>
-                    </div>
-
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_3')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Carol" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Carol, 28 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
-                      </div>
-                      <span class="az-nearby-dist">550 m ›</span>
-                    </div>
-
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_4')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150" alt="Beatriz" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Beatriz, 25 <span class="az-status-dot cyan">●</span> <span class="az-status-text">Novo por aqui 🔷</span></span>
-                      </div>
-                      <span class="az-nearby-dist">800 m ›</span>
-                    </div>
-
-                    <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('usr_5')">
-                      <div class="az-nearby-avatar-wrap">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Fernanda" />
-                        <span class="az-nearby-green-dot"></span>
-                      </div>
-                      <div class="az-nearby-info">
-                        <span class="az-nearby-name">Fernanda, 27 <span class="az-status-dot green">●</span> <span class="az-status-text">Online agora</span></span>
-                      </div>
-                      <span class="az-nearby-dist">1,2 km ›</span>
+                      <span class="az-nearby-dist">754 m ›</span>
                     </div>
                   </div>
                 </div>

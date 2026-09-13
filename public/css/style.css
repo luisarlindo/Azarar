@@ -6859,6 +6859,162 @@ html, body {
   to { transform: rotate(360deg); }
 }
 
+/* GPS Recalibrate Button */
+.az-gps-recalibrate-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #38bdf8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+.az-gps-recalibrate-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+  transform: rotate(45deg);
+}
+
+/* Proximity Checkin Alert Banner */
+.az-proximity-alert {
+  margin: 6px 4px 4px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255, 26, 114, 0.22), rgba(139, 92, 246, 0.25));
+  border: 1px solid rgba(255, 26, 114, 0.5);
+  box-shadow: 0 0 12px rgba(255, 26, 114, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: pulseNeonBorder 2s infinite ease-in-out;
+}
+.az-proximity-icon {
+  font-size: 16px;
+  animation: bounceGps 1.5s infinite;
+}
+.az-proximity-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.az-proximity-info strong {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.az-proximity-info span {
+  font-size: 7.5px;
+  color: #e2e8f0;
+}
+.az-btn-quick-checkin {
+  background: linear-gradient(135deg, #ff1a72, #ec4899);
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 4px 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(255, 26, 114, 0.4);
+}
+.az-btn-quick-checkin:hover {
+  transform: scale(1.04);
+  box-shadow: 0 3px 12px rgba(255, 26, 114, 0.6);
+}
+
+/* Radar Controls Panel */
+.az-radar-controls-panel {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.az-gps-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2px;
+  font-size: 7.5px;
+}
+.az-gps-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #38bdf8;
+  font-weight: 700;
+}
+.az-gps-pulse-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  animation: pulseDot 1.5s infinite;
+}
+.az-gps-coords-preview {
+  color: #94a3b8;
+  font-size: 7px;
+}
+.az-radius-chips-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.az-radius-chips-bar::-webkit-scrollbar { display: none; }
+.az-radius-chip {
+  flex: 1;
+  padding: 3px 2px;
+  font-size: 7.5px;
+  font-weight: 700;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.az-radius-chip:hover {
+  border-color: rgba(255, 26, 114, 0.5);
+  color: #fff;
+}
+.az-radius-chip.active {
+  background: linear-gradient(135deg, rgba(255, 26, 114, 0.28), rgba(236, 72, 153, 0.2));
+  border-color: #ff1a72;
+  color: #ff5294;
+  box-shadow: 0 0 8px rgba(255, 26, 114, 0.3);
+}
+
+@keyframes pulseNeonBorder {
+  0%, 100% { border-color: rgba(255, 26, 114, 0.5); box-shadow: 0 0 10px rgba(255, 26, 114, 0.2); }
+  50% { border-color: rgba(56, 189, 248, 0.7); box-shadow: 0 0 16px rgba(56, 189, 248, 0.35); }
+}
+
+@keyframes bounceGps {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-3px); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
+}
+
 /* 3. Nearby List */
 .az-nearby-card {
   padding: 7px 6px !important;

@@ -15,6 +15,20 @@ class Venue < ApplicationRecord
   scope :organic, -> { where(is_partner: false) }
   scope :gold_partners, -> { where(is_partner: true, partner_tier: "gold_partner") }
   scope :visible_in_app, -> { where(is_blocked: false).where("subscription_status = 'active' OR subscription_status IS NULL OR subscription_status = ''") }
+  scope :with_coordinates, -> { where.not(latitude: nil, longitude: nil) }
+
+  reverse_geocoded_by :latitude, :longitude
+
+  def distance_to_coords(other_lat, other_lng)
+    return nil unless latitude.present? && longitude.present? && other_lat.present? && other_lng.present?
+    (Geocoder::Calculations.distance_between([latitude, longitude], [other_lat.to_f, other_lng.to_f], units: :km) * 1000.0).round
+  end
+
+  def formatted_distance_to(other_lat, other_lng)
+    dist = distance_to_coords(other_lat, other_lng)
+    return nil unless dist
+    dist >= 1000 ? "#{(dist / 1000.0).round(1).to_s.tr('.', ',')} km" : "#{dist} m"
+  end
 
   def partner?
     is_partner

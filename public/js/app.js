@@ -986,9 +986,12 @@
   }
 
   // ==========================================================================
-  // GPS GEOLOCATION & DRAGGABLE RANGE SLIDER (5m to 2km)
+  // GPS GEOLOCATION & REAL DISTANCE RADAR ENGINE
   // ==========================================================================
   let userCoordinates = null;
+  let gpsWatchId = null;
+  let cachedNearbyUsers = [];
+  let proximityVenueId = null;
 
   function applyLocation(locString) {
     if (!locString) return;
@@ -1000,6 +1003,8 @@
     if (heroLoc) heroLoc.textContent = locString;
     const profLoc = document.getElementById('profLocation');
     if (profLoc) profLoc.textContent = `${locString} • No seu raio agora`;
+    const cityEl = document.getElementById('lblGpsCity');
+    if (cityEl) cityEl.textContent = locString;
   }
 
   function reverseGeocode(lat, lon) {
@@ -1022,14 +1027,30 @@
         if (data && data.city && data.region_code) {
           const loc = `${data.city}, ${data.region_code}`;
           applyLocation(loc);
+          if (data.latitude && data.longitude && !userCoordinates) {
+            userCoordinates = {
+              latitude: parseFloat(data.latitude),
+              longitude: parseFloat(data.longitude),
+              accuracy: 5000
+            };
+            syncLocationWithServer();
+            fetchNearbyRadar(currentRadius);
+          }
         }
       })
       .catch(() => {});
   }
 
-  function initGPSLocation() {
+  function initGPSLocation(isRecalibrate = false) {
+    const statusText = document.getElementById('lblGpsText');
+    const cityEl = document.getElementById('lblGpsCity');
+
+    if (statusText) statusText.textContent = isRecalibrate ? 'Recalibrando GPS...' : 'Buscando satélites...';
+
     if (!navigator.geolocation) {
+      if (statusText) statusText.textContent = 'GPS: Indisponível';
       fetchIPLocation();
+      fetchNearbyRadar(currentRadius);
       return;
     }
 
@@ -1040,15 +1061,61 @@
           longitude: pos.coords.longitude,
           accuracy: pos.coords.accuracy
         };
+        const accMeters = Math.round(pos.coords.accuracy || 15);
+        if (statusText) statusText.textContent = `GPS: Ativo (±${accMeters}m)`;
+        if (cityEl) cityEl.textContent = `${pos.coords.latitude.toFixed(3)}, ${pos.coords.longitude.toFixed(3)}`;
+
         reverseGeocode(pos.coords.latitude, pos.coords.longitude);
         syncLocationWithServer();
+        fetchNearbyRadar(currentRadius);
+
+        if (isRecalibrate) {
+          showToast(`🛰️ GPS sincronizado com precisão de ±${accMeters}m!`);
+        }
       },
       (err) => {
         console.info('GPS fallback mode active:', err.message);
+        if (statusText) statusText.textContent = 'GPS: Modo Aproximado (IP)';
         fetchIPLocation();
+        fetchNearbyRadar(currentRadius);
+        if (isRecalibrate) {
+          showToast('⚠️ Permissão de GPS negada. Usando localização aproximada.');
+        }
       },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: isRecalibrate ? 0 : 30000 }
     );
+
+    // Continuous watch for movement
+    if (!gpsWatchId && navigator.geolocation.watchPosition) {
+      try {
+        gpsWatchId = navigator.geolocation.watchPosition(
+          (pos) => {
+            const hasMoved = !userCoordinates || 
+              Math.abs(pos.coords.latitude - userCoordinates.latitude) > 0.00015 || 
+              Math.abs(pos.coords.longitude - userCoordinates.longitude) > 0.00015;
+            
+            if (hasMoved) {
+              userCoordinates = {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude,
+                accuracy: pos.coords.accuracy
+              };
+              syncLocationWithServer();
+              fetchNearbyRadar(currentRadius);
+            }
+          },
+          () => {},
+          { enableHighAccuracy: false, maximumAge: 45000, timeout: 20000 }
+        );
+      } catch (e) {}
+    }
+  }
+
+  function recalibrateGPS() {
+    if (navigator.vibrate) navigator.vibrate(25);
+    activateRadarSpin(20);
+    showToast('🛰️ Recalibrando sinal GPS em tempo real...');
+    initGPSLocation(true);
   }
 
   function syncLocationWithServer() {
@@ -1065,6 +1132,78 @@
         radius_meters: currentRadius
       })
     }).catch(() => {});
+  }
+
+  function fetchNearbyRadar(radius) {
+    if (radius) currentRadius = radius;
+    const lat = userCoordinates ? userCoordinates.latitude : (currentUser && currentUser.latitude ? currentUser.latitude : -7.1190);
+    const lng = userCoordinates ? userCoordinates.longitude : (currentUser && currentUser.longitude ? currentUser.longitude : -34.8250);
+
+    fetch(`/api/v1/nearby_users?latitude=${lat}&longitude=${lng}&radius_meters=${currentRadius}`, {
+      headers: {
+        'Accept': 'application/json'
+      }
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (!data || !data.success) return;
+        cachedNearbyUsers = data.users || [];
+
+        // Update online count
+        const countEl = document.getElementById('countOnlineUsers');
+        if (countEl) countEl.textContent = data.count !== undefined ? data.count : cachedNearbyUsers.length;
+
+        // Update venues with real computed distances
+        if (data.venues && data.venues.length > 0) {
+          cachedVenues = data.venues;
+          renderVenuesList();
+        }
+
+        // Proximity checkin detection
+        const proxAlert = document.getElementById('proximityCheckinAlert');
+        if (data.closest_venue && data.closest_venue.can_checkin && !data.closest_venue.already_checked_in) {
+          proximityVenueId = data.closest_venue.id;
+          const nameEl = document.getElementById('proxVenueName');
+          const distEl = document.getElementById('proxVenueDist');
+          if (nameEl) nameEl.textContent = data.closest_venue.name;
+          if (distEl) distEl.textContent = data.closest_venue.distance_label || `${data.closest_venue.distance_meters} m`;
+          if (proxAlert) proxAlert.style.display = 'flex';
+        } else {
+          if (proxAlert) proxAlert.style.display = 'none';
+        }
+
+        renderRadarUsers();
+      })
+      .catch(err => {
+        console.error('Error fetching nearby radar:', err);
+        renderRadarUsers();
+      });
+  }
+
+  function setRadarRadius(meters) {
+    const m = Math.max(5, parseInt(meters, 10) || 2000);
+    const maxAllowed = PLAN_LIMITS[currentVipPlan] || 5000;
+
+    if (m > maxAllowed) {
+      triggerLockFeedback(m);
+      return;
+    }
+
+    currentRadius = m;
+    updateDiscreteSliderVisual(m);
+    activateRadarSpin(15);
+    if (navigator.vibrate) navigator.vibrate(15);
+    showToast(`📡 Raio atualizado para ${formatRadiusLabel(m)}`);
+    syncLocationWithServer();
+    fetchNearbyRadar(m);
+  }
+
+  function doProximityCheckin() {
+    if (!proximityVenueId) return;
+    performVenueCheckin(proximityVenueId);
+    const proxAlert = document.getElementById('proximityCheckinAlert');
+    if (proxAlert) proxAlert.style.display = 'none';
+    fetchNearbyRadar(currentRadius);
   }
 
   // ==========================================================================
@@ -1235,6 +1374,22 @@
     const formatted = formatRadiusLabel(m);
     if (lblBig) lblBig.textContent = formatted;
     if (muralLbl) muralLbl.textContent = formatted;
+
+    const radarPill = document.getElementById('lblRadarRadiusPill');
+    if (radarPill) radarPill.textContent = `RAIO: ${formatted.toUpperCase()}`;
+
+    const nearbySub = document.getElementById('lblNearbyScopeSubtitle');
+    if (nearbySub) nearbySub.textContent = `até ${formatted}`;
+
+    // sync quick radius chips on radar card
+    document.querySelectorAll('#radarRadiusChips .az-radius-chip').forEach(c => {
+      const chipMeters = parseInt(c.getAttribute('data-meters'), 10);
+      if (Math.abs(chipMeters - m) < (m >= 1000 ? 100 : 10)) {
+        c.classList.add('active');
+      } else {
+        c.classList.remove('active');
+      }
+    });
 
     // Update Plan Badge in readout
     if (lblBadge) {
@@ -3048,36 +3203,38 @@
 
   function renderRadarUsers() {
     const container = document.getElementById('nearbyUsersList');
-
-    const users = Storage.getUsers();
-    let filtered = users.filter(u => {
-      if (currentUser && u.id === currentUser.id) return false;
-      return (u.distance || 0) <= currentRadius;
-    });
-
-    const countEl = document.getElementById('countOnlineUsers');
-    if (countEl) countEl.textContent = filtered.length;
-
     if (!container) return;
 
-    if (filtered.length === 0) {
+    const listToRender = (cachedNearbyUsers && cachedNearbyUsers.length > 0)
+      ? cachedNearbyUsers
+      : Storage.getUsers().filter(u => (!currentUser || u.id !== currentUser.id) && ((u.distance || 0) <= currentRadius));
+
+    const countEl = document.getElementById('countOnlineUsers');
+    if (countEl) countEl.textContent = listToRender.length;
+
+    const scopeSubtitle = document.getElementById('lblNearbyScopeSubtitle');
+    if (scopeSubtitle) scopeSubtitle.textContent = `até ${formatRadiusLabel(currentRadius)}`;
+
+    if (listToRender.length === 0) {
       container.innerHTML = `
         <div style="text-align: center; padding: 16px 8px; color: var(--text-dim);">
           <div style="font-size: 20px; margin-bottom: 4px;">📡</div>
-          <span style="color: #fff; font-size: 11px; font-weight: 700; display: block;">Ninguém encontrado no raio atual</span>
-          <p style="font-size: 10px; margin: 4px 0 0; color: #94a3b8;">Toque em "RAIO: 2 KM" para aumentar o alcance</p>
+          <span style="color: #fff; font-size: 11px; font-weight: 700; display: block;">Ninguém encontrado no raio de ${formatRadiusLabel(currentRadius)}</span>
+          <p style="font-size: 10px; margin: 4px 0 0; color: #94a3b8;">Toque nos botões de raio para aumentar seu alcance</p>
         </div>
       `;
       return;
     }
 
-    container.innerHTML = filtered.slice(0, 5).map((u, idx) => {
+    container.innerHTML = listToRender.slice(0, 6).map((u, idx) => {
       const firstName = (u.name || 'Usuário').split(' ')[0];
-      const distFormatted = (u.distance || 150) < 1000 
-        ? `${u.distance || (150 * (idx + 1))} m` 
-        : `${((u.distance || 1200) / 1000).toFixed(1).replace('.', ',')} km`;
-      const statusText = idx === 1 ? 'Curtiu você 💖' : (idx === 3 ? 'Novo por aqui 🔷' : 'Online agora');
-      const statusClass = idx === 1 ? 'pink' : (idx === 3 ? 'cyan' : 'green');
+      const distFormatted = u.distance_label 
+        ? u.distance_label 
+        : ((u.distance_meters || u.distance || 150) < 1000 
+            ? `${u.distance_meters || u.distance || (150 * (idx + 1))} m` 
+            : `${(((u.distance_meters || u.distance || 1200)) / 1000).toFixed(1).replace('.', ',')} km`);
+      const statusText = idx === 1 ? 'Curtiu você 💖' : (u.vibe || (idx === 3 ? 'Novo por aqui 🔷' : 'Online agora'));
+      const statusClass = idx === 1 ? 'pink' : (u.verified ? 'cyan' : 'green');
       return `
         <div class="az-nearby-row" onclick="window.azararApp.openDirectChat('${u.id}')" title="Conversar com ${firstName}">
           <div class="az-nearby-avatar-wrap">
@@ -4881,6 +5038,10 @@
     openRadarPreview,
     centerGPSLocation,
     recalibrateRadar,
+    recalibrateGPS,
+    setRadarRadius,
+    fetchNearbyRadar,
+    doProximityCheckin,
     openRideApp,
     openRideOptionsModal,
     closeRideOptionsModal,

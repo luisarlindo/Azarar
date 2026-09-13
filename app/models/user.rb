@@ -29,6 +29,10 @@ class User < ApplicationRecord
 
   scope :online, -> { where(online_now: true) }
   scope :verified_users, -> { where(verified: true) }
+  scope :with_coordinates, -> { where.not(latitude: nil, longitude: nil) }
+  scope :online_with_coordinates, -> { online.with_coordinates }
+
+  reverse_geocoded_by :latitude, :longitude
 
   before_validation :clean_username
 
@@ -135,6 +139,30 @@ class User < ApplicationRecord
       update!(plan: tier, plan_expires_at: expires)
     end
     true
+  end
+
+  def checkin_at!(venue)
+    transaction do
+      checkins.where(active: true).update_all(active: false)
+      new_checkin = checkins.create!(
+        venue: venue,
+        active: true,
+        expires_at: 4.hours.from_now
+      )
+      update!(current_venue_id: venue.id)
+      new_checkin
+    end
+  end
+
+  def distance_to_coords(other_lat, other_lng)
+    return nil unless latitude.present? && longitude.present? && other_lat.present? && other_lng.present?
+    (Geocoder::Calculations.distance_between([latitude, longitude], [other_lat.to_f, other_lng.to_f], units: :km) * 1000.0).round
+  end
+
+  def formatted_distance_to(other_lat, other_lng)
+    dist = distance_to_coords(other_lat, other_lng)
+    return nil unless dist
+    dist >= 1000 ? "#{(dist / 1000.0).round(1).to_s.tr('.', ',')} km" : "#{dist} m"
   end
 
   private

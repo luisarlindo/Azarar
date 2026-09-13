@@ -2,16 +2,33 @@ class VenuesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    venues = Venue.visible_in_app.order(is_partner: :desc, stars_tier: :desc, checkins_count: :desc)
+    venues = Venue.visible_in_app
     
     # Optional category filter
     if params[:category].present? && params[:category] != "all"
       venues = venues.where(category: params[:category])
     end
 
+    user_lat = params[:latitude].presence || current_user&.latitude
+    user_lng = params[:longitude].presence || current_user&.longitude
+
+    venue_list = venues.map { |v| venue_json(v, user_lat: user_lat, user_lng: user_lng) }
+
+    # Sort: partners first, then by distance if coordinates present, else checkins_count
+    venue_list = if user_lat.present? && user_lng.present?
+                   venue_list.sort_by { |v| [v[:is_partner] ? 0 : 1, v[:distance_meters] || 999_999] }
+                 else
+                   venue_list.sort_by { |v| [v[:is_partner] ? 0 : 1, -(v[:checkins_count] || 0)] }
+                 end
+
+    if params[:radius_meters].present?
+      max_r = params[:radius_meters].to_i
+      venue_list = venue_list.select { |v| v[:distance_meters].nil? || v[:distance_meters] <= max_r }
+    end
+
     render json: {
       status: "success",
-      venues: venues.map { |v| venue_json(v) }
+      venues: venue_list
     }
   end
 
@@ -151,7 +168,7 @@ class VenuesController < ApplicationController
 
   private
 
-  def venue_json(v, include_users: false)
+  def venue_json(v, include_users: false, user_lat: nil, user_lng: nil)
     json = {
       id: v.id,
       name: v.name,
@@ -190,6 +207,21 @@ class VenuesController < ApplicationController
       gallery_images: v.gallery_images || [],
       gallery_videos: v.gallery_videos || []
     }
+
+    u_lat = user_lat || params[:latitude].presence || current_user&.latitude
+    u_lng = user_lng || params[:longitude].presence || current_user&.longitude
+
+    if u_lat.present? && u_lng.present? && v.latitude.present? && v.longitude.present?
+      dist = (Geocoder::Calculations.distance_between([u_lat.to_f, u_lng.to_f], [v.latitude, v.longitude], units: :km) * 1000.0).round
+      json[:distance_meters] = dist
+      json[:distance] = dist
+      json[:distance_label] = dist >= 1000 ? "#{(dist / 1000.0).round(1).to_s.tr('.', ',')} km" : "#{dist} m"
+    else
+      def_dist = (v.stars_tier || 1) * 350
+      json[:distance_meters] = def_dist
+      json[:distance] = def_dist
+      json[:distance_label] = "#{def_dist} m"
+    end
 
     if include_users
       checked_in_users = User.where(current_venue_id: v.id).limit(15)

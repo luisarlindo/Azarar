@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_10_112207) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_13_060000) do
   create_table "checkins", force: :cascade do |t|
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
@@ -109,6 +109,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_10_112207) do
     t.string "vibe", default: "🍹 No balcão do bar"
     t.index ["current_venue_id"], name: "index_users_on_current_venue_id"
     t.index ["email_or_phone"], name: "index_users_on_email_or_phone", unique: true
+    t.index ["latitude", "longitude"], name: "index_users_on_latitude_and_longitude"
+    t.index ["online_now", "latitude", "longitude"], name: "index_users_on_online_and_coordinates"
     t.index ["plan"], name: "index_users_on_plan"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
