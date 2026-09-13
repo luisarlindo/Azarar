@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 class SubscriptionsController < ApplicationController
+  protect_from_forgery with: :null_session, if: -> { request.format.json? }
+
   def index
     if current_user
       render json: {
@@ -10,7 +14,7 @@ class SubscriptionsController < ApplicationController
         plans: User::PLANS
       }
     else
-      render json: { error: "Não autenticado" }, status: :unauthorized
+      render json: { error: "Nao autenticado" }, status: :unauthorized
     end
   end
 
@@ -30,14 +34,14 @@ class SubscriptionsController < ApplicationController
           message: "Plano #{current_user.plan_name} ativado com sucesso!"
         }
       else
-        render json: { success: false, error: "Plano invñlido" }, status: :unprocessable_entity
+        render json: { success: false, error: "Plano invalido" }, status: :unprocessable_entity
       end
     else
       render json: {
         success: true,
         demo: true,
         plan: tier,
-        plan_name: User::PLANS.dig(tier, :name) || "Grátis",
+        plan_name: User::PLANS.dig(tier, :name) || "Gratis",
         max_radius_meters: User::PLANS.dig(tier, :max_radius_meters) || 5000
       }
     end
