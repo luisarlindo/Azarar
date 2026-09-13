@@ -26,13 +26,22 @@
     <!-- Screen Container (Isolated In-App Views Container) -->
     <div class="screen-container <%= (@user_json || current_user) ? 'view-mode-app-shell' : 'view-mode-home' %>" id="screenContainer">
       
-      <!-- Ambient Particles Canvas (Persistent Across All Screens) -->
-      <canvas id="particlesCanvas" class="particles-canvas"></canvas>
-      
       <!-- ============================================ -->
       <!-- VIEW 1: HOME / LANDING SCREEN (Logged Out)  -->
       <!-- ============================================ -->
       <section class="app-view view-home <%= (@user_json || current_user) ? '' : 'active' %>" id="viewHome">
+
+        <!-- Cinematic Ambient Crossfade Background Slideshow -->
+        <div class="az-hero-slideshow" id="heroBgSlideshow" aria-hidden="true">
+          <div class="az-hero-slide active" style="background-image: url('/assets/images/bg.png');" data-index="0"></div>
+          <div class="az-hero-slide" style="background-image: url('/assets/images/bg-cheers.jpg');" data-index="1"></div>
+          <div class="az-hero-slide" style="background-image: url('/assets/images/bg-rooftop.jpg');" data-index="2"></div>
+          <div class="az-hero-slide" style="background-image: url('/assets/images/bg-nightlife.jpg');" data-index="3"></div>
+          <div class="az-hero-overlay"></div>
+        </div>
+
+        <!-- Ambient Particles Canvas (Floating in front of the atmospheric scenes) -->
+        <canvas id="particlesCanvas" class="particles-canvas"></canvas>
 
         <!-- Top Branding Section -->
         <header class="app-header">

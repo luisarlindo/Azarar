@@ -4810,8 +4810,31 @@
     });
   }
 
+  // ==========================================================================
+  // CINEMATIC HERO BACKGROUND SLIDESHOW (viewHome)
+  // ==========================================================================
+  function initHeroSlideshow() {
+    const slideshow = document.getElementById('heroBgSlideshow');
+    if (!slideshow) return;
+    const slides = slideshow.querySelectorAll('.az-hero-slide');
+    if (!slides || slides.length < 2) return;
+
+    let currentSlide = 0;
+    const intervalMs = 6500;
+
+    setInterval(() => {
+      const homeView = document.getElementById('viewHome');
+      if (!homeView || !homeView.classList.contains('active')) return;
+
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }, intervalMs);
+  }
+
   // Initialize chips
   initEditProfileChips();
+  initHeroSlideshow();
 
   // If already logged in or initial user is present, enter shell directly
   if (currentUser) {
@@ -4833,6 +4856,7 @@
     stepRadarDistance,
     onContinuousRadiusInput,
     onContinuousRadiusChange,
+    initHeroSlideshow,
     onRadiusStepInput,
     onRadiusStepChange,
     onRadiusSliderInput,
